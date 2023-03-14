@@ -1,0 +1,73 @@
+.g-card-dashboard {
+  position: relative;
+  min-height: 120px;
+  border-radius: 12px;
+  box-shadow: none;
+  cursor: pointer;
+  transition: $animate-delay;
+
+  @include hover-supported {
+    box-shadow: 4px 8px 24px rgb($black, 25%);
+  }
+
+  &__wrap {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    box-shadow: none;
+    padding: 20px;
+    overflow: hidden;
+    color: $white;
+    background-repeat: no-repeat;
+    background-position: bottom right;
+    background-size: 81px 91px;
+  }
+
+  &:nth-child(1) {
+    background-image: linear-gradient(286.17deg, #cb4800 0%, #ff7b33 100%);
+  }
+
+  &:nth-child(2) {
+    background-image: linear-gradient(286.17deg, #9610ff 0%, #af48ff 100%);
+  }
+
+  &:nth-child(3) {
+    background-image: linear-gradient(286.17deg, #facc15 0%, #ffe580 100%);
+  }
+
+  &:nth-child(4) {
+    background-image: linear-gradient(286.17deg, #335ef7 0%, #5f82ff 100%);
+  }
+
+  &:nth-child(5) {
+    background-image: linear-gradient(286.17deg, #ff4d67 0%, #ff8a9b 100%);
+  }
+
+  &:nth-child(6) {
+    background-image: linear-gradient(286.17deg, #fb9400 0%, #ffab38 100%);
+  }
+
+  &:nth-child(7) {
+    background-image: linear-gradient(0deg, #009689 0%, #009689 100%);
+  }
+
+  &:nth-child(8) {
+    background-image: linear-gradient(0deg, #7a5548 0%, #7a5548 100%);
+  }
+
+  &:nth-child(9) {
+    background-image: linear-gradient(0deg, #607d8a 0%, #607d8a 100%);
+  }
+
+  &:nth-child(10) {
+    background-image: linear-gradient(0deg, #00bcd3 0%, #00bcd3 100%);
+  }
+
+  .q-card__section {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding: 0;
+    z-index: 1;
+  }
+}

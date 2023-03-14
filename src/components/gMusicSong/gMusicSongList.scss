@@ -1,0 +1,63 @@
+@import "gMusicSong";
+
+.g-music-song-list {
+  position: relative;
+  width: 100%;
+
+  & + & {
+    margin: 32px 0 0;
+  }
+
+  &__wrap {
+    display: flex;
+    flex-direction: column;
+    margin: 0 auto;
+  }
+
+  &__head {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    width: 100%;
+
+    & + .g-music-gallery-list__body {
+      margin: 24px 0 0;
+    }
+
+    &-title {
+      color: $greyscale900;
+    }
+
+    &-sub-title {
+      font-size: $size-16;
+      font-weight: 700;
+      line-height: $lh-29;
+      color: $primary;
+      cursor: pointer;
+
+      &:hover {
+        color: rgba($primary, 0.8);
+      }
+    }
+  }
+
+  &__body {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin: 24px 0 0;
+  }
+}
+
+body.body--dark {
+  .g-music-song-list {
+    &__head {
+      &-title {
+        color: $white;
+      }
+    }
+  }
+}

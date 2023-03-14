@@ -1,0 +1,210 @@
+.g-playlist-header {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+
+  &__wrap {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+  }
+
+  &__aside {
+    &-picture {
+      width: 120px;
+      height: 120px;
+      display: block;
+      border-radius: 12px;
+
+      &-default {
+        background:
+          linear-gradient(
+            141.82deg,
+            #42d0e1 0%,
+            #f2e58d 32.64%,
+            #fec856 50.01%,
+            #f77e0c 78.11%,
+            #f0de51 101.07%
+          );
+        animation: rotate-hue 6s alternate infinite;
+      }
+
+      @keyframes rotate-hue {
+        to {
+          filter: hue-rotate(1turn);
+        }
+      }
+
+      img {
+        width: 100%;
+        height: 100%;
+      }
+    }
+  }
+
+  &__main {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+
+    &-top {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    &-bottom {
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+
+    &-actions {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+
+      .g-icon {
+        cursor: pointer;
+
+        @include hover-supported {
+          path {
+            fill: $primary;
+          }
+        }
+
+        &-dots {
+          width: 24px;
+          height: 24px;
+        }
+
+        &-check_like,
+        &-download_song {
+          path {
+            stroke: black;
+            fill: transparent;
+          }
+
+          @include hover-supported {
+            path {
+              stroke: $primary;
+              fill: transparent;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  &__info {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+
+    &-title {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      font-size: $size-24;
+      font-weight: 700;
+      line-height: $lh-29;
+      color: $greyscale900;
+    }
+
+    &-description {
+      display: flex;
+      gap: 27px;
+      font-size: $size-12;
+      font-weight: 600;
+      line-height: $lh-20;
+      color: $greyscale700;
+      letter-spacing: 0.2px;
+
+      span {
+        position: relative;
+
+        & + span {
+          &::before {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            left: -13.5px;
+            content: "";
+            width: 1px;
+            height: calc(100% - 4px);
+            background: $greyscale700;
+          }
+        }
+      }
+    }
+  }
+
+  &__actions {
+    display: flex;
+    gap: 12px;
+
+    .q-btn {
+      min-width: 184px;
+
+      @media #{$mobile} {
+        width: 100%;
+        min-width: auto;
+      }
+
+      .on-left {
+        margin-right: 16px;
+      }
+
+      .g-icon {
+        &-shuffle {
+          path {
+            fill: $white;
+          }
+        }
+
+        &-play_round {
+          path {
+            fill: $primary;
+          }
+        }
+      }
+
+      @include hover-supported {
+        .g-icon {
+          &-shuffle {
+            path {
+              fill: $primary;
+            }
+          }
+
+          &-play_round {
+            path {
+              fill: $white;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+body.body--dark {
+  .g-playlist-header {
+    &__info {
+      &-title {
+        color: $white;
+      }
+
+      &-description {
+        color: $white;
+
+        span {
+          &::before {
+            background: $white;
+          }
+        }
+      }
+    }
+  }
+}

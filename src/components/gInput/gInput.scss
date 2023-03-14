@@ -1,0 +1,169 @@
+.g-input {
+  .q-field {
+    &:hover {
+      .g-icon {
+        &::after {
+          opacity: 1;
+        }
+      }
+    }
+
+    .q-field__control {
+      height: 56px;
+      border-radius: 16px;
+      padding: 0 20px;
+      background: $greyscale100;
+      border: 1px solid transparent;
+      transition: $animate-delay;
+
+      &::before {
+        display: none;
+      }
+
+      &:hover {
+        border: 1px solid $primary;
+      }
+
+      input {
+        font-size: $size-14;
+        font-weight: 600;
+        line-height: $lh-20;
+        color: $greyscale900;
+        letter-spacing: 0.2px;
+
+        @media #{$mobile} {
+          font-size: $size-16;
+          line-height: $lh-22;
+        }
+
+        &::placeholder {
+          font-weight: 400;
+          color: $greyscale500;
+        }
+
+        &[type="password"]:not(:placeholder-shown) {
+          font-family: Verdana, sans-serif;
+        }
+      }
+
+      .q-field__marginal {
+        height: 54px;
+
+        .g-icon {
+          cursor: pointer;
+
+          &.g-icon-visibility,
+          &.g-icon-visibility_off {
+            path {
+              fill: $greyscale500;
+            }
+
+            &:hover {
+              path {
+                fill: $primary;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
+  .q-field--focused,
+  .q-field--highlighted {
+    .q-field__control {
+      background: $t-green;
+      border: 1px solid $primary;
+      box-shadow: none;
+
+      &:hover,
+      &:focus-within {
+        background: $t-green;
+      }
+    }
+  }
+
+  .q-field--highlighted {
+    .g-icon {
+      path {
+        fill: $black;
+      }
+    }
+  }
+
+  .q-field--focused {
+    .g-icon {
+      path {
+        fill: $primary;
+      }
+
+      &-email_verify {
+        path {
+          fill: none;
+        }
+      }
+    }
+  }
+
+  .q-field--error {
+    .q-field__control {
+      border-color: $negative;
+    }
+  }
+
+  .q-field__append {
+    .text-negative {
+      display: none;
+    }
+  }
+
+  .q-field__bottom {
+    .q-field__messages {
+      color: $negative;
+    }
+  }
+}
+
+body.body--dark {
+  .g-input {
+    .q-field {
+      .q-field__control {
+        background: $dark-2;
+
+        input {
+          color: $white;
+        }
+      }
+
+      &--focused,
+      &--highlighted {
+        .q-field__control {
+          background: $t-green;
+          border: 1px solid $primary;
+          box-shadow: none;
+
+          &:hover,
+          &:focus-within {
+            background: $t-green;
+          }
+        }
+      }
+
+      .g-icon {
+        path {
+          stroke: $white;
+        }
+      }
+    }
+  }
+}
+
+.q-search {
+  &.q-field--focused {
+    .q-field__inner {
+      .q-field__control {
+        border-radius: 16px 16px 0 0;
+      }
+    }
+  }
+}

@@ -1,0 +1,14 @@
+.g-play-btn {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: linear-gradient(286.17deg, #cb4800 0%, #ff7b33 100%);
+  z-index: 2;
+  transition: $animate-delay;
+  cursor: pointer;
+  user-select: none;
+}

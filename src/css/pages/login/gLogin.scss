@@ -1,0 +1,188 @@
+.g-login {
+  display: flex;
+  min-height: 100vh;
+  background-color: $white;
+
+  @media #{$tablet} {
+    justify-content: center;
+  }
+
+  @media #{$mobile} {
+    padding: 0 0 84px !important;
+  }
+
+  .g-back {
+    span {
+      @media #{$mobile} {
+        display: none;
+      }
+    }
+  }
+
+  &__form {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    padding: 48px 30px;
+    flex: 0 0 440px;
+
+    @media #{$tablet} {
+      flex: 0 0 488px;
+    }
+
+    @media #{$mobile} {
+      flex: 1;
+      padding: 24px;
+    }
+  }
+
+  &__illustration {
+    flex: 1 1 0;
+    background-color: $greyscale900;
+    background-image: url(@/assets/images/illustration.png);
+    background-repeat: no-repeat;
+    background-position: left center;
+
+    @media #{$tablet} {
+      display: none;
+    }
+
+    @media #{$mobile} {
+      display: none;
+    }
+  }
+
+  &__title {
+    text-align: center;
+    margin: 56px 0 0;
+
+    @media #{$mobile} {
+      margin: 42px 0 0;
+
+      &::before {
+        display: block;
+        content: '';
+        width: 100px;
+        height: 101px;
+        background-image: url(@/assets/images/big_logo.svg);
+        background-repeat: no-repeat;
+        background-position: center;
+        background-size: cover;
+        margin: 0 auto 32px;
+      }
+    }
+  }
+
+  &__inputs {
+    margin: 48px 0 0;
+
+    &-label {
+      & + & {
+        margin: 24px 0 0;
+      }
+    }
+  }
+
+  &__checkbox {
+    width: max-content;
+    justify-content: center;
+    margin: 8px auto 0;
+  }
+
+  &__forgot {
+    font-size: $size-16;
+    line-height: $lh-22;
+    text-align: center;
+    width: max-content;
+    margin: 24px auto 0;
+  }
+
+  &__btn {
+    width: 100%;
+    margin: 24px 0 0;
+  }
+
+  &__social {
+    margin: 58px 0 0;
+  }
+
+  &__signup {
+    font-size: $size-14;
+    font-weight: 400;
+    line-height: $lh-20;
+    text-align: center;
+    margin: 48px 0 0;
+    color: $greyscale500;
+  }
+}
+
+body.body--dark {
+  .g-login {
+    background-color: $dark-1;
+
+    .g-input {
+      .g-icon {
+        path {
+          fill: $white;
+        }
+
+        &-mail,
+        &-lock {
+          path {
+            fill: $greyscale500;
+            stroke: transparent;
+          }
+        }
+      }
+
+      .q-field--highlighted {
+        .g-icon {
+          &-mail,
+          &-lock {
+            path {
+              fill: $white;
+            }
+          }
+        }
+      }
+
+      .q-field--focused {
+        .g-icon {
+          &-mail,
+          &-lock {
+            path {
+              fill: $primary;
+            }
+          }
+        }
+      }
+
+      .q-field__control {
+        .q-field__marginal {
+          .g-icon {
+            &-visibility,
+            &-visibility_off {
+              path {
+                stroke: transparent;
+              }
+            }
+          }
+        }
+
+        .q-field--focused {
+          .g-icon {
+            path {
+              fill: $primary;
+            }
+
+            &-email_verify {
+              path {
+                fill: none;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,29 @@
+.g-notification {
+  position: relative;
+
+  &__wrap {
+    display: flex;
+    flex-direction: column;
+  }
+
+  &__nav {
+    width: 50%;
+    margin: 34px 0 0;
+
+    @media #{$mobile} {
+      width: 100%;
+    }
+
+    &-item {
+      .q-item__section--main {
+        .text-xl {
+          font-weight: 600;
+        }
+
+        .text-m {
+          margin: 4px 0 0;
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,60 @@
+.q-dialog {
+  &__backdrop {
+    background: rgb(9 16 29 / 70%);
+  }
+
+  &__inner {
+    &--standard {
+      padding: 44px;
+
+      .q-card {
+        box-shadow: none;
+        border-radius: 48px;
+
+        .q-card__section {
+          padding: 40px 32px 32px 32px;
+        }
+      }
+    }
+
+    &--bottom {
+      border-radius: 40px 40px 0 0;
+      padding: 0;
+
+      &::before {
+        position: absolute;
+        top: 8px;
+        left: 0;
+        right: 0;
+        margin: 0 auto;
+        background: $greyscale300;
+        content: '';
+        width: 38px;
+        height: 3px;
+        border-radius: 100px;
+        z-index: 1;
+      }
+    }
+
+    .q-bottom-sheet {
+      border: 1px solid $greyscale100;
+      border-radius: 40px 40px 0 0;
+
+      .q-dialog__title {
+        padding: 35px 24px 24px;
+      }
+    }
+  }
+}
+
+body.body--dark {
+  .q-dialog {
+    &__inner {
+      &--bottom {
+        &::before {
+          background: $dark-3;
+        }
+      }
+    }
+  }
+}

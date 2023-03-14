@@ -1,0 +1,57 @@
+.q-toggle {
+  height: 24px;
+  max-width: 44px;
+
+  &.disabled {
+    opacity: 1 !important;
+
+    .q-toggle__inner--truthy {
+      background: $dark-3;
+    }
+
+    .q-toggle__inner--truthy {
+      .q-toggle__thumb {
+        border-color: $dark-3;
+      }
+    }
+  }
+
+  &__inner {
+    height: 24px;
+    width: 100%;
+    max-width: 44px;
+    border-radius: 1000px;
+    background: $greyscale200;
+    font-size: 31px;
+
+    &--truthy {
+      background: $primary;
+
+      .q-toggle__thumb {
+        border-color: $primary;
+      }
+    }
+  }
+
+  &__track {
+    position: absolute;
+    top: 0;
+    left: 0;
+    background: transparent;
+  }
+
+  &__thumb {
+    top: 1px;
+    left: 1px;
+    width: 22px;
+    height: 22px;
+    background: $white;
+    border: 2px solid $greyscale200;
+    border-radius: 1000px;
+
+    &::before,
+    &::after {
+      display: none;
+    }
+  }
+}

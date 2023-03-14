@@ -1,0 +1,133 @@
+.q-btn {
+  padding: 6px 18px;
+  font-size: $size-16;
+  line-height: $lh-22;
+  font-weight: 700;
+  letter-spacing: 0.2px;
+  color: $white;
+  min-height: auto;
+  background: $primary;
+  text-transform: unset;
+  border-radius: 16px;
+  border: 2px solid transparent;
+  transition: $animate-delay;
+
+  &-large {
+    padding: 16px 14px;
+  }
+
+  &-medium {
+    padding: 9.5px 25px;
+  }
+
+  &-small {
+    padding: 4px 14px;
+  }
+
+  .q-icon {
+    width: 24px;
+    height: 24px;
+    transition: $animate-delay;
+  }
+
+  @include hover-supported {
+    color: $primary;
+    background: $primary100;
+  }
+
+  &--rounded {
+    border-radius: 100px;
+    box-shadow: $shadow-btn-1;
+  }
+
+  &--light-primary {
+    font-size: $size-16;
+    line-height: $lh-20;
+    background: $primary100;
+    color: $primary;
+    box-shadow: none;
+
+    @include hover-supported {
+      background: $primary;
+      color: $white;
+    }
+  }
+
+  &-border {
+    background: transparent;
+    border: 2px solid $primary;
+    color: $primary;
+
+    @include hover-supported {
+      background: $primary;
+      color: $white;
+    }
+  }
+
+  &--flat {
+    font-size: $size-14;
+    font-weight: 600;
+    line-height: $lh-20;
+    background: none;
+    color: $greyscale500;
+
+    @include hover-supported {
+      background: none;
+      color: $greyscale900;
+    }
+  }
+
+  &--white {
+    color: $primary;
+    background: $white;
+
+    @include hover-supported {
+      background: $primary100;
+    }
+  }
+
+  .q-focus-helper {
+    visibility: hidden;
+  }
+
+  .on-left {
+    margin-right: 8px;
+  }
+
+  .on-right {
+    margin-left: 8px;
+  }
+
+  &.icon-left {
+    .q-btn__content {
+      flex-direction: row-reverse;
+    }
+  }
+}
+
+.g-action-button {
+  &__bottom {
+    display: flex;
+    gap: 12px;
+    margin: auto 0 0;
+
+    .q-btn {
+      width: 100%;
+    }
+  }
+}
+
+body.body--dark {
+  .q-btn {
+    &--flat {
+      @include hover-supported {
+        color: $primary;
+      }
+    }
+
+    &--light-primary {
+      background: $dark-3;
+      color: $white;
+    }
+  }
+}

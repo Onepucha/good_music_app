@@ -1,0 +1,56 @@
+.g-back {
+  position: relative;
+  width: max-content;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  cursor: pointer;
+
+  @include hover-supported {
+    path {
+      fill: $primary;
+    }
+  }
+
+  .g-icon-back {
+    width: 28px;
+    height: 28px;
+  }
+
+  span {
+    font-size: $size-24;
+    font-weight: 700;
+    line-height: $lh-29;
+    color: $greyscale900;
+    transition: $animate-delay;
+  }
+
+  @include hover-supported {
+    span {
+      color: $primary;
+    }
+
+    .g-icon-back {
+      &::after {
+        opacity: 1;
+      }
+    }
+  }
+}
+
+body.body--dark {
+  .g-back {
+    path {
+      fill: $white;
+      stroke: none;
+    }
+
+    span {
+      color: $white;
+
+      @include hover-supported {
+        color: $primary;
+      }
+    }
+  }
+}

@@ -1,0 +1,45 @@
+.g-profile-edit {
+  position: relative;
+
+  &__wrap {
+    display: flex;
+    flex-direction: column;
+  }
+
+  &__form {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    margin: 32px 0 0;
+
+    &-wrapper {
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+    }
+  }
+
+  &__inputs {
+    margin: 0 0 24px 0;
+
+    .g-icon-calendar {
+      path {
+        stroke: $greyscale900;
+      }
+    }
+
+    .q-field--focused {
+      .g-icon-calendar {
+        path {
+          fill: transparent;
+        }
+      }
+    }
+
+    &-label {
+      & + & {
+        margin: 8px 0 0;
+      }
+    }
+  }
+}

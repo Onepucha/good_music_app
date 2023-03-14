@@ -1,0 +1,246 @@
+.q-drawer {
+  position: fixed;
+  background: $gray;
+
+  @media #{$mobile} {
+    position: fixed;
+    width: 100% !important;
+    height: 90px;
+    top: auto !important;
+    background: $white;
+    border-radius: 24px 24px 0 0;
+  }
+
+  &__default {
+    &.q-drawer__content {
+      height: calc(100% - 88px) !important;
+    }
+  }
+
+  &__content {
+    padding: 24px 16px;
+    height: 100%;
+    overflow: auto;
+    position: relative;
+
+    @media #{$mobile} {
+      gap: 19px;
+      padding: 13px 32px 39px;
+      overflow: hidden;
+    }
+  }
+
+  &__logo {
+    position: relative;
+    display: inline-block;
+    height: 40px;
+    width: 164px;
+    background-repeat: no-repeat;
+    background-position: 0 0;
+    background-size: contain;
+    background-image: url(@/assets/images/nav_logo.svg);
+
+    a {
+      display: block;
+      height: 40px;
+      width: 164px;
+    }
+  }
+
+  &__nav {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    margin: 54px 0 0;
+
+    @media #{$mobile} {
+      width: 100%;
+      flex-direction: row;
+      justify-content: space-between;
+      gap: 19px;
+      margin: 0;
+    }
+
+    &-item {
+      display: flex;
+      align-items: center;
+      padding: 8px;
+      border-radius: 8px;
+      transition: $animate-duration;
+
+      @media #{$mobile} {
+        width: 77px;
+        flex-direction: column;
+        padding: 0;
+        border-radius: 0;
+      }
+
+      & + & {
+        margin: 12px 0 0;
+
+        @media #{$mobile} {
+          margin: 0;
+        }
+      }
+
+      &:hover,
+      &.router-link-active {
+        color: $primary;
+        background: $white;
+        box-shadow: $shadow-sm;
+
+        @media #{$mobile} {
+          background: none;
+          box-shadow: none;
+        }
+      }
+
+      .g-icon {
+        path {
+          transition: 0s;
+        }
+
+        circle {
+          transition: 0s;
+        }
+      }
+
+      &.router-link-active {
+        .g-icon {
+          path {
+            fill: $primary;
+            stroke: $primary;
+          }
+
+          &-explore {
+            path {
+              fill: $white;
+              stroke: $white;
+            }
+
+            circle {
+              fill: $primary;
+              stroke: $primary;
+            }
+          }
+
+          &-library {
+            path {
+              &:last-child {
+                stroke: $white;
+              }
+            }
+          }
+        }
+      }
+    }
+
+    &-icon {
+      width: 28px;
+      height: 28px;
+      margin: 0 10px 0 0;
+
+      @media #{$mobile} {
+        width: 24px;
+        height: 24px;
+        margin: 0 0 2px;
+      }
+    }
+
+    &-label {
+      font-family: $fonts;
+      font-size: 24px;
+      line-height: 29px;
+      font-weight: 700;
+
+      @media #{$mobile} {
+        font-size: $size-10;
+        line-height: $lh-12;
+        margin: 2px 0 0;
+      }
+    }
+  }
+
+  &__card {
+    margin: 62px 0 24px;
+
+    @media #{$mobile} {
+      display: none;
+    }
+  }
+
+  &__install-app {
+    width: max-content;
+    margin: auto 0 0;
+
+    @media #{$mobile} {
+      display: none;
+    }
+
+    &:hover {
+      .g-icon {
+        path {
+          stroke: $greyscale900;
+        }
+      }
+    }
+
+    .q-btn__content {
+      text-align: left;
+      justify-content: flex-end;
+    }
+
+    &.q-btn {
+      .on-left {
+        margin-right: 12px;
+      }
+    }
+  }
+}
+
+body.body--dark {
+  .q-drawer {
+    background: rgba($dark-1, 0.85);
+    backdrop-filter: blur(10px);
+    border-color: rgba($dark-1, 0.85);
+
+    &__logo {
+      background-image: url(@/assets/images/nav_logo_dark.svg);
+    }
+
+    &__nav {
+      &-item:not(.router-link-active) {
+        color: $greyscale500;
+      }
+    }
+
+    &__install-app {
+      @include hover-supported {
+        .g-icon {
+          path {
+            stroke: $primary;
+          }
+        }
+      }
+    }
+
+    .router-link-active {
+      .g-icon {
+        &-explore {
+          path {
+            fill: $dark-1;
+            stroke: $dark-1;
+          }
+        }
+
+        &-library {
+          path {
+            &:last-child {
+              stroke: $dark-1;
+            }
+          }
+        }
+      }
+    }
+  }
+}

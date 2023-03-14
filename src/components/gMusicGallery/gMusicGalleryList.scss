@@ -1,0 +1,92 @@
+@import "gMusicGalleryItem";
+
+.g-music-gallery-list {
+  position: relative;
+  width: 100%;
+
+  & + & {
+    margin: 32px 0 0;
+  }
+
+  &__wrap {
+    display: flex;
+    flex-direction: column;
+    margin: 0 auto;
+  }
+
+  &__head {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    width: 100%;
+
+    & + .g-music-gallery-list__body {
+      margin: 16px 0 0;
+
+      @media #{$mobile} {
+        margin: 16px -24px 0;
+      }
+    }
+
+    &-title {
+      color: $greyscale900;
+    }
+
+    &-sub-title {
+      font-size: $size-16;
+      font-weight: 700;
+      line-height: $lh-29;
+      color: $primary;
+      cursor: pointer;
+
+      &:hover {
+        color: rgba($primary, 0.8);
+      }
+    }
+  }
+
+  &__body {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 24px 12px;
+    margin: 24px 0 0;
+
+    @media #{$tablet} {
+      grid-template-columns: repeat(3, 1fr);
+    }
+
+    @media #{$mobile} {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    &-overflow {
+      @media #{$mobile} {
+        grid-template-columns: repeat(6, 1fr);
+        margin: 16px -24px 0;
+        padding: 0 24px 12px;
+        overflow-x: auto;
+        overflow-y: hidden;
+        overscroll-behavior-x: contain;
+        scroll-snap-type: x mandatory;
+      }
+
+      .g-music-gallery-item {
+        @media #{$mobile} {
+          min-width: 160px;
+        }
+      }
+    }
+  }
+}
+
+body.body--dark {
+  .g-music-gallery-list {
+    &__head {
+      &-title {
+        color: $white;
+      }
+    }
+  }
+}

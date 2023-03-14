@@ -1,0 +1,91 @@
+.g-loader {
+  position: relative;
+  margin: 0 auto;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  animation-play-state: paused;
+
+  &:hover {
+    opacity: 1;
+    animation-play-state: running;
+  }
+
+  $bubble-size: 10px;
+  $spinnin-bubble-translate: 200%;
+  $spinning-bubble-transform-origin: ($spinnin-bubble-translate - 50%) * -1;
+
+  .loading-spinning-bubbles {
+    position: relative;
+    margin: auto;
+    width: 60px;
+    height: 60px;
+
+    .bubble-container {
+      position: absolute;
+      top: calc(50% - #{$bubble-size} / 2);
+      left: calc(50% - #{$bubble-size} / 2);
+      transform-origin: $spinning-bubble-transform-origin 50%;
+
+      &:nth-of-type(0n + 1) {
+        transform: translateX($spinnin-bubble-translate) rotate(-90deg);
+        animation-delay: -1.5s;
+      }
+
+      &:nth-of-type(0n + 2) {
+        transform: translateX($spinnin-bubble-translate) rotate(-45deg);
+        animation-delay: -1.375s;
+      }
+
+      &:nth-of-type(0n + 3) {
+        transform: translateX($spinnin-bubble-translate);
+        animation-delay: -1.25s;
+      }
+
+      &:nth-of-type(0n + 4) {
+        transform: translateX($spinnin-bubble-translate) rotate(45deg);
+        animation-delay: -1.125s;
+      }
+
+      &:nth-of-type(0n + 5) {
+        transform: translateX($spinnin-bubble-translate) rotate(90deg);
+        animation-delay: -1s;
+      }
+
+      &:nth-of-type(0n + 6) {
+        transform: translateX($spinnin-bubble-translate) rotate(135deg);
+        animation-delay: -0.875s;
+      }
+
+      &:nth-of-type(0n + 7) {
+        transform: translateX($spinnin-bubble-translate) rotate(180deg);
+        animation-delay: -0.75s;
+      }
+
+      &:nth-of-type(0n + 8) {
+        transform: translateX($spinnin-bubble-translate) rotate(225deg);
+        animation-delay: -0.625s;
+      }
+
+      .bubble {
+        background: $primary;
+        width: $bubble-size;
+        height: $bubble-size;
+        border-radius: 50%;
+        animation: bubble 1s infinite;
+        animation-delay: inherit;
+      }
+    }
+  }
+
+  @keyframes bubble {
+    0%,
+    100% {
+      transform: scale(0);
+    }
+
+    50% {
+      transform: scale(1);
+    }
+  }
+}

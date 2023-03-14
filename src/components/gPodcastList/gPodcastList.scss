@@ -1,0 +1,143 @@
+.g-podcast-list {
+  position: relative;
+  display: flex;
+  gap: 16px;
+  align-items: center;
+  max-width: 380px;
+
+  &__aside {
+    &-picture {
+      width: 116px;
+      height: 116px;
+      display: block;
+      border-radius: 12px;
+
+      &-default {
+        background:
+          linear-gradient(
+            141.82deg,
+            #42d0e1 0%,
+            #f2e58d 32.64%,
+            #fec856 50.01%,
+            #f77e0c 78.11%,
+            #f0de51 101.07%
+          );
+        animation: rotate-hue 6s alternate infinite;
+      }
+
+      @keyframes rotate-hue {
+        to {
+          filter: hue-rotate(1turn);
+        }
+      }
+
+      img {
+        width: 100%;
+        height: 100%;
+      }
+    }
+  }
+
+  &__main {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    width: 100%;
+
+    &-top {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    &-bottom {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    &-actions {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+
+      .g-icon {
+        cursor: pointer;
+
+        &-heart,
+        &-download_song {
+          path {
+            stroke: black;
+            fill: transparent;
+          }
+        }
+      }
+    }
+  }
+
+  &__info {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+
+    &-title {
+      align-items: center;
+      gap: 4px;
+      font-size: $size-18;
+      font-weight: 700;
+      line-height: $lh-22;
+      color: $greyscale900;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    &-description {
+      display: flex;
+      gap: 27px;
+      font-size: $size-12;
+      font-weight: 500;
+      line-height: $lh-14;
+      color: $greyscale700;
+      letter-spacing: 0.2px;
+
+      span {
+        position: relative;
+
+        & + span {
+          &::before {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            left: -13.5px;
+            content: "";
+            width: 1px;
+            height: calc(100% - 4px);
+            background: $greyscale700;
+          }
+        }
+      }
+    }
+  }
+}
+
+body.body--dark {
+  .g-podcast-list {
+    &__info {
+      &-title {
+        color: $white;
+      }
+
+      &-description {
+        color: $white;
+
+        span {
+          &::before {
+            background: $white;
+          }
+        }
+      }
+    }
+  }
+}

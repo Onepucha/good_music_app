@@ -1,0 +1,55 @@
+.g-input-verification-code {
+  &__wrap {
+    display: flex;
+    gap: 16px;
+    align-items: center;
+    justify-content: center;
+
+    input {
+      &[type="number"] {
+        width: 83px;
+        height: 61px;
+        font-size: $size-24;
+        font-weight: 700;
+        line-height: $lh-29;
+        color: $greyscale900;
+        text-align: center;
+        background: $greyscale50;
+        border: 1px solid $greyscale200;
+        border-radius: 16px;
+        appearance: textfield;
+        outline: none;
+      }
+
+      &:focus {
+        background: $t-green;
+        border-color: $primary;
+      }
+
+      &::-webkit-outer-spin-button,
+      &::-webkit-inner-spin-button {
+        margin: 0;
+        appearance: none;
+      }
+    }
+  }
+}
+
+body.body--dark {
+  .g-input-verification-code {
+    &__wrap {
+      input {
+        &[type="number"] {
+          background: $dark-2;
+          border-color: $dark-3;
+          color: $white;
+        }
+
+        &:focus {
+          background: $t-green;
+          border-color: $primary;
+        }
+      }
+    }
+  }
+}

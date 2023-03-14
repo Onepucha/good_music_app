@@ -1,0 +1,138 @@
+.g-music-gallery-item {
+  position: relative;
+  transition: $animate-delay;
+  scroll-snap-align: center;
+
+  @media #{$mobile} {
+    width: 100%;
+    min-width: 156px;
+  }
+
+  &-artist {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+
+    .g-music-gallery-item__picture,
+    .g-music-gallery-item__gradient {
+      border-radius: 50%;
+    }
+
+    .g-music-gallery-item__gradient {
+      min-width: 160px;
+      min-height: 160px;
+      padding: 5px;
+    }
+  }
+
+  &__shade {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    top: 0;
+    height: 100%;
+    width: 100%;
+    background: transparent;
+    z-index: 1;
+    cursor: pointer;
+  }
+
+  &__picture {
+    position: relative;
+
+    img {
+      border-radius: 16px;
+      width: 100%;
+      user-select: none;
+      aspect-ratio: 1/1;
+    }
+  }
+
+  &__gradient {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 160px;
+    height: 160px;
+    border-radius: 16px;
+    background: linear-gradient(
+      141.82deg,
+      #42d0e1 0%,
+      #f2e58d 32.64%,
+      #fec856 50.01%,
+      #f77e0c 78.11%,
+      #f0de51 101.07%
+    );
+    animation: rotate-hue 6s alternate infinite;
+
+    @keyframes rotate-hue {
+      to {
+        filter: hue-rotate(1turn);
+      }
+    }
+
+    &-title {
+      font-size: $size-24;
+      font-weight: 700;
+      line-height: $lh-29;
+      color: $white;
+      text-align: center;
+    }
+
+    &-info {
+      position: relative;
+      font-size: $size-12;
+      font-weight: 700;
+      line-height: $lh-14;
+      color: $white;
+      text-align: center;
+      margin: 16px 0 0;
+      padding: 16px 0 0;
+
+      &::before {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 1px;
+        content: '';
+        background: $white;
+      }
+    }
+  }
+
+  &__description {
+    margin: 8px 0 0;
+
+    &-title {
+      font-size: $size-18;
+      font-weight: 700;
+      line-height: $lh-25;
+      color: $greyscale900;
+    }
+
+    &-info {
+      font-size: $size-14;
+      font-weight: 400;
+      line-height: $lh-20;
+      color: $greyscale500;
+    }
+  }
+}
+
+body.body--dark {
+  .g-music-gallery-item {
+    &__description {
+      &-title {
+        color: $white;
+      }
+
+      &-info {
+        color: $white;
+      }
+    }
+  }
+}

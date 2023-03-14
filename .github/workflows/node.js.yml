@@ -1,0 +1,35 @@
+# This workflow will do a clean installation of node dependencies, cache/restore them, build the source code and run tests across different versions of node
+# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-nodejs
+
+name: Node.js CI
+
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  deploy:
+
+    runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: false
+      matrix:
+        node-version: [18.x]
+        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
+
+    steps:
+      - name: Deploying to Stage
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          password: ${{ secrets.PASSWORD }}
+          #          port: ${{ secrets.PORT }}
+          script: |
+            cd rep/good_music
+            git pull origin
+            export NVM_DIR=~/.nvm
+            source ~/.nvm/nvm.sh
+            make deploy-stage
+            curl -X POST -H "Content-Type: application/json" -d '{ "chat_id": -845544356, "text": "🩼 Frontend on stage" }' https://api.telegram.org/bot6208870915:AAHLGdoo9V3TlNQqn0h2YyNtY-_jAfUh3SY/sendMessage

@@ -1,0 +1,134 @@
+.g-profile-details {
+  position: relative;
+
+  &__wrap {
+    display: flex;
+    flex-direction: column;
+  }
+
+  &__top-line {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    gap: 12px;
+
+    .g-icon-pen {
+      cursor: pointer;
+      width: 28px;
+      height: 28px;
+    }
+  }
+
+  &__header {
+    margin: 32px 0 0;
+  }
+
+  &__generic {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    max-width: 300px;
+    margin: 0 auto;
+
+    &-head {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    &-main {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+      padding: 20px 0 20px;
+      margin: 20px 0 0;
+
+      &::before,
+      &::after {
+        position: absolute;
+        left: 0;
+        width: 100%;
+        height: 1px;
+        background: $greyscale200;
+        content: '';
+      }
+
+      &::before {
+        top: 0;
+      }
+
+      &::after {
+        bottom: 0;
+      }
+    }
+  }
+
+  &__user {
+    &-default {
+      flex-basis: 200px;
+      width: 200px;
+      min-height: 200px;
+      background-image: url('@/assets/images/avatar.png');
+      background-position: center;
+      background-size: cover;
+      background-repeat: no-repeat;
+    }
+
+    &-title {
+      margin: 20px 0 0;
+    }
+
+    &-btn {
+      margin: 20px 0 0;
+    }
+  }
+
+  &__user-info {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+
+    span {
+      font-size: $size-18;
+      font-weight: 500;
+      line-height: $lh-25;
+      letter-spacing: 0.2px;
+      color: $greyscale700;
+    }
+
+    &-comments {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      width: 100%;
+      min-width: 138px;
+    }
+
+    &-likes {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      width: 100%;
+      min-width: 138px;
+    }
+  }
+
+  &__body {
+    margin: 24px 0 0;
+  }
+}
+
+body.body--dark {
+  .g-profile-details {
+    &__user-info {
+      span {
+        color: $greyscale300;
+      }
+    }
+  }
+}

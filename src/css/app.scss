@@ -1,0 +1,143 @@
+:root {
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-size-adjust: 100%;
+}
+@import "quasar.variables";
+@import "fonts.css";
+@import "global";
+
+html,
+body,
+#app {
+  height: 100%;
+  font-family: $fonts;
+  font-size: $size-18;
+  line-height: $lh-22;
+  margin: 0;
+  padding: 0;
+}
+
+.body--light {
+  background: $light;
+  color: $greyscale900;
+}
+
+.body--dark {
+  background: $dark-1;
+  color: $white;
+
+  .g-readmore {
+    color: $white;
+  }
+}
+
+.q-page-container {
+  height: 100%;
+
+  .q-page {
+    display: flex;
+    flex-direction: column;
+    min-height: calc(100vh - 52px);
+    height: 100%;
+    padding: 18px 30px 124px;
+
+    &__header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 8px 0;
+      min-height: 48px;
+
+      &-title {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        width: 100%;
+      }
+
+      &-actions {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+
+        &-dropdown {
+          width: 28px;
+          height: 28px;
+        }
+      }
+
+      &-dropdown {
+        display: flex;
+      }
+    }
+
+    &__chart {
+      .g-music-gallery-list {
+        margin: 32px 0 0;
+      }
+    }
+
+    @media #{$mobile} {
+      min-height: 100vh;
+      padding: 94px 24px 164px;
+    }
+  }
+
+  @media #{$mobile} {
+    padding: 0 !important;
+  }
+}
+
+#nprogress {
+  pointer-events: none;
+}
+
+#nprogress .bar {
+  background: $primary;
+  position: fixed;
+  z-index: 1031;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 2px;
+}
+
+.g-readmore {
+  font-size: $size-16;
+  font-weight: 500;
+  line-height: $lh-22;
+  letter-spacing: 0.2px;
+  color: $greyscale800;
+}
+
+.g-link {
+  color: $primary;
+  font-weight: 500;
+  letter-spacing: 0.2px;
+  transition: $animate-delay;
+  cursor: pointer;
+
+  &:hover {
+    color: rgba($primary, 0.8);
+  }
+}
+
+.q-date {
+  .q-date__header {
+    .q-btn--flat {
+      color: $greyscale900;
+    }
+  }
+
+  .q-date__calendar-item {
+    .q-btn {
+      font-size: $size-14;
+      color: $greyscale900;
+      padding: 0.285em;
+    }
+  }
+}

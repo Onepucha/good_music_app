@@ -1,0 +1,215 @@
+.q-header {
+  color: $greyscale300;
+  background-color: $white;
+  padding: 0 0 16px 0;
+
+  .q-btn {
+    box-shadow: none;
+  }
+
+  &__logo {
+    position: relative;
+    display: inline-block;
+    height: 32px;
+    width: 32px;
+    background-repeat: no-repeat;
+    background-position: 0 0;
+    background-size: contain;
+    background-image: url(@/assets/images/small_logo.svg);
+
+    &-full {
+      width: 129px;
+      background-image: url(@/assets/images/small_logo_full.svg);
+
+      a {
+        width: 129px;
+      }
+    }
+
+    a {
+      display: block;
+      width: 32px;
+      height: 32px;
+    }
+  }
+
+  &__profile {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    order: 3;
+    cursor: pointer;
+
+    &:hover {
+      .q-header__profile-avatar {
+        opacity: 0.7;
+      }
+    }
+
+    @media #{$mobile} {
+      order: inherit;
+    }
+
+    &-avatar {
+      position: relative;
+      transition: $animate-delay;
+    }
+
+    &-name {
+      display: inline-block;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      vertical-align: middle;
+      font-size: $size-20;
+      font-weight: 700;
+      line-height: $lh-24;
+      color: $greyscale900;
+      max-width: 170px;
+
+      @media #{$mobile} {
+        max-width: 120px;
+      }
+    }
+  }
+
+  &__toolbar {
+    position: relative;
+    display: flex;
+    gap: 20px;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 30px 0;
+    min-height: 40px;
+    width: 100%;
+
+    @media #{$mobile} {
+      padding: 24px 24px 0;
+    }
+  }
+
+  &__search-container {
+    display: flex;
+    justify-content: flex-end;
+    flex-wrap: nowrap;
+    flex: 1;
+    gap: 20px;
+  }
+
+  &__search-input {
+    width: 100%;
+
+    .q-field__control {
+      height: 28px;
+      border-radius: inherit;
+      background: transparent;
+
+      &::before,
+      &::after {
+        border-color: transparent;
+        background: transparent;
+      }
+
+      &:hover,
+      &:focus-within {
+        background: transparent;
+
+        &::before,
+        &::after {
+          border-color: transparent;
+        }
+      }
+
+      .q-field__native {
+        font-size: $size-16;
+        line-height: $lh-22;
+        font-weight: 600;
+        color: $greyscale300;
+      }
+    }
+  }
+
+  &__search-btn,
+  &__ball-btn {
+    &.q-btn {
+      min-height: 28px;
+      padding: 0;
+      background: transparent;
+      border-radius: inherit;
+
+      &:hover {
+        background: transparent;
+      }
+
+      &:hover {
+        .g-icon {
+          path {
+            stroke: $primary;
+          }
+
+          circle {
+            stroke: $primary;
+          }
+        }
+      }
+    }
+  }
+
+  &__search-btn {
+    .q-btn__content {
+      .g-icon {
+        margin: 0;
+      }
+    }
+  }
+
+  &__login {
+    &:hover {
+      .g-icon {
+        path {
+          stroke: $primary;
+        }
+      }
+    }
+
+    .q-btn__content {
+      @media #{$mobile} {
+        .q-icon {
+          display: none;
+        }
+      }
+    }
+
+    @media #{$mobile} {
+      background: transparent;
+      border: 2px solid $primary;
+      color: $primary;
+
+      @include hover-supported() {
+        background: $primary;
+        color: $white;
+      }
+    }
+  }
+}
+
+body.body--dark {
+  .q-header {
+    color: $white;
+    background: $dark-1;
+
+    &__logo {
+      background-image: url(@/assets/images/small_logo_dark.svg);
+
+      &-full {
+        background-image: url(@/assets/images/small_logo_full_dark.svg);
+      }
+    }
+
+    &__profile {
+      &-name {
+        color: $white;
+      }
+    }
+  }
+}

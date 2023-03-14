@@ -1,0 +1,56 @@
+.g-explore {
+  position: relative;
+
+  &__wrap {
+    display: flex;
+    flex-direction: column;
+  }
+
+  &__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    gap: 12px;
+
+    &-title {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    &-dropdown {
+      display: flex;
+    }
+  }
+
+  &__body {
+    margin: 24px 0 0;
+  }
+
+  &__dashboard {
+    --gap: 12px;
+
+    display: flex;
+    flex-wrap: wrap;
+    width: calc(100% + var(--gap));
+    margin: calc(1 * var(--gap)) 0 0 calc(-1 * var(--gap));
+
+    .g-card-dashboard {
+      width: calc((100% / 5) - var(--gap));
+      margin: var(--gap) 0 0 var(--gap);
+    }
+
+    @media #{$tablet} {
+      .g-card-dashboard {
+        width: calc((100% / 2) - var(--gap));
+      }
+    }
+
+    @media #{$mobile} {
+      .g-card-dashboard {
+        width: calc((100% / 2) - var(--gap));
+      }
+    }
+  }
+}
