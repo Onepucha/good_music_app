@@ -246,8 +246,3 @@ const logout = async () => {
     </q-card>
   </q-dialog>
 </template>
-
-<route lang="yaml">
-meta:
-layout: default
-</route>

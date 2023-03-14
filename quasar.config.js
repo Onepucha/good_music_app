@@ -12,7 +12,7 @@ const { configure } = require('quasar/wrappers')
 const path = require('path')
 // const svgLoader = require('vite-svg-loader')
 
-module.exports = configure(function (/* ctx */) {
+module.exports = configure(function (ctx) {
   return {
     eslint: {
       // fix: true,
@@ -186,6 +186,12 @@ module.exports = configure(function (/* ctx */) {
     // Full list of options: https://v2.quasar.dev/quasar-cli-vite/developing-capacitor-apps/configuring-capacitor
     capacitor: {
       hideSplashscreen: true,
+      capacitorCliPreparationParams: ['sync', ctx.targetName],
+      appName: 'Good Music', // string
+      // (Optional) If not present, will look for package.json > version
+      version: '1', // string
+      // (Optional) If not present, will look for package.json > description
+      description: 'Good Music',
     },
 
     // Full list of options: https://v2.quasar.dev/quasar-cli-vite/developing-electron-apps/configuring-electron

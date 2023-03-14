@@ -63,9 +63,4 @@ const onAudioToggle = (song: Song, index: number) => {
   </div>
 </template>
 
-<route lang="yaml">
-meta:
-  layout: default
-</route>
-
 <style scoped></style>

@@ -80,8 +80,3 @@ const getAlbums = async (index: number, done: any) => {
     </q-infinite-scroll>
   </div>
 </template>
-
-<route lang="yaml">
-meta:
-layout: default
-</route>

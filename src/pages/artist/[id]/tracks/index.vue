@@ -92,8 +92,3 @@ getArtistCode()
     </q-infinite-scroll>
   </div>
 </template>
-
-<route lang="yaml">
-meta:
-layout: default
-</route>

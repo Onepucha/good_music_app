@@ -78,8 +78,3 @@ const getAllArtist = async (index: number, done: () => void) => {
     </q-infinite-scroll>
   </div>
 </template>
-
-<route lang="yaml">
-meta:
-layout: default
-</route>

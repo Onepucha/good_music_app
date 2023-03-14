@@ -130,8 +130,3 @@ const sendCode = async () => {
     </form>
   </div>
 </template>
-
-<route lang="yaml">
-meta:
-layout: simple
-</route>

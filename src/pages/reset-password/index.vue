@@ -197,8 +197,3 @@ const openModalCongratulations = () => {
     </form>
   </div>
 </template>
-
-<route lang="yaml">
-meta:
-layout: simple
-</route>

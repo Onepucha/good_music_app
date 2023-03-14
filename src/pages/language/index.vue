@@ -65,8 +65,3 @@ const setUserLocale = (item: object | any) => {
     </div>
   </div>
 </template>
-
-<route lang="yaml">
-meta:
-layout: default
-</route>

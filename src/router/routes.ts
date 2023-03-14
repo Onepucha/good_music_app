@@ -38,7 +38,7 @@ const routes: RouteRecordRaw[] = [
     path: '/artist',
     component: () => import('layouts/default.vue'),
     children: [
-      { path: '', component: () => import('pages/artist.vue') },
+      { path: '', component: () => import('pages/index.vue') },
       { path: ':id', component: () => import('pages/artist/[id]/index.vue') },
       {
         path: ':id',
