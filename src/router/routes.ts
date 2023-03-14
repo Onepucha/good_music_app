@@ -29,7 +29,10 @@ const routes: RouteRecordRaw[] = [
   {
     path: '/albums',
     component: () => import('layouts/default.vue'),
-    children: [{ path: '', component: () => import('pages/albums.vue') }],
+    children: [
+      { path: '', component: () => import('pages/albums.vue') },
+      { path: ':id', component: () => import('pages/albums/[id].vue') },
+    ],
   },
   {
     path: '/artist',
@@ -37,12 +40,23 @@ const routes: RouteRecordRaw[] = [
     children: [
       { path: '', component: () => import('pages/artist.vue') },
       { path: ':id', component: () => import('pages/artist/[id]/index.vue') },
+      {
+        path: ':id',
+        component: () => import('pages/artist/[id]/tracks/index.vue'),
+      },
+      {
+        path: ':id',
+        component: () => import('pages/artist/[id]/track/[code]/index.vue'),
+      },
     ],
   },
   {
     path: '/chart',
     component: () => import('layouts/default.vue'),
-    children: [{ path: '', component: () => import('pages/chart.vue') }],
+    children: [
+      { path: '', component: () => import('pages/chart.vue') },
+      { path: ':id', component: () => import('pages/chart/[id].vue') },
+    ],
   },
   {
     path: '/downloads',
@@ -74,7 +88,14 @@ const routes: RouteRecordRaw[] = [
   {
     path: '/profile',
     component: () => import('layouts/default.vue'),
-    children: [{ path: '', component: () => import('pages/profile.vue') }],
+    children: [
+      { path: '', component: () => import('pages/profile.vue') },
+      {
+        path: ':id',
+        component: () => import('pages/profile/details/index.vue'),
+      },
+      { path: ':id', component: () => import('pages/profile/edit/index.vue') },
+    ],
   },
   {
     path: '/reset-password',
@@ -91,7 +112,18 @@ const routes: RouteRecordRaw[] = [
   {
     path: '/songs',
     component: () => import('layouts/default.vue'),
-    children: [{ path: '', component: () => import('pages/songs.vue') }],
+    children: [
+      { path: '', component: () => import('pages/songs.vue') },
+      { path: ':id', component: () => import('pages/songs/[id].vue') },
+    ],
+  },
+  {
+    path: '/releases',
+    component: () => import('layouts/default.vue'),
+    children: [
+      { path: '', component: () => import('pages/releases.vue') },
+      { path: ':id', component: () => import('pages/releases/[id].vue') },
+    ],
   },
 
   // Always leave this as last one,

@@ -12,7 +12,6 @@ export const useReleasesStore = defineStore('releases', () => {
   // actions
   const getReleases = async () => {
     try {
-      console.log(fetchWrapper.get(baseUrl))
       releases.value = await fetchWrapper.get(baseUrl)
       return releases.value
     } catch (error: unknown) {
