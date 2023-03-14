@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { defineComponent, reactive } from 'vue'
 import { useAuthStore } from '@/stores'
-import { allLocales, setLocale } from '@/i18n'
+import { allLocales } from '@/boot/i18n'
 
 import gBack from '@/components/gBack/gBack.vue'
 import { useTranslation } from '@/composables/lang'
@@ -24,7 +24,7 @@ const data: Data = reactive({
 })
 
 const setUserLocale = (item: object | any) => {
-  setLocale(item.value)
+  // setLocale(item.value)
   authStore.setLocale(item.value)
 }
 </script>

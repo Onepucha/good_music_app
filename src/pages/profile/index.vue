@@ -3,7 +3,7 @@ import { computed, defineComponent, reactive, ref } from 'vue'
 
 import { useAuthStore } from '@/stores'
 import { useTranslation } from '@/composables/lang'
-import { allLocales } from '@/../i18n'
+import { allLocales } from '@/boot/i18n'
 
 import DynamicIcon from '@/components/DynamicIcon.vue'
 import gCardPremium from '@/components/gCardPremium/gCardPremium.vue'

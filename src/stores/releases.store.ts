@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 
-import { fetchWrapper } from 'src/helpers'
+import { fetchWrapper } from '@/helpers'
 import { ref } from 'vue'
 
 const baseUrl = `${import.meta.env.VITE_API_URL}/releases`

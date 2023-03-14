@@ -10,7 +10,7 @@ import { useRouter } from 'vue-router'
 export const useAuthStore = defineStore('auth', () => {
   const router = useRouter()
   // initial state
-  const user = ref<User | null>(null)
+  const user = ref<User | undefined>(undefined)
 
   // actions
   const login = async (email: string, password: string) => {
@@ -64,13 +64,13 @@ export const useAuthStore = defineStore('auth', () => {
   }
 
   const setLocale = (locale: string) => {
-    if (user.value !== null) {
+    if (user.value !== undefined) {
       user.value.language_descriptor = locale
     }
   }
 
   const logout = async () => {
-    user.value = null
+    user.value = undefined
     await api.get('/user/logout')
     deleteCookie('test-session')
     await router.push('/login')

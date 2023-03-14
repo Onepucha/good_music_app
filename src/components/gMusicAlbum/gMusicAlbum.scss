@@ -34,15 +34,14 @@
     border-radius: 12px;
 
     &-default {
-      background:
-        linear-gradient(
-          141.82deg,
-          #42d0e1 0%,
-          #f2e58d 32.64%,
-          #fec856 50.01%,
-          #f77e0c 78.11%,
-          #f0de51 101.07%
-        );
+      background: linear-gradient(
+        141.82deg,
+        #42d0e1 0%,
+        #f2e58d 32.64%,
+        #fec856 50.01%,
+        #f77e0c 78.11%,
+        #f0de51 101.07%
+      );
       animation: rotate-hue 6s alternate infinite;
 
       @keyframes rotate-hue {
@@ -91,7 +90,7 @@
             top: 50%;
             transform: translateY(-50%);
             left: -13.5px;
-            content: "";
+            content: '';
             width: 1px;
             height: calc(100% - 4px);
             background: $greyscale700;

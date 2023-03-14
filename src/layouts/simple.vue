@@ -144,5 +144,3 @@ const classesLayout = () => {
     </q-page-container>
   </q-layout>
 </template>
-
-<style lang="scss"></style>

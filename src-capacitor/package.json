@@ -1,0 +1,11 @@
+{
+  "name": "good-music-app",
+  "version": "0.0.1",
+  "description": "Good Music",
+  "author": "Anatoliy_Petushkov <pap@trueflip.io>",
+  "private": true,
+  "dependencies": {
+    "@capacitor/cli": "^2.0.0",
+    "@capacitor/core": "^2.0.0"
+  }
+}

@@ -2,7 +2,6 @@
   <div class="q-page">
     <div class="row">
       <div class="col-12 col-md-12">
-        <q-icon name="play" />
         <g-music-gallery-list
           :list="data.newReleases"
           :sub-title="t('pages.home.galleryListReleases.subTitle')"
@@ -110,8 +109,8 @@ const getCharts = async () => {
 }
 
 onMounted(() => {
-  getReleases()
+  // getReleases()
   getPopularArtist()
-  getCharts()
+  // getCharts()
 })
 </script>

@@ -1,6 +1,5 @@
 <script lang="ts" setup>
-import { computed, defineAsyncComponent } from 'vue'
-import { shallowRef, ref, watch } from 'vue'
+import { computed, defineAsyncComponent, ref, shallowRef, watch } from 'vue'
 
 interface Props {
   name: string
@@ -61,5 +60,3 @@ result.value = defineAsyncComponent(promise)
     </keep-alive>
   </svg>
 </template>
-
-<style scoped></style>

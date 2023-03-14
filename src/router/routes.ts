@@ -30,7 +30,7 @@ const routes: RouteRecordRaw[] = [
     path: '/albums',
     component: () => import('layouts/default.vue'),
     children: [
-      { path: '', component: () => import('pages/albums.vue') },
+      { path: '', component: () => import('pages/albums/index.vue') },
       { path: ':id', component: () => import('pages/albums/[id].vue') },
     ],
   },
@@ -38,14 +38,14 @@ const routes: RouteRecordRaw[] = [
     path: '/artist',
     component: () => import('layouts/default.vue'),
     children: [
-      { path: '', component: () => import('pages/index.vue') },
+      { path: '', component: () => import('pages/artist/index.vue') },
       { path: ':id', component: () => import('pages/artist/[id]/index.vue') },
       {
-        path: ':id',
+        path: ':id/tracks',
         component: () => import('pages/artist/[id]/tracks/index.vue'),
       },
       {
-        path: ':id',
+        path: ':id/track/:code',
         component: () => import('pages/artist/[id]/track/[code]/index.vue'),
       },
     ],
@@ -54,66 +54,79 @@ const routes: RouteRecordRaw[] = [
     path: '/chart',
     component: () => import('layouts/default.vue'),
     children: [
-      { path: '', component: () => import('pages/chart.vue') },
+      { path: '', component: () => import('pages/chart/index.vue') },
       { path: ':id', component: () => import('pages/chart/[id].vue') },
     ],
   },
   {
     path: '/downloads',
     component: () => import('layouts/default.vue'),
-    children: [{ path: '', component: () => import('pages/downloads.vue') }],
+    children: [
+      { path: '', component: () => import('pages/downloads/index.vue') },
+    ],
   },
   {
     path: '/forgot-password',
     component: () => import('layouts/default.vue'),
     children: [
-      { path: '', component: () => import('pages/forgot-password.vue') },
+      { path: '', component: () => import('pages/forgot-password/index.vue') },
     ],
   },
   {
     path: '/language',
     component: () => import('layouts/default.vue'),
-    children: [{ path: '', component: () => import('pages/language.vue') }],
+    children: [
+      { path: '', component: () => import('pages/language/index.vue') },
+    ],
   },
   {
     path: '/notification',
     component: () => import('layouts/default.vue'),
-    children: [{ path: '', component: () => import('pages/notification.vue') }],
+    children: [
+      { path: '', component: () => import('pages/notification/index.vue') },
+    ],
   },
   {
     path: '/playlists',
     component: () => import('layouts/default.vue'),
-    children: [{ path: '', component: () => import('pages/playlists.vue') }],
+    children: [
+      { path: '', component: () => import('pages/playlists/index.vue') },
+    ],
   },
   {
     path: '/profile',
     component: () => import('layouts/default.vue'),
     children: [
-      { path: '', component: () => import('pages/profile.vue') },
+      { path: '', component: () => import('pages/profile/index.vue') },
       {
-        path: ':id',
+        path: '/profile/details',
         component: () => import('pages/profile/details/index.vue'),
       },
-      { path: ':id', component: () => import('pages/profile/edit/index.vue') },
+      {
+        path: '/profile/edit',
+        component: () => import('pages/profile/edit/index.vue'),
+      },
     ],
   },
   {
     path: '/reset-password',
     component: () => import('layouts/default.vue'),
     children: [
-      { path: '', component: () => import('pages/reset-password.vue') },
+      { path: '', component: () => import('pages/reset-password/index.vue') },
     ],
   },
   {
     path: '/security',
     component: () => import('layouts/default.vue'),
-    children: [{ path: '', component: () => import('pages/security.vue') }],
+    children: [
+      { path: '', component: () => import('pages/security/index.vue') },
+    ],
   },
   {
     path: '/songs',
     component: () => import('layouts/default.vue'),
     children: [
-      { path: '', component: () => import('pages/songs.vue') },
+      { path: '', component: () => import('pages/songs/index.vue') },
       { path: ':id', component: () => import('pages/songs/[id].vue') },
     ],
   },
@@ -121,12 +134,10 @@ const routes: RouteRecordRaw[] = [
     path: '/releases',
     component: () => import('layouts/default.vue'),
     children: [
-      { path: '', component: () => import('pages/releases.vue') },
+      { path: '', component: () => import('pages/releases/index.vue') },
       { path: ':id', component: () => import('pages/releases/[id].vue') },
     ],
   },
-  // Always leave this as last one,
-  // but you can also remove it
   {
     path: '/:catchAll(.*)*',
     component: () => import('pages/ErrorNotFound.vue'),

@@ -28,5 +28,3 @@ const activateReadMore = () => {
     <span v-if="readMoreActivated" v-html="props.longText"></span>
   </div>
 </template>
-
-<style scoped></style>

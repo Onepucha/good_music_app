@@ -290,5 +290,3 @@ const avatarOrFullName = computed<string>(() =>
     />
   </q-layout>
 </template>
-
-<style lang="scss"></style>
