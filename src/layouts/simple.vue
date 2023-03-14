@@ -13,6 +13,7 @@ import DynamicIcon from '@/components/DynamicIcon.vue'
 import RouterViewTransition from '@/components/RouterViewTransition.vue'
 import gCardPremium from '@/components/gCardPremium/gCardPremium.vue'
 import { useTranslation } from '@/composables/lang'
+
 const { t } = useTranslation()
 
 defineComponent({
@@ -108,7 +109,7 @@ const classesLayout = () => {
       side="left"
     >
       <div v-if="!data.isMobile" class="q-drawer__logo">
-        <router-link to="/"> </router-link>
+        <router-link to="/"></router-link>
       </div>
 
       <div class="q-drawer__nav">
