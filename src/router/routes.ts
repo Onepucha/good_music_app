@@ -125,7 +125,6 @@ const routes: RouteRecordRaw[] = [
       { path: ':id', component: () => import('pages/releases/[id].vue') },
     ],
   },
-
   // Always leave this as last one,
   // but you can also remove it
   {
