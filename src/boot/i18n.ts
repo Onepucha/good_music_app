@@ -1,7 +1,6 @@
 import { boot } from 'quasar/wrappers'
 import { useAuthStore } from '@/stores'
 import { createI18n } from 'vue-i18n'
-
 import messages from 'src/i18n'
 
 export const allLocales = [

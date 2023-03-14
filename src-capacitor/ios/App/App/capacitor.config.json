@@ -1,0 +1,10 @@
+{
+	"appId": "org.capacitor.quasar.app",
+	"appName": "Good Music",
+	"bundledWebRuntime": false,
+	"npmClient": "npm",
+	"webDir": "www",
+	"server": {
+		"url": "http://192.168.0.125:5173"
+	}
+}
