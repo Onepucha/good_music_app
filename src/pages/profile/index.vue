@@ -89,10 +89,10 @@ const logout = async () => {
         <div class="g-profile">
           <div class="g-profile__wrap">
             <div class="q-page__header">
-              <div class="q-page__header-title">
+              <q-item class="q-page__header-title" to="/">
                 <i class="g-icon g-icon-logo"></i>
                 <h4>{{ t('pages.profile.titleHeader') }}</h4>
-              </div>
+              </q-item>
 
               <div class="q-page__header-dropdown">
                 <i class="g-icon g-icon-dropdown-menu">

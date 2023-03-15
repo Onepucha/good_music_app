@@ -10,7 +10,6 @@
 
 const { configure } = require('quasar/wrappers')
 const path = require('path')
-// const svgLoader = require('vite-svg-loader')
 
 module.exports = configure(function (ctx) {
   return {
@@ -29,7 +28,7 @@ module.exports = configure(function (ctx) {
     // app boot file (/src/boot)
     // --> boot files are part of "main.js"
     // https://v2.quasar.dev/quasar-cli-vite/boot-files
-    boot: ['i18n', 'axios', 'UnoCss'],
+    boot: ['i18n', 'axios', 'UnoCss', 'fake-backend'],
 
     // https://v2.quasar.dev/quasar-cli-vite/quasar-config-js#css
     css: ['app.scss'],

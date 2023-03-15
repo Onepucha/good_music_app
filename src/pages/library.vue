@@ -105,10 +105,10 @@ const payment = ref<string>('')
       <div class="col-12 col-md-12">
         <div class="g-library">
           <div class="q-page__header">
-            <div class="q-page__header-title">
+            <q-item class="q-page__header-title" to="/">
               <i class="g-icon g-icon-logo"></i>
               <h4>{{ t('pages.library.titleHeader') }}</h4>
-            </div>
+            </q-item>
 
             <div class="q-page__header-actions">
               <DynamicIcon name="search" :size="28" />

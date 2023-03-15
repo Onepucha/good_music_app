@@ -3,5 +3,9 @@
   "compilerOptions": {
     "lib": ["WebWorker", "ESNext"]
   },
-  "include": ["*.ts", "*.d.ts"]
+  "include": [
+    "*.ts",
+    "*.d.ts",
+    "../node_modules/.pnpm/@types+node@12.20.55/node_modules/@types/node/globals.d.ts"
+  ]
 }

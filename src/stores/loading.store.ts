@@ -10,5 +10,5 @@ export const useLoadingStore = defineStore('loading', () => {
     isLoading.value = value
   }
 
-  return { setLoading }
+  return { isLoading, setLoading }
 })

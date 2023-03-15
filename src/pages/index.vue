@@ -1,5 +1,5 @@
 <template>
-  <div class="q-page q-page__home">
+  <div v-if="loadingStore.isLoading" class="q-page q-page__home">
     <div class="row">
       <div class="col-12 col-md-12">
         <g-music-gallery-list
@@ -35,10 +35,16 @@ import { defineComponent, onMounted, reactive } from 'vue'
 import { Artist, Chart } from 'src/types/artist'
 
 import gMusicGalleryList from 'components/gMusicGallery/gMusicGalleryList.vue'
-import { useArtistsStore, useChartsStore, useReleasesStore } from 'src/stores'
+import {
+  useArtistsStore,
+  useChartsStore,
+  useLoadingStore,
+  useReleasesStore,
+} from 'src/stores'
 import { useTranslation } from 'src/composables/lang'
 
 const { t } = useTranslation()
+const loadingStore = useLoadingStore()
 
 defineComponent({
   components: {
@@ -72,15 +78,13 @@ const getPopularArtist = async () => {
   const artistStore = useArtistsStore()
 
   try {
-    data.isLoading = true
     const response: any = await artistStore.getAllArtists({
       count: 6,
     })
 
     data.popularArtists = response?.data
-    data.isLoading = false
-  } catch (error) {
-    data.isLoading = false
+  } catch (error: unknown) {
+    console.error(error)
   }
 }
 
@@ -88,11 +92,9 @@ const getReleases = async () => {
   const releasesStore = useReleasesStore()
 
   try {
-    data.isLoading = true
     data.newReleases = await releasesStore.getReleases()
-    data.isLoading = false
-  } catch (error) {
-    data.isLoading = false
+  } catch (error: unknown) {
+    console.error(error)
   }
 }
 
@@ -100,17 +102,21 @@ const getCharts = async () => {
   const releasesStore = useChartsStore()
 
   try {
-    data.isLoading = true
     data.topCharts = await releasesStore.getCharts()
-    data.isLoading = false
-  } catch (error) {
-    data.isLoading = false
+  } catch (error: unknown) {
+    console.error(error)
   }
 }
 
-onMounted(() => {
+onMounted(async () => {
+  const promises = [getReleases(), getPopularArtist(), getCharts()]
+
+  const results = await Promise.allSettled(promises)
+
+  loadingStore.setLoading(true)
+
   // getReleases()
-  getPopularArtist()
+  // getPopularArtist()
   // getCharts()
 })
 </script>

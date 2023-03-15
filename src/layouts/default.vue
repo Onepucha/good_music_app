@@ -9,15 +9,15 @@ import {
 } from 'vue'
 
 import { useTranslation } from '@/composables/lang'
-import { useAuthStore } from '@/stores'
+import { useAuthStore, usePlayerStore, useUsersStore } from '@/stores'
 import { useQuasar } from 'quasar'
 import DynamicIcon from '@/components/DynamicIcon.vue'
 import RouterViewTransition from '@/components/RouterViewTransition.vue'
 import gCardPremium from '@/components/gCardPremium/gCardPremium.vue'
 import gPlayer from '@/components/gPlayer/gPlayer.vue'
-import { usePlayerStore, useUsersStore } from '@/stores/'
 
 const { t } = useTranslation()
+
 const usersStore = useUsersStore()
 const playerStore = usePlayerStore()
 

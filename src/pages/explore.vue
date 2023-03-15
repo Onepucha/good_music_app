@@ -148,10 +148,10 @@ const abortFilterFn = () => {
         <div class="g-explore">
           <div class="g-explore__wrap">
             <div class="q-page__header">
-              <div class="q-page__header-title">
+              <q-item class="q-page__header-title" to="/">
                 <i class="g-icon g-icon-logo"></i>
                 <h4>{{ t('pages.explore.titleHeader') }}</h4>
-              </div>
+              </q-item>
 
               <div class="q-page__header-dropdown">
                 <i class="g-icon g-icon-dropdown-menu">
