@@ -1,5 +1,5 @@
 <template>
-  <div class="q-page">
+  <div class="q-page q-page__home">
     <div class="row">
       <div class="col-12 col-md-12">
         <g-music-gallery-list

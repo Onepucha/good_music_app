@@ -241,11 +241,13 @@ onMounted(() => {
     <form class="g-register__form" @submit.prevent="onSubmit">
       <div class="g-register__form-wrapper">
         <template v-if="step === 0">
-          <g-back
-            :label="t('pages.register.buttonBackRegister')"
-            href="/"
-            icon="back"
-          />
+          <div class="q-page__header">
+            <g-back
+              :label="t('pages.register.buttonBackRegister')"
+              href="/"
+              icon="back"
+            />
+          </div>
 
           <h3 class="g-register__title">
             {{ t('pages.register.title') }}

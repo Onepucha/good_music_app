@@ -54,9 +54,15 @@ const onSubmit = async () => {
 </script>
 
 <template>
-  <div class="g-login">
+  <div class="q-page g-login">
     <form class="g-login__form" @submit.prevent="onSubmit">
-      <g-back :label="t('pages.login.buttonBackLogin')" href="/" icon="back" />
+      <div class="q-page__header">
+        <g-back
+          :label="t('pages.login.buttonBackLogin')"
+          href="/"
+          icon="back"
+        />
+      </div>
 
       <h3 class="g-login__title">{{ t('pages.login.title') }}</h3>
 

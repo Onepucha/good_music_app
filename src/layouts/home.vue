@@ -165,6 +165,71 @@ const avatarOrFullName = computed<string>(() =>
 
 <template>
   <q-layout :view="classesLayout()">
+    <q-header class="q-header" reveal>
+      <q-toolbar class="q-header__toolbar">
+        <!--        <q-btn dense flat icon="menu" round @click="toggleLeftDrawer" />-->
+
+        <div
+          v-if="data.isMobile"
+          :class="{ 'q-header__logo-full': !isAuth }"
+          class="q-header__logo"
+        >
+          <router-link to="/"></router-link>
+        </div>
+
+        <router-link v-if="isAuth" class="q-header__profile" to="/profile">
+          <div class="q-header__profile-avatar">
+            <q-avatar :size="'32px'" color="primary">
+              <template v-if="authUser.avatar">
+                <img :alt="authUser.fullname" src="/images/icons/avatar.png" />
+              </template>
+
+              <template v-else>
+                {{ avatarOrFullName }}
+              </template>
+            </q-avatar>
+          </div>
+          <div v-if="authUser.fullname" class="q-header__profile-name">
+            {{ authUser.fullname }}
+          </div>
+        </router-link>
+
+        <div class="q-header__search-container">
+          <q-input
+            v-if="!data.isMobile"
+            v-model="search"
+            :placeholder="t('layouts.placeholderSearch')"
+            class="q-header__search-input"
+            dense
+          />
+          <q-btn :ripple="false" class="q-header__search-btn" unelevated>
+            <DynamicIcon :size="28" name="search" />
+          </q-btn>
+        </div>
+
+        <q-btn
+          v-if="isAuth"
+          :ripple="false"
+          class="q-header__ball-btn"
+          unelevated
+        >
+          <DynamicIcon :size="28" name="ball" />
+        </q-btn>
+
+        <q-btn
+          v-if="!isAuth"
+          :label="t('layouts.buttonLogin')"
+          class="q-header__login icon-left"
+          rounded
+          text-color="''"
+          to="/login"
+          unelevated
+        >
+          <DynamicIcon class="on-left" name="login" />
+        </q-btn>
+      </q-toolbar>
+    </q-header>
+
     <q-drawer
       v-model="leftDrawerOpen"
       :width="240"

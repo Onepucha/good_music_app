@@ -1,7 +1,12 @@
 .q-header {
+  display: flex;
   color: $greyscale300;
   background-color: $white;
-  padding: 0 0 16px 0;
+  height: 64px;
+
+  @media #{$mobile} {
+    height: 80px;
+  }
 
   .q-btn {
     box-shadow: none;
@@ -84,8 +89,16 @@
     width: 100%;
 
     @media #{$mobile} {
-      padding: 24px 24px 0;
+      padding: 0 24px 0;
     }
+
+    //@supports (padding-top: constant(safe-area-inset-top)) {
+    //  margin-top: constant(safe-area-inset-top);
+    //}
+    //
+    //@supports (padding-top: env(safe-area-inset-top)) {
+    //  margin-top: env(safe-area-inset-top);
+    //}
   }
 
   &__search-container {
