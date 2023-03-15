@@ -1,6 +1,5 @@
 import { boot } from 'quasar/wrappers'
 import axios, { AxiosInstance } from 'axios'
-import { useLoadingStore } from '@/stores'
 
 declare module '@vue/runtime-core' {
   interface ComponentCustomProperties {
@@ -23,20 +22,14 @@ const api = axios.create({
 })
 
 api.interceptors.request.use((config) => {
-  const loadingStore = useLoadingStore()
-  loadingStore.setLoading(true)
   return config
 })
 
 api.interceptors.response.use(
   (res) => {
-    const loadingStore = useLoadingStore()
-    loadingStore.setLoading(false)
     return Promise.resolve(res)
   },
-  (err) => {
-    const loadingStore = useLoadingStore()
-    loadingStore.setLoading(false)
+  (err: Error) => {
     return Promise.reject(err)
   }
 )

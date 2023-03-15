@@ -13,6 +13,7 @@ export const useReleasesStore = defineStore('releases', () => {
   const getReleases = async () => {
     try {
       releases.value = await fetchWrapper.get(baseUrl)
+
       return releases.value
     } catch (error: unknown) {
       console.error(error)

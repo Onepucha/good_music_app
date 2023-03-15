@@ -31,7 +31,7 @@
     "stores": "^1.0.0",
     "to": "^0.2.9",
     "update": "^0.7.4",
-    "vite": "^4.1.4",
+    "vite": "^2.9.14",
     "vite-svg-loader": "^4.0.0",
     "vue": "^3.0.0",
     "vue-i18n": "^9.2.2",
@@ -59,7 +59,14 @@
     "stylelint-config-standard": "^29.0.0",
     "stylelint-config-standard-scss": "^6.1.0",
     "types": "^0.1.1",
-    "typescript": "^4.5.4"
+    "typescript": "^4.5.4",
+    "workbox-build": "^6.5.0",
+    "workbox-cacheable-response": "^6.5.0",
+    "workbox-core": "^6.5.0",
+    "workbox-expiration": "^6.5.0",
+    "workbox-precaching": "^6.5.0",
+    "workbox-routing": "^6.5.0",
+    "workbox-strategies": "^6.5.0"
   },
   "engines": {
     "node": "^18 || ^16 || ^14.19",

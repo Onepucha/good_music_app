@@ -1,27 +1,11 @@
 <script lang="ts" setup>
-import {
-  computed,
-  defineComponent,
-  onMounted,
-  onUnmounted,
-  reactive,
-  ref,
-} from 'vue'
+import { computed, onMounted, onUnmounted, reactive, ref } from 'vue'
 import { useQuasar } from 'quasar'
 import { useAuthStore } from '@/stores'
-import DynamicIcon from '@/components/DynamicIcon.vue'
 import RouterViewTransition from '@/components/RouterViewTransition.vue'
-import gCardPremium from '@/components/gCardPremium/gCardPremium.vue'
 import { useTranslation } from '@/composables/lang'
 
 const { t } = useTranslation()
-
-defineComponent({
-  components: {
-    DynamicIcon,
-    gCardPremium,
-  },
-})
 
 const leftDrawerOpen = ref<boolean>(false)
 
@@ -99,46 +83,6 @@ const classesLayout = () => {
 
 <template>
   <q-layout view="lHh lpr fFf">
-    <q-drawer
-      v-model="leftDrawerOpen"
-      :width="240"
-      behavior="desktop"
-      bordered
-      class="q-drawer"
-      show-if-above
-      side="left"
-    >
-      <div v-if="!data.isMobile" class="q-drawer__logo">
-        <router-link to="/"></router-link>
-      </div>
-
-      <div class="q-drawer__nav">
-        <router-link
-          v-for="(item, index) in navs"
-          :key="index"
-          :to="item.path"
-          class="q-drawer__nav-item"
-        >
-          <DynamicIcon :name="item.icon" class="q-drawer__nav-icon" />
-
-          <span class="q-drawer__nav-label">{{ item.name }}</span>
-        </router-link>
-      </div>
-
-      <g-card-premium class="q-drawer__card" />
-
-      <q-btn
-        :label="t('layouts.buttonInstallApp')"
-        :ripple="false"
-        class="q-drawer__install-app icon-left"
-        flat
-        text-color="''"
-        unelevated
-      >
-        <DynamicIcon class="on-left" name="download" />
-      </q-btn>
-    </q-drawer>
-
     <q-page-container>
       <RouterViewTransition></RouterViewTransition>
     </q-page-container>
