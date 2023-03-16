@@ -15,10 +15,12 @@ defineComponent({
 
 <template>
   <div class="q-page">
-    <g-back
-      :label="t('pages.releases.buttonBackRelease')"
-      icon="back"
-      @click.prevent="$router.go(-1)"
-    />
+    <div class="q-page__header">
+      <g-back
+        :label="t('pages.releases.buttonBackRelease')"
+        icon="back"
+        @click.prevent="$router.go(-1)"
+      />
+    </div>
   </div>
 </template>

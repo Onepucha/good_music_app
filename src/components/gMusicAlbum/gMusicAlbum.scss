@@ -21,6 +21,7 @@
     align-items: center;
     justify-content: center;
     width: 22px;
+    min-width: 22px;
     font-size: $size-18;
     font-weight: 700;
     line-height: $lh-22;
@@ -29,7 +30,9 @@
 
   &__picture {
     width: 80px;
+    min-width: 80px;
     height: 80px;
+    min-height: 80px;
     display: block;
     border-radius: 12px;
 

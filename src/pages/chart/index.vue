@@ -35,19 +35,23 @@ onMounted(async () => {
 
 <template>
   <div class="q-page q-page__chart">
-    <div class="q-page__header">
-      <g-back
-        :label="t('pages.chart.buttonBackChart')"
-        icon="back"
-        @click.prevent="$router.go(-1)"
-      />
-      <DynamicIcon :size="28" name="search" />
-    </div>
+    <div class="row">
+      <div class="col-12 col-md-12">
+        <div class="q-page__header">
+          <g-back
+            :label="t('pages.chart.buttonBackChart')"
+            icon="back"
+            @click.prevent="$router.go(-1)"
+          />
+          <DynamicIcon :size="28" name="search" />
+        </div>
 
-    <g-music-gallery-list
-      :list="data.charts"
-      :title="t('pages.chart.galleryListWeeklyAlbum.title')"
-      :type="'chart'"
-    />
+        <g-music-gallery-list
+          :list="data.charts"
+          :title="t('pages.chart.galleryListWeeklyAlbum.title')"
+          :type="'chart'"
+        />
+      </div>
+    </div>
   </div>
 </template>
