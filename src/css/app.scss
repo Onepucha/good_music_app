@@ -42,7 +42,7 @@ body,
   .router-view-transition-wrapper {
     @media #{$mobile} {
       @supports (padding-top: constant(safe-area-inset-top)) {
-        padding-top: calc(env(safe-area-inset-top) - 22px);
+        padding-top: calc(constant(safe-area-inset-top) - 22px);
       }
 
       @supports (padding: max(0px)) {
@@ -110,20 +110,34 @@ body,
       }
     }
 
-    &__chart {
-      .g-music-gallery-list {
-        margin: 32px 0 0;
-      }
-    }
-
     @media #{$mobile} {
-      min-height: 100vh;
       padding: 64px 24px 144px 24px;
+
+      @supports (padding-top: constant(safe-area-inset-top)) {
+        padding-top: max(84px, calc(constant(safe-area-inset-top) + 64px));
+        padding-bottom: max(144px, calc(constant(safe-area-inset-top) + 64px));
+      }
+
+      @supports (padding-top: env(safe-area-inset-top)) {
+        padding-top: max(84px, calc(env(safe-area-inset-top) + 64px));
+        padding-bottom: max(144px, calc(env(safe-area-inset-top) + 64px));
+      }
     }
 
     &__home {
       @media #{$mobile} {
-        padding: 94px 24px 144px;
+        @supports (padding-top: constant(safe-area-inset-top)) {
+          padding-top: max(84px, calc(constant(safe-area-inset-top) + 64px));
+          padding-bottom: max(
+            144px,
+            calc(constant(safe-area-inset-top) + 64px)
+          );
+        }
+
+        @supports (padding-top: env(safe-area-inset-top)) {
+          padding-top: max(84px, calc(env(safe-area-inset-top) + 64px));
+          padding-bottom: max(144px, calc(env(safe-area-inset-top) + 64px));
+        }
       }
     }
   }

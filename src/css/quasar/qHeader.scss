@@ -2,10 +2,17 @@
   display: flex;
   color: $greyscale300;
   background-color: $white;
-  height: 64px;
 
   @media #{$mobile} {
-    height: 80px;
+    @supports (padding-top: constant(safe-area-inset-top)) {
+      padding-top: max(12px, calc(constant(safe-area-inset-top) - 44px));
+      padding-bottom: max(12px, calc(constant(safe-area-inset-top) - 44px));
+    }
+
+    @supports (padding-top: env(safe-area-inset-top)) {
+      padding-top: max(12px, calc(env(safe-area-inset-top) - 44px));
+      padding-bottom: max(12px, calc(env(safe-area-inset-top) - 44px));
+    }
   }
 
   .q-btn {
@@ -20,11 +27,11 @@
     background-repeat: no-repeat;
     background-position: 0 0;
     background-size: contain;
-    background-image: url(@/assets/images/small_logo.svg);
+    background-image: url('src/assets/images/small_logo.svg');
 
     &-full {
       width: 129px;
-      background-image: url(@/assets/images/small_logo_full.svg);
+      background-image: url('src/assets/images/small_logo_full.svg');
 
       a {
         width: 129px;
@@ -87,18 +94,11 @@
     padding: 16px 30px 0;
     min-height: 40px;
     width: 100%;
+    background-color: $white;
 
     @media #{$mobile} {
       padding: 0 24px 0;
     }
-
-    //@supports (padding-top: constant(safe-area-inset-top)) {
-    //  margin-top: constant(safe-area-inset-top);
-    //}
-    //
-    //@supports (padding-top: env(safe-area-inset-top)) {
-    //  margin-top: env(safe-area-inset-top);
-    //}
   }
 
   &__search-container {
@@ -212,10 +212,10 @@ body.body--dark {
     background: $dark-1;
 
     &__logo {
-      background-image: url(@/assets/images/small_logo_dark.svg);
+      background-image: url('src/assets/images/small_logo_dark.svg');
 
       &-full {
-        background-image: url(@/assets/images/small_logo_full_dark.svg);
+        background-image: url('src/assets/images/small_logo_full_dark.svg');
       }
     }
 

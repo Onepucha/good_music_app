@@ -55,28 +55,32 @@ const getAlbums = async (index: number, done: any) => {
 
 <template>
   <div class="q-page">
-    <div class="q-page__header">
-      <g-back icon="back" @click.prevent="$router.go(-1)" />
-    </div>
-
-    <g-chart-info :chart="chart" />
-
-    <q-infinite-scroll
-      class="g-music-album-list"
-      :offset="250"
-      @load="getAlbums"
-    >
-      <g-music-album
-        v-for="(album, index) in data.albumList"
-        :key="index"
-        :album="album"
-      />
-
-      <template #loading>
-        <div class="row justify-center q-my-md">
-          <g-loader />
+    <div class="row">
+      <div class="col-12 col-md-12">
+        <div class="q-page__header">
+          <g-back icon="back" @click.prevent="$router.go(-1)" />
         </div>
-      </template>
-    </q-infinite-scroll>
+
+        <g-chart-info :chart="chart" />
+
+        <q-infinite-scroll
+          class="g-music-album-list"
+          :offset="250"
+          @load="getAlbums"
+        >
+          <g-music-album
+            v-for="(album, index) in data.albumList"
+            :key="index"
+            :album="album"
+          />
+
+          <template #loading>
+            <div class="row justify-center q-my-md">
+              <g-loader />
+            </div>
+          </template>
+        </q-infinite-scroll>
+      </div>
+    </div>
   </div>
 </template>

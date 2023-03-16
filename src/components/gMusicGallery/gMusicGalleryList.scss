@@ -27,6 +27,7 @@
 
       @media #{$mobile} {
         margin: 16px -24px 0;
+        padding: 0 24px 12px;
       }
     }
 
@@ -51,7 +52,6 @@
     display: grid;
     grid-template-columns: repeat(6, 1fr);
     gap: 24px 12px;
-    margin: 24px 0 0;
 
     @media #{$tablet} {
       grid-template-columns: repeat(3, 1fr);
