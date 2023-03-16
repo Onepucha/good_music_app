@@ -84,12 +84,10 @@ const addFollow = async (object: { follow: boolean; artist: Artist }) => {
 }
 
 const onAudioToggle = (item: { song: Song; index: number }) => {
-  console.log(playerStore.musicId)
-  console.log(item.song?._id)
-  if (playerStore.playing && playerStore.musicId === item.song?._id) {
+  if (playerStore.playing && playerStore.getMusicIndex === item.index) {
     onAudioPause()
   } else {
-    if (playerStore.musicId === item.song?._id) {
+    if (playerStore.getMusicIndex === item.index) {
       playerStore.setPlaying(true)
 
       nextTick(() => {

@@ -5,7 +5,7 @@ import { Artist, Song } from '@/types/artist'
 import DynamicIcon from '@/components/DynamicIcon.vue'
 import gPlayBtn from '@/components/gPlayBtn/gPlayBtn.vue'
 import { useTranslation } from '@/composables/lang'
-import { useAuthStore, useUsersStore, usePlayerStore } from '@/stores'
+import { useAuthStore, usePlayerStore, useUsersStore } from '@/stores'
 
 const { t } = useTranslation()
 const usersStore = useUsersStore()
@@ -92,7 +92,7 @@ const toggleFollow = (artist: Artist | undefined) => {
 }
 
 const onAudioToggle = () => {
-  emit('toggleplay', { song: props.song, index: 0 })
+  emit('toggleplay', { song: props.song, index: playerStore.getMusicIndex })
 }
 </script>
 
