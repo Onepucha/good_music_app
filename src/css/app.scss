@@ -6,10 +6,10 @@
   text-size-adjust: 100%;
 }
 
-@import 'quasar.variables';
-@import 'css-ios-pwa-viewport.css';
-@import 'fonts.css';
-@import 'global';
+@import "quasar.variables";
+@import "css-ios-pwa-viewport.css";
+@import "fonts.css";
+@import "global";
 
 html,
 body,
@@ -58,7 +58,7 @@ body,
     padding: 18px 30px 124px;
 
     &.g-login {
-      padding: 24px 24px 48px 24px;
+      padding: 24px 24px 48px;
     }
 
     &__header {
@@ -75,7 +75,7 @@ body,
         top: 0;
         left: 0;
         right: 0;
-        padding: 24px 24px 16px 24px;
+        padding: 24px 24px 16px;
         z-index: 102;
 
         @supports (padding-top: constant(safe-area-inset-top)) {
@@ -111,7 +111,7 @@ body,
     }
 
     @media #{$mobile} {
-      padding: 64px 24px 144px 24px;
+      padding: 64px 24px 144px;
 
       @supports (padding-top: constant(safe-area-inset-top)) {
         padding-top: max(84px, calc(constant(safe-area-inset-top) + 64px));
@@ -128,10 +128,11 @@ body,
       @media #{$mobile} {
         @supports (padding-top: constant(safe-area-inset-top)) {
           padding-top: max(84px, calc(constant(safe-area-inset-top) + 64px));
-          padding-bottom: max(
-            144px,
-            calc(constant(safe-area-inset-top) + 64px)
-          );
+          padding-bottom:
+            max(
+              144px,
+              calc(constant(safe-area-inset-top) + 64px)
+            );
         }
 
         @supports (padding-top: env(safe-area-inset-top)) {
