@@ -87,7 +87,10 @@ const onAudioToggle = (item: { song: Song; index: number }) => {
   if (playerStore.playing && playerStore.getMusicIndex === item.index) {
     onAudioPause()
   } else {
-    if (playerStore.getMusicIndex === item.index) {
+    if (
+      playerStore.getMusicIndex !== null &&
+      playerStore.getMusicIndex === item.index
+    ) {
       playerStore.setPlaying(true)
 
       nextTick(() => {

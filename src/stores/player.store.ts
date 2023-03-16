@@ -8,7 +8,7 @@ export const usePlayerStore = defineStore('player', () => {
   const playing = ref<boolean>(false)
   const artist = ref<Artist | undefined>(undefined)
   const music = ref<null | Song>(null)
-  const musicIndex = ref<number>(0)
+  const musicIndex = ref<number | null>(null)
   const list = ref<Array<Song>>([])
 
   // actions
@@ -40,8 +40,8 @@ export const usePlayerStore = defineStore('player', () => {
     return music.value?._id || ''
   })
 
-  const getMusicIndex = computed<number>(() => {
-    return musicIndex.value || 0
+  const getMusicIndex = computed<number | null>(() => {
+    return musicIndex.value || null
   })
 
   return {
