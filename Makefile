@@ -1,6 +1,6 @@
 deploy-stage:
 	@cp .env.production .env
-	npm run build
+	quasar build
 	@pm2 start ecosystem.config.cjs --only frontend-stage
 
 dev:
