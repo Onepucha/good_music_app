@@ -67,7 +67,7 @@ const sendCode = async () => {
 </script>
 
 <template>
-  <div class="g-forgot-password">
+  <div class="q-page g-forgot-password">
     <form class="g-forgot-password__form" @submit.prevent="sendCode">
       <g-back
         :label="t('pages.forgot-password.buttonBackForgotPassword')"
