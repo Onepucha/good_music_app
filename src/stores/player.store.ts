@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import { computed, ref } from 'vue'
-import { Song, Artist } from 'src/types/artist'
+import { Artist, Song } from 'src/types/artist'
 
 export const usePlayerStore = defineStore('player', () => {
   // initial state
@@ -8,6 +8,7 @@ export const usePlayerStore = defineStore('player', () => {
   const playing = ref<boolean>(false)
   const artist = ref<Artist | undefined>(undefined)
   const music = ref<null | Song>(null)
+  const musicIndex = ref<number>(0)
   const list = ref<Array<Song>>([])
 
   // actions
@@ -21,6 +22,7 @@ export const usePlayerStore = defineStore('player', () => {
 
   const setMusic = (currentMusic: Song, index: number) => {
     music.value = currentMusic
+    musicIndex.value = index
     player.value.data.internalMusic = currentMusic
     player.value.data.songIndex = index
   }
@@ -38,11 +40,16 @@ export const usePlayerStore = defineStore('player', () => {
     return music.value?._id || ''
   })
 
+  const getMusicIndex = computed<number>(() => {
+    return musicIndex.value || 0
+  })
+
   return {
     artist,
     player,
     playing,
     music,
+    musicIndex,
     list,
     musicId,
     artistId,
@@ -50,5 +57,6 @@ export const usePlayerStore = defineStore('player', () => {
     setPlaying,
     setMusic,
     setMusicList,
+    getMusicIndex,
   }
 })

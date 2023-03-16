@@ -3,9 +3,10 @@
   flex-direction: column;
   width: 100%;
   max-width: 380px;
-  margin: 24px auto 0;
+  margin: 0 auto;
 
-  & + .g-music-song-list {
+  & + .g-music-song-list,
+  & + .g-music-album-list {
     margin: 24px 0 0;
   }
 
@@ -82,7 +83,7 @@
   &__main {
     position: relative;
     display: flex;
-    gap: 24px;
+    gap: 16px;
     align-items: center;
     justify-content: space-between;
     width: 100%;
