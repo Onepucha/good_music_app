@@ -1,6 +1,8 @@
 deploy-stage:
 	@cp .env.production .env
 	quasar build
+	cp -a dist/spa/. dist/
+	rm -rf dist/spa
 	@pm2 start ecosystem.config.cjs --only frontend-stage
 
 dev:
