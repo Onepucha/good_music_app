@@ -41,7 +41,7 @@
           color: $greyscale500;
         }
 
-        &[type='password']:not(:placeholder-shown) {
+        &[type="password"]:not(:placeholder-shown) {
           font-family: Verdana, sans-serif;
         }
       }
