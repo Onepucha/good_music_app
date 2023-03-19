@@ -37,19 +37,17 @@ const data: Data = reactive({
 const getAllArtist = async (index: number, done: () => void) => {
   const artistStore = useArtistsStore()
 
-  data.page++
-
   try {
+    data.page++
     data.isLoading = true
     const response: any = await artistStore.getAllArtists({
       count: data.artistCount,
       page: data.page,
     })
 
-    await done()
-
     data.artists = data.artists.concat(response.data)
     data.isLoading = false
+    done()
   } catch (error) {
     data.isLoading = false
   }

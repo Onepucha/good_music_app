@@ -28,18 +28,24 @@ const isLoading = ref<boolean>(true)
 interface Data {
   artist: Artist | undefined
   artistSong: Array<Song>
+  page: number
 }
 
 const data: Data = reactive({
   artist: undefined,
   artistSong: [],
+  page: 0,
 })
 
 const getArtistSongs = async (index: number, done: () => void) => {
   try {
+    data.page++
     isLoading.value = true
     let id: string | string[] = route.params.id
-    const response: AxiosResponse = await Songs.getAll({ id: id })
+    const response: AxiosResponse = await Songs.getAll({
+      id: id,
+      page: data.page,
+    })
 
     data.artistSong = data.artistSong.concat(response.data.songs)
     isLoading.value = false

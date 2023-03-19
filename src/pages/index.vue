@@ -2,7 +2,6 @@
   <div v-if="loadingStore.isLoading" class="q-page q-page__home">
     <div class="row">
       <div class="col-12 col-md-12">
-        123
         <g-music-gallery-list
           :list="data.newReleases"
           :sub-title="t('pages.home.galleryListReleases.subTitle')"
