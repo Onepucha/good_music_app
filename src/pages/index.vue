@@ -109,14 +109,10 @@ const getCharts = async () => {
 }
 
 onMounted(async () => {
-  const promises = [getReleases(), getPopularArtist(), getCharts()]
-
-  const results = await Promise.allSettled(promises)
+  await getReleases()
+  await getPopularArtist()
+  await getCharts()
 
   loadingStore.setLoading(true)
-
-  // getReleases()
-  // getPopularArtist()
-  // getCharts()
 })
 </script>

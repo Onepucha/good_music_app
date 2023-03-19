@@ -60,7 +60,25 @@ body,
     &.g-login,
     &.g-register {
       flex-direction: row;
-      padding-bottom: 36px;
+      padding: 0;
+
+      @media #{$mobile} {
+        padding: 64px 24px 144px;
+
+        @supports (padding-top: constant(safe-area-inset-top)) {
+          padding-top: max(84px, calc(constant(safe-area-inset-top) + 44px));
+          padding-bottom:
+            max(
+              144px,
+              calc(constant(safe-area-inset-top) + 44px)
+            );
+        }
+
+        @supports (padding-top: env(safe-area-inset-top)) {
+          padding-top: max(84px, calc(env(safe-area-inset-top) + 44px));
+          padding-bottom: max(144px, calc(env(safe-area-inset-top) + 44px));
+        }
+      }
     }
 
     &.g-forgot-password {

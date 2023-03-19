@@ -19,8 +19,8 @@
     position: relative;
     display: flex;
     flex-direction: column;
+    padding: 48px 30px;
     flex: 0 0 440px;
-    padding: 24px 24px 48px;
 
     @media #{$tablet} {
       flex: 0 0 488px;

@@ -37,22 +37,26 @@ const data: Data = reactive({
   page: 0,
 })
 
+const scrollTargetRef = ref()
+
 const getArtistSongs = async (index: number, done: () => void) => {
   try {
     data.page++
-    isLoading.value = true
     let id: string | string[] = route.params.id
     const response: AxiosResponse = await Songs.getAll({
       id: id,
       page: data.page,
     })
 
-    data.artistSong = data.artistSong.concat(response.data.songs)
-    isLoading.value = false
+    if (response.data.songs.length === 0) {
+      scrollTargetRef.value.stop()
+    }
+
     done()
+    data.artistSong = data.artistSong.concat(response.data.songs)
   } catch (error: unknown) {
     console.error(error)
-    isLoading.value = false
+    scrollTargetRef.value.stop()
   }
 }
 
@@ -82,19 +86,25 @@ getArtistCode()
       </i>
     </div>
 
-    <q-infinite-scroll :offset="250" @load="getArtistSongs">
-      <g-music-song-list
-        v-if="data.artistSong.length"
-        :list="data.artistSong"
-        :artist="data.artist?.name"
-        :artist-id="data.artist?._id"
-      />
+    <q-list class="scroll">
+      <q-infinite-scroll
+        ref="scrollTargetRef"
+        :offset="250"
+        @load="getArtistSongs"
+      >
+        <g-music-song-list
+          v-if="data.artistSong.length"
+          :list="data.artistSong"
+          :artist="data.artist?.name"
+          :artist-id="data.artist?._id"
+        />
 
-      <template #loading>
-        <div class="row justify-center q-my-md">
-          <g-loader />
-        </div>
-      </template>
-    </q-infinite-scroll>
+        <template #loading>
+          <div class="row justify-center q-my-md">
+            <g-loader />
+          </div>
+        </template>
+      </q-infinite-scroll>
+    </q-list>
   </div>
 </template>

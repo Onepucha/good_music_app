@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { defineComponent, reactive } from 'vue'
+import { defineComponent, reactive, ref } from 'vue'
 
 import gBack from '@/components/gBack/gBack.vue'
 import gMusicGalleryList from '@/components/gMusicGallery/gMusicGalleryList.vue'
@@ -34,22 +34,27 @@ const data: Data = reactive({
   isLoading: false,
 })
 
+const scrollTargetRef = ref()
+
 const getAllArtist = async (index: number, done: () => void) => {
   const artistStore = useArtistsStore()
 
   try {
     data.page++
-    data.isLoading = true
     const response: any = await artistStore.getAllArtists({
       count: data.artistCount,
       page: data.page,
     })
 
-    data.artists = data.artists.concat(response.data)
-    data.isLoading = false
+    if (response.data.length === 0) {
+      scrollTargetRef.value.stop()
+    }
+
     done()
-  } catch (error) {
-    data.isLoading = false
+    data.artists = data.artists.concat(response.data)
+  } catch (error: unknown) {
+    console.error(error)
+    scrollTargetRef.value.stop()
   }
 }
 </script>
@@ -65,7 +70,7 @@ const getAllArtist = async (index: number, done: () => void) => {
       <DynamicIcon :size="28" name="search" />
     </div>
 
-    <q-infinite-scroll :offset="250" @load="getAllArtist">
+    <q-infinite-scroll ref="scrollTargetRef" :offset="250" @load="getAllArtist">
       <g-music-gallery-list :list="data.artists" :type="'artist'" />
 
       <template #loading>

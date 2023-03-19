@@ -39,7 +39,7 @@ const data: Data = reactive({
   albumList: [],
 })
 
-const getAlbums = async (index: number, done: any) => {
+const getAlbums = async (index: number, done: () => void) => {
   try {
     const albumsStore = useAlbumsStore()
 
