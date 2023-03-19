@@ -20,7 +20,7 @@
 
     @media #{$mobile} {
       flex: 1;
-      padding: 0 24px 24px 24px;
+      padding: 0;
     }
 
     &-wrapper {
@@ -68,11 +68,8 @@
 
   &__title {
     text-align: center;
-    margin: 56px 0 0;
 
     @media #{$mobile} {
-      margin: 42px 0 0;
-
       &::before {
         display: block;
         content: '';

@@ -157,13 +157,3 @@ body.body--dark {
     }
   }
 }
-
-.q-search {
-  &.q-field--focused {
-    .q-field__inner {
-      .q-field__control {
-        border-radius: 16px 16px 0 0;
-      }
-    }
-  }
-}

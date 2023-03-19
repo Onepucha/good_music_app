@@ -87,6 +87,13 @@ const routes: RouteRecordRaw[] = [
     ],
   },
   {
+    path: '/premium',
+    component: () => import('layouts/default.vue'),
+    children: [
+      { path: '', component: () => import('pages/premium/index.vue') },
+    ],
+  },
+  {
     path: '/playlists',
     component: () => import('layouts/default.vue'),
     children: [

@@ -237,7 +237,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="g-register">
+  <div class="q-page g-register">
     <form class="g-register__form" @submit.prevent="onSubmit">
       <div class="g-register__form-wrapper">
         <template v-if="step === 0">
