@@ -11,6 +11,7 @@ export interface User {
   _id: string
   id: string
   artists: string[] | any
+  songs: string[]
   created_at: string | Date
   updated_at: string | Date
   updatedAt: string

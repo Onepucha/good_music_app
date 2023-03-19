@@ -63,6 +63,10 @@ export const useAuthStore = defineStore('auth', () => {
     }
   }
 
+  const findSongLiked = (id: string) => {
+    return user.value?.songs ? user.value?.songs?.includes(id) : false
+  }
+
   const setLocale = (locale: string) => {
     if (user.value !== undefined) {
       user.value.language_descriptor = locale
@@ -81,5 +85,14 @@ export const useAuthStore = defineStore('auth', () => {
     () => user.value?.fullname || user.value?.email || ''
   )
 
-  return { user, login, userInfo, setProfile, setLocale, logout, fullname }
+  return {
+    user,
+    login,
+    userInfo,
+    setProfile,
+    setLocale,
+    logout,
+    findSongLiked,
+    fullname,
+  }
 })

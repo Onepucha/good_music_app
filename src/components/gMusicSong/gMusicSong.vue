@@ -1,14 +1,15 @@
 <script lang="ts" setup>
-import { defineComponent, nextTick, reactive, ref } from 'vue'
+import { computed, defineComponent, reactive, ref } from 'vue'
 import { Song } from '@/types/artist'
 
 import DynamicIcon from '@/components/DynamicIcon.vue'
 import gPlayBtn from '@/components/gPlayBtn/gPlayBtn.vue'
 import { useTranslation } from '@/composables/lang'
 import { RouteLocationRaw } from 'vue-router'
-import { usePlayerStore, useUsersStore } from '@/stores/'
+import { useAuthStore, usePlayerStore, useUsersStore } from '@/stores/'
 
 const { t } = useTranslation()
+const authStore = useAuthStore()
 const usersStore = useUsersStore()
 const playerStore = usePlayerStore()
 
@@ -20,7 +21,7 @@ defineComponent({
 })
 
 const props = defineProps<{
-  song?: Song | undefined
+  song: Song
   artist?: string
   artistId?: RouteLocationRaw
 }>()
@@ -32,47 +33,26 @@ interface Menu {
 
 interface Data {
   menuTheme: boolean
-  menu: Menu[]
 }
 
 const data: Data = reactive({
   menuTheme: usersStore.menuTheme,
-  menu: [
-    {
-      label: t('gMusicSong.like'),
-      icon: 'like',
-    },
-    {
-      label: t('gMusicSong.addToPlaylist'),
-      icon: 'add_playlist',
-    },
-    {
-      label: t('gMusicSong.dontPlayThis'),
-      icon: 'dont_play',
-    },
-    {
-      label: t('gMusicSong.download'),
-      icon: 'download_song',
-    },
-    {
-      label: t('gMusicSong.viewArtist'),
-      icon: 'artist',
-    },
-    {
-      label: t('gMusicSong.gotoAlbum'),
-      icon: 'play_album',
-    },
-    {
-      label: t('gMusicSong.share'),
-      icon: 'share',
-    },
-  ],
 })
 
-const emit = defineEmits(['toggleplay'])
+const songLiked = computed<boolean>(() => {
+  return authStore.findSongLiked(props.song?._id)
+})
+
+const like = ref<boolean>(songLiked.value)
+
+const emit = defineEmits(['toggleplay', 'like'])
 
 const onAudioToggle = () => {
   emit('toggleplay', props.song)
+}
+
+const setLiked = () => {
+  emit('like', { ids: props.song?._id, is_add_to_liked: !songLiked.value })
 }
 </script>
 
@@ -126,18 +106,77 @@ const onAudioToggle = () => {
           anchor="bottom right"
         >
           <q-list>
-            <q-item
-              v-for="(item, index) in data.menu"
-              :key="index"
-              v-close-popup
-              clickable
-            >
+            <q-item v-close-popup clickable @click.prevent="setLiked">
               <q-item-section avatar>
-                <DynamicIcon :size="20" :name="item.icon" />
+                <DynamicIcon
+                  :class="{ active: songLiked }"
+                  :size="20"
+                  name="like"
+                />
               </q-item-section>
 
               <q-item-section>
-                {{ item.label }}
+                {{ t('gMusicSong.like') }}
+              </q-item-section>
+            </q-item>
+
+            <q-item v-close-popup clickable>
+              <q-item-section avatar>
+                <DynamicIcon :size="20" name="add_playlist" />
+              </q-item-section>
+
+              <q-item-section>
+                {{ t('gMusicSong.addToPlaylist') }}
+              </q-item-section>
+            </q-item>
+
+            <q-item v-close-popup clickable>
+              <q-item-section avatar>
+                <DynamicIcon :size="20" name="dont_play" />
+              </q-item-section>
+
+              <q-item-section>
+                {{ t('gMusicSong.dontPlayThis') }}
+              </q-item-section>
+            </q-item>
+
+            <q-item v-close-popup clickable>
+              <q-item-section avatar>
+                <DynamicIcon :size="20" name="download_song" />
+              </q-item-section>
+
+              <q-item-section>
+                {{ t('gMusicSong.download') }}
+              </q-item-section>
+            </q-item>
+
+            <q-item v-close-popup clickable>
+              <q-item-section avatar>
+                <DynamicIcon :size="20" name="artist" />
+              </q-item-section>
+
+              <q-item-section>
+                {{ t('gMusicSong.viewArtist') }}
+              </q-item-section>
+            </q-item>
+
+            <q-item v-close-popup clickable>
+              <q-item-section avatar>
+                <DynamicIcon :size="20" name="play_album" />
+              </q-item-section>
+
+              <q-item-section>
+                {{ t('gMusicSong.gotoAlbum') }}
+              </q-item-section>
+            </q-item>
+
+            <q-item v-close-popup clickable>
+              <q-item-section avatar>
+                <DynamicIcon :size="20" name="share" />
+              </q-item-section>
+
+              <q-item-section>
+                {{ t('gMusicSong.share') }}
               </q-item-section>
             </q-item>
           </q-list>

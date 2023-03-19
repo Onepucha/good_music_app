@@ -26,10 +26,16 @@ const props = withDefaults(defineProps<Props>(), {
   artistId: '',
 })
 
-const emit = defineEmits(['toggleplay'])
+const emit = defineEmits(['toggleplay', 'like'])
 
 const onAudioToggle = (song: Song, index: number) => {
   emit('toggleplay', { song, index })
+}
+
+const setLiked = (object: { ids: string; is_add_to_liked: boolean }) => {
+  let idsSong = [] as Array<string>
+  idsSong.push(object.ids)
+  emit('like', { ids: idsSong, is_add_to_liked: object.is_add_to_liked })
 }
 </script>
 
@@ -57,6 +63,7 @@ const onAudioToggle = (song: Song, index: number) => {
           :artist-id="artistId"
           :song="item"
           @toggleplay="onAudioToggle(item, index)"
+          @like="setLiked"
         />
       </div>
     </div>

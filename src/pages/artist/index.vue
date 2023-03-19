@@ -34,7 +34,7 @@ const data: Data = reactive({
   isLoading: false,
 })
 
-const scrollTargetRef = ref()
+const scrollTargetRef = ref<any>(document.createElement('div'))
 
 const getAllArtist = async (index: number, done: () => void) => {
   const artistStore = useArtistsStore()

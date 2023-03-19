@@ -7,11 +7,18 @@ import gBack from '@/components/gBack/gBack.vue'
 import gMusicGenericArtist from '@/components/gMusicGenericArtist/gMusicGenericArtist.vue'
 import gMusicSongList from '@/components/gMusicSong/gMusicSongList.vue'
 import { useTranslation } from '@/composables/lang'
-import { useAlertStore, useArtistsStore, usePlayerStore } from '@/stores'
+import {
+  useAlertStore,
+  useArtistsStore,
+  useAuthStore,
+  usePlayerStore,
+} from '@/stores'
 import Songs from '@/services/songs'
 import { AxiosResponse } from 'axios'
+import { api } from '@/boot/axios'
 
 const { t } = useTranslation()
+const authStore = useAuthStore()
 const playerStore = usePlayerStore()
 
 defineComponent({
@@ -80,6 +87,20 @@ const addFollow = async (object: { follow: boolean; artist: Artist }) => {
     if (error instanceof Error) {
       alertStore.error(error.message)
     }
+  }
+}
+
+const setLiked = async (object: {
+  ids: string[]
+  is_add_to_liked: boolean
+}) => {
+  try {
+    await Songs.setLiked(object.ids, object.is_add_to_liked)
+    // TODO: Fixed for optimization
+    let response = await api.get('user/info')
+    authStore.user = response.data.user
+  } catch (error: unknown) {
+    console.error(error)
   }
 }
 
@@ -161,6 +182,7 @@ onMounted(async () => {
         :sub-title="t('pages.artists.gMusicSongList.subTitle')"
         :title="t('pages.artists.gMusicSongList.title')"
         @toggleplay="onAudioToggle"
+        @like="setLiked"
       />
     </template>
   </div>
