@@ -1,8 +1,8 @@
 .q-menu {
   border: 1px solid $primary;
-  border-top: none;
-  border-radius: 0 0 16px 16px;
+  border-radius: 16px;
   box-shadow: none;
+  margin-top: 10px !important;
 
   &.popover-menu {
     border-radius: 16px;

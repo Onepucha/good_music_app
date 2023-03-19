@@ -41,7 +41,7 @@
           color: $greyscale500;
         }
 
-        &[type='password']:not(:placeholder-shown) {
+        &[type="password"]:not(:placeholder-shown) {
           font-family: Verdana, sans-serif;
         }
       }
@@ -153,16 +153,6 @@ body.body--dark {
         path {
           stroke: $white;
         }
-      }
-    }
-  }
-}
-
-.q-search {
-  &.q-field--focused {
-    .q-field__inner {
-      .q-field__control {
-        border-radius: 16px 16px 0 0;
       }
     }
   }

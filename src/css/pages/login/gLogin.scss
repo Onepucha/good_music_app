@@ -28,6 +28,7 @@
 
     @media #{$mobile} {
       flex: 1;
+      padding: 0;
     }
   }
 
@@ -49,11 +50,8 @@
 
   &__title {
     text-align: center;
-    margin: 56px 0 0;
 
     @media #{$mobile} {
-      margin: 42px 0 0;
-
       &::before {
         display: block;
         content: '';

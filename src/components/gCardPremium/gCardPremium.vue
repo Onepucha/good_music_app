@@ -1,12 +1,7 @@
 <script lang="ts" setup>
 import { useTranslation } from '@/composables/lang'
+
 const { t } = useTranslation()
-
-const emit = defineEmits(['get-premium'])
-
-const getPremium = (event: any) => {
-  emit('get-premium', event.target.value)
-}
 </script>
 
 <template>
@@ -22,7 +17,7 @@ const getPremium = (event: any) => {
         rounded
         text-color="''"
         unelevated
-        @click.prevent="getPremium"
+        to="/premium"
       />
     </q-card-section>
   </q-card>

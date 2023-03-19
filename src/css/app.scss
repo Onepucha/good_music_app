@@ -57,9 +57,10 @@ body,
     height: 100%;
     padding: 18px 30px 124px;
 
-    &.g-login {
-      padding: 0;
+    &.g-login,
+    &.g-register {
       flex-direction: row;
+      padding-bottom: 36px;
     }
 
     &.g-forgot-password {
