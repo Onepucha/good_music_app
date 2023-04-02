@@ -1,66 +1,81 @@
 <script lang="ts" setup>
-import { defineComponent, onMounted, reactive } from 'vue'
+import { defineComponent, reactive, ref } from 'vue'
 
 import gBack from '@/components/gBack/gBack.vue'
+import gMusicGalleryList from '@/components/gMusicGallery/gMusicGalleryList.vue'
+import gLoader from '@/components/gLoader/gLoader.vue'
 import DynamicIcon from '@/components/DynamicIcon.vue'
-import gMusicAlbum from '@/components/gMusicAlbum/gMusicAlbum.vue'
+import Albums from '@/services/albums'
+
 import { useTranslation } from '@/composables/lang'
-import { useAlbumsStore } from '@/stores/albums.store'
-import { Song } from '@/types/artist'
 
 const { t } = useTranslation()
 
 defineComponent({
   components: {
     gBack,
+    gMusicGalleryList,
+    gLoader,
     DynamicIcon,
-    gMusicAlbum,
   },
 })
 
 interface Data {
-  albumList: Array<Song> | undefined
+  albums: Array<string>
+  page: number
+  albumCount: number
+  isLoading: boolean
 }
 
 const data: Data = reactive({
-  albumList: [],
+  albums: [],
+  page: 0,
+  albumCount: 24,
+  isLoading: false,
 })
 
-onMounted(async () => {
-  const albumsStore = useAlbumsStore()
+const scrollTargetRef = ref<any>(document.createElement('div'))
 
-  data.albumList = await albumsStore.getAlbums()
-})
+const getAllAlbums = async (index: number, done: () => void) => {
+  try {
+    data.page++
+    const response: any = await Albums.getAll({
+      count: data.albumCount,
+      page: data.page,
+    })
+
+    if (response.data.length === 0) {
+      scrollTargetRef.value.stop()
+    }
+
+    done()
+    data.albums = data.albums.concat(response.data.albums)
+  } catch (error: unknown) {
+    console.error(error)
+    scrollTargetRef.value.stop()
+  }
+}
 </script>
 
 <template>
   <div class="q-page">
-    <div class="row">
-      <div class="col-12 col-md-12">
-        <div class="q-page__header">
-          <g-back
-            icon="back"
-            :label="t('pages.albums.buttonBackAlbums')"
-            @click.prevent="$router.go(-1)"
-          />
-
-          <div class="q-page__header-actions">
-            <DynamicIcon name="search" :size="28" />
-
-            <div class="q-page__header-dropdown">
-              <i class="g-icon g-icon-dropdown-menu">
-                <span></span>
-              </i>
-            </div>
-          </div>
-        </div>
-
-        <g-music-album
-          v-for="album in data.albumList"
-          :key="album._id"
-          :album="album"
-        />
-      </div>
+    <div class="q-page__header">
+      <g-back
+        :label="t('pages.albums.buttonBackAlbums')"
+        icon="back"
+        @click.prevent="$router.go(-1)"
+      />
+      <DynamicIcon :size="28" name="search" />
     </div>
+
+    <q-infinite-scroll ref="scrollTargetRef" :offset="250" @load="getAllAlbums">
+      <g-music-gallery-list :list="data.albums" :type="'album'" />
+
+      <template #loading>
+        <div class="row justify-center q-my-md">
+          <g-loader />
+        </div>
+      </template>
+    </q-infinite-scroll>
   </div>
 </template>

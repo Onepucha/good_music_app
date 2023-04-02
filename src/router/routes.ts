@@ -29,17 +29,42 @@ const routes: RouteRecordRaw[] = [
   {
     path: '/albums',
     component: () => import('layouts/default.vue'),
+    children: [{ path: '', component: () => import('pages/albums/index.vue') }],
+  },
+  {
+    name: 'album',
+    path: '/album',
+    component: () => import('layouts/default.vue'),
     children: [
-      { path: '', component: () => import('pages/albums/index.vue') },
-      { path: ':id', component: () => import('pages/albums/[id].vue') },
+      {
+        name: 'album',
+        path: ':id',
+        component: () => import('pages/album/[id]/index.vue'),
+      },
+      {
+        path: ':id/tracks',
+        component: () => import('pages/album/[id]/tracks/index.vue'),
+      },
+      {
+        path: ':id/album/:code',
+        component: () => import('pages/album/[id]/album/[code]/index.vue'),
+      },
     ],
   },
   {
+    name: 'artist',
     path: '/artist',
     component: () => import('layouts/default.vue'),
     children: [
-      { path: '', component: () => import('pages/artist/index.vue') },
-      { path: ':id', component: () => import('pages/artist/[id]/index.vue') },
+      {
+        name: 'artist',
+        path: '',
+        component: () => import('pages/artist/index.vue'),
+      },
+      {
+        path: ':id',
+        component: () => import('pages/artist/[id]/index.vue'),
+      },
       {
         path: ':id/tracks',
         component: () => import('pages/artist/[id]/tracks/index.vue'),
@@ -98,6 +123,10 @@ const routes: RouteRecordRaw[] = [
     component: () => import('layouts/default.vue'),
     children: [
       { path: '', component: () => import('pages/playlists/index.vue') },
+      {
+        path: ':id',
+        component: () => import('pages/playlists/[id]/index.vue'),
+      },
     ],
   },
   {

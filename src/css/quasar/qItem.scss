@@ -13,6 +13,25 @@
           stroke: $primary;
         }
 
+        &-like,
+        &-heart {
+          path {
+            &:nth-child(2) {
+              stroke: $primary;
+            }
+          }
+
+          &.active {
+            path {
+              fill: transparent;
+
+              &:nth-child(2) {
+                stroke: $primary;
+              }
+            }
+          }
+        }
+
         &-playlists,
         &-songs {
           path {

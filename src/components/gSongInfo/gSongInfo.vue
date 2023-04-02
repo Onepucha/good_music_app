@@ -1,13 +1,24 @@
 <script setup lang="ts">
 import { computed, defineComponent, reactive } from 'vue'
-import { Song } from '@/types/artist'
+import { Artist, Song } from '@/types/artist'
 
 import DynamicIcon from '@/components/DynamicIcon.vue'
 import { useTranslation } from '@/composables/lang'
-import { useUsersStore } from '@/stores'
+import {
+  useAlertStore,
+  useAuthStore,
+  usePlayerStore,
+  useUsersStore,
+} from '@/stores'
+import { copyToClipboard } from 'quasar'
+import { useRoute } from 'vue-router'
 
+const route = useRoute()
 const { t } = useTranslation()
+const authStore = useAuthStore()
 const usersStore = useUsersStore()
+const alertStore = useAlertStore()
+const playerStore = usePlayerStore()
 
 defineComponent({
   components: {
@@ -18,58 +29,29 @@ defineComponent({
 const emit = defineEmits([
   'toggleplay',
   'add-follow',
-  'like',
   'add-playlist',
   'download',
+  'set-liked',
+  'view-artist',
+  'go-to-album',
+  'dont-play-this',
 ])
-
-interface Menu {
-  label: string
-  icon: string
-}
 
 interface Data {
   menuTheme: boolean
-  menu: Menu[]
 }
 
 const props = defineProps<{
   song?: Song | undefined
-  artist?: string
+  artist: Artist
 }>()
 
 const data: Data = reactive({
   menuTheme: usersStore.menuTheme,
-  menu: [
-    {
-      label: t('gMusicSong.like'),
-      icon: 'like',
-    },
-    {
-      label: t('gMusicSong.addToPlaylist'),
-      icon: 'add_playlist',
-    },
-    {
-      label: t('gMusicSong.dontPlayThis'),
-      icon: 'dont_play',
-    },
-    {
-      label: t('gMusicSong.download'),
-      icon: 'download_song',
-    },
-    {
-      label: t('gMusicSong.viewArtist'),
-      icon: 'artist',
-    },
-    {
-      label: t('gMusicSong.gotoAlbum'),
-      icon: 'play_album',
-    },
-    {
-      label: t('gMusicSong.share'),
-      icon: 'share',
-    },
-  ],
+})
+
+const hasLiked = computed<boolean>(() => {
+  return !!props.song?.is_liked
 })
 
 const infoLength = computed<boolean>(() => {
@@ -85,6 +67,47 @@ const allGenres = computed<string>(() => {
     })
     .join(', ')
 })
+
+const setShare = () => {
+  copyToClipboard(`${import.meta.env.VITE_API_URL}${route.path}`)
+    .then(() => {
+      alertStore.success(t('gMusicGenericArtist.successClipboard'))
+    })
+    .catch(() => {
+      alertStore.error(t('gMusicGenericArtist.errorClipboard'))
+    })
+}
+
+const setLiked = () => {
+  emit('set-liked', true, {
+    ids: [props.song?._id],
+    is_add_to_liked: !props.song?.is_liked,
+  })
+}
+
+const onAudioToggle = () => {
+  emit('toggleplay', { song: props.song, index: playerStore.getMusicIndex })
+}
+
+const downloadSong = () => {
+  emit('download', props.song?.url, props.song?.name)
+}
+
+const viewArtist = () => {
+  emit('view-artist', props.artist._id)
+}
+
+const goToAlbum = () => {
+  emit('go-to-album', props.song?.albums?.at(0))
+}
+
+const addPlayList = () => {
+  emit('add-playlist', props.song)
+}
+
+const dontPlayThis = () => {
+  emit('dont-play-this', props.song)
+}
 </script>
 
 <template>
@@ -107,7 +130,7 @@ const allGenres = computed<string>(() => {
       </h3>
 
       <div class="g-song-info__artist-name">
-        <span>{{ props.artist || 'Untitled' }}</span>
+        <span>{{ props.artist.name || 'Untitled' }}</span>
 
         <span v-if="allGenres.length">, {{ allGenres }} </span>
       </div>
@@ -121,18 +144,26 @@ const allGenres = computed<string>(() => {
 
     <div class="g-song-info__main">
       <div class="g-song-info__actions">
-        <DynamicIcon :size="24" name="heart" @click.prevent="emit('like')" />
-
         <DynamicIcon
+          v-if="authStore.user"
           :size="24"
-          name="add_playlist"
-          @click.prevent="emit('add-playlist')"
+          name="heart"
+          :class="{ active: !!props.song?.is_liked }"
+          @click.prevent="setLiked"
         />
 
         <DynamicIcon
+          v-if="authStore.user"
+          :size="24"
+          name="add_playlist"
+          @click.prevent="addPlayList"
+        />
+
+        <DynamicIcon
+          v-if="authStore.user"
           :size="24"
           name="download_song"
-          @click.prevent="emit('download')"
+          @click.prevent="downloadSong"
         />
 
         <i class="g-icon g-icon-dots" @click.prevent.stop="">
@@ -146,17 +177,47 @@ const allGenres = computed<string>(() => {
           >
             <q-list>
               <q-item
-                v-for="(item, index) in data.menu"
-                :key="index"
+                v-if="authStore.user && props.song"
                 v-close-popup
                 clickable
+                @click.prevent="dontPlayThis"
               >
                 <q-item-section avatar>
-                  <DynamicIcon :size="20" :name="item.icon" />
+                  <DynamicIcon :size="20" name="dont_play" />
                 </q-item-section>
 
                 <q-item-section>
-                  {{ item.label }}
+                  {{ t('gMusicSong.dontPlayThis') }}
+                </q-item-section>
+              </q-item>
+
+              <q-item v-close-popup clickable @click.prevent="viewArtist">
+                <q-item-section avatar>
+                  <DynamicIcon :size="20" name="artist" />
+                </q-item-section>
+
+                <q-item-section>
+                  {{ t('gMusicSong.viewArtist') }}
+                </q-item-section>
+              </q-item>
+
+              <q-item v-close-popup clickable @click.prevent="goToAlbum">
+                <q-item-section avatar>
+                  <DynamicIcon :size="20" name="play_album" />
+                </q-item-section>
+
+                <q-item-section>
+                  {{ t('gMusicSong.gotoAlbum') }}
+                </q-item-section>
+              </q-item>
+
+              <q-item v-close-popup clickable @click.prevent="setShare">
+                <q-item-section avatar>
+                  <DynamicIcon :size="20" name="share" />
+                </q-item-section>
+
+                <q-item-section>
+                  {{ t('gMusicSong.share') }}
                 </q-item-section>
               </q-item>
             </q-list>
@@ -171,9 +232,14 @@ const allGenres = computed<string>(() => {
           rounded
           text-color="''"
           unelevated
-          @click.prevent="emit('toggleplay')"
+          @click.prevent="onAudioToggle"
         >
-          <DynamicIcon class="on-left" name="play" />
+          <DynamicIcon
+            v-if="playerStore.playing"
+            class="on-left"
+            name="pause"
+          />
+          <DynamicIcon v-else class="on-left" name="play" />
         </q-btn>
       </div>
     </div>

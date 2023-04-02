@@ -1,11 +1,12 @@
 <script lang="ts" setup>
 import { defineComponent, nextTick, onMounted, reactive, ref } from 'vue'
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import { Artist, Song } from '@/types/artist'
 
 import gBack from '@/components/gBack/gBack.vue'
 import gMusicGenericArtist from '@/components/gMusicGenericArtist/gMusicGenericArtist.vue'
 import gMusicSongList from '@/components/gMusicSong/gMusicSongList.vue'
+import gMusicSongListNotFound from '@/components/gMusicSong/gMusicSongListNotFound.vue'
 import { useTranslation } from '@/composables/lang'
 import {
   useAlertStore,
@@ -13,9 +14,8 @@ import {
   useAuthStore,
   usePlayerStore,
 } from '@/stores'
+import { downloadSong } from '@/utils/utils'
 import Songs from '@/services/songs'
-import { AxiosResponse } from 'axios'
-import { api } from '@/boot/axios'
 
 const { t } = useTranslation()
 const authStore = useAuthStore()
@@ -26,10 +26,12 @@ defineComponent({
     gBack,
     gMusicGenericArtist,
     gMusicSongList,
+    gMusicSongListNotFound,
   },
 })
 
 const route = useRoute()
+const router = useRouter()
 
 const isLoading = ref<boolean>(true)
 
@@ -62,7 +64,7 @@ const getArtistCode = async () => {
 const getArtistSongs = async () => {
   try {
     let id: string | string[] = route.params.id
-    const response: AxiosResponse = await Songs.getAll({ count: 3, id: id })
+    const response: any = await Songs.getAll({ count: 3, id: id })
 
     data.artistSong = response.data.songs
   } catch (error: unknown) {
@@ -90,15 +92,23 @@ const addFollow = async (object: { follow: boolean; artist: Artist }) => {
   }
 }
 
-const setLiked = async (object: {
-  ids: string[]
-  is_add_to_liked: boolean
-}) => {
+const setLiked = async (
+  isSingle: boolean,
+  object: {
+    ids: string[]
+    is_add_to_liked: boolean
+  }
+) => {
   try {
     await Songs.setLiked(object.ids, object.is_add_to_liked)
-    // TODO: Fixed for optimization
-    let response = await api.get('user/info')
-    authStore.user = response.data.user
+
+    const index = data.artistSong?.findIndex(
+      (song) => song._id === object.ids.at(0)
+    )
+
+    if (data.artistSong && index !== undefined) {
+      data.artistSong[index].is_liked = object.is_add_to_liked
+    }
   } catch (error: unknown) {
     console.error(error)
   }
@@ -148,6 +158,22 @@ const onAudioPause = () => {
   playerStore.player.pause()
 }
 
+const viewArtist = (url: string) => {
+  router.push(`/artist/${url}`)
+}
+
+const goToAlbum = (url: string) => {
+  router.push(`/album/${url}`)
+}
+
+const addPlayList = (song: Song) => {
+  console.log(song)
+}
+
+const dontPlayThis = (song: Song) => {
+  console.log(song)
+}
+
 onMounted(async () => {
   await getArtistCode()
   await getArtistSongs()
@@ -172,18 +198,27 @@ onMounted(async () => {
         :song="data.artistSong.at(0)"
         @add-follow="addFollow"
         @toggleplay="onAudioToggle"
+        @download="downloadSong"
+        @add-playlist="addPlayList"
+        @dont-play-this="dontPlayThis"
       />
 
       <g-music-song-list
         v-if="data.artistSong.length"
         :list="data.artistSong"
-        :artist="data.artist?.name"
+        :artist="playerStore.artist"
         :artist-id="data.artist?._id"
         :sub-title="t('pages.artists.gMusicSongList.subTitle')"
         :title="t('pages.artists.gMusicSongList.title')"
         @toggleplay="onAudioToggle"
-        @like="setLiked"
+        @download="downloadSong"
+        @go-to-album="goToAlbum"
+        @set-liked="setLiked"
+        @view-artist="viewArtist"
+        @add-playlist="addPlayList"
+        @dont-play-this="dontPlayThis"
       />
+      <g-music-song-list-not-found v-else />
     </template>
   </div>
 </template>

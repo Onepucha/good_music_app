@@ -1,89 +1,97 @@
 <script setup lang="ts">
-import { computed, defineComponent, reactive, ref } from 'vue'
-import { Artist } from '@/types/artist'
+import { computed, defineComponent, reactive } from 'vue'
+import { Album, Song } from '@/types/artist'
 
 import DynamicIcon from '@/components/DynamicIcon.vue'
-import { useTranslation } from '@/composables/lang'
+import gPlayBtn from '@/components/gPlayBtn/gPlayBtn.vue'
 import Readmore from '@/components/Readmore.vue'
-import { useUsersStore } from '@/stores'
+import {
+  useAlertStore,
+  useAuthStore,
+  usePlayerStore,
+  useUsersStore,
+} from '@/stores'
+import { useTranslation } from '@/composables/lang'
+import { copyToClipboard } from 'quasar'
+import { useRoute } from 'vue-router'
 
+const route = useRoute()
 const { t } = useTranslation()
+const authStore = useAuthStore()
 const usersStore = useUsersStore()
+const playerStore = usePlayerStore()
+const alertStore = useAlertStore()
 
 defineComponent({
   components: {
     DynamicIcon,
     Readmore,
+    gPlayBtn,
   },
 })
 
-const emit = defineEmits(['add-follow', 'like', 'add-playlist', 'download'])
-
-interface Menu {
-  label: string
-  icon: string
-}
+const emit = defineEmits([
+  'add-follow',
+  'toggleplay',
+  'add-playlist',
+  'download',
+  'dont-play-this',
+  'view-artist',
+  'set-liked',
+])
 
 interface Data {
   menuTheme: boolean
-  menu: Menu[]
 }
 
 const props = defineProps<{
-  artist: Artist
+  album: Album
+  song?: Song | undefined
 }>()
 
 const data: Data = reactive({
   menuTheme: usersStore.menuTheme,
-  menu: [
-    {
-      label: t('gMusicSong.like'),
-      icon: 'like',
-    },
-    {
-      label: t('gMusicSong.addToPlaylist'),
-      icon: 'add_playlist',
-    },
-    {
-      label: t('gMusicSong.dontPlayThis'),
-      icon: 'dont_play',
-    },
-    {
-      label: t('gMusicSong.download'),
-      icon: 'download_song',
-    },
-    {
-      label: t('gMusicSong.viewArtist'),
-      icon: 'artist',
-    },
-    {
-      label: t('gMusicSong.gotoAlbum'),
-      icon: 'play_album',
-    },
-    {
-      label: t('gMusicSong.share'),
-      icon: 'share',
-    },
-  ],
-})
-
-const follow = ref<boolean>(false)
-
-const followBtnText = computed<string>(() => {
-  return follow.value ? 'Following' : 'Follow'
-})
-
-const followBtnClass = computed<string>(() => {
-  return follow.value ? 'q-btn-border' : ''
 })
 
 const infoLength = computed<boolean>(() => {
-  return props.artist?.info ? props.artist?.info?.length > 0 : false
+  return props.album?.info ? props.album?.info?.length > 0 : false
 })
 
-const toggleFollow = (artist: Artist) => {
-  follow.value = !follow.value
-  emit('add-follow', artist)
+const onAudioToggle = () => {
+  emit('toggleplay', { song: props.song, index: playerStore.getMusicIndex })
+}
+
+const setShare = () => {
+  copyToClipboard(`${import.meta.env.VITE_API_URL}${route.path}`)
+    .then(() => {
+      alertStore.success(t('gMusicGenericArtist.successClipboard'))
+    })
+    .catch(() => {
+      alertStore.error(t('gMusicGenericArtist.errorClipboard'))
+    })
+}
+
+const downloadSong = () => {
+  emit('download', props.song?.url, props.song?.name)
+}
+
+const addPlayList = () => {
+  emit('add-playlist', props.song)
+}
+
+const dontPlayThis = () => {
+  emit('dont-play-this', props.song)
+}
+
+const viewArtist = () => {
+  emit('view-artist', props.album?.artists?.at(0)?._id)
+}
+
+const setLiked = () => {
+  emit('set-liked', true, {
+    ids: [props.song?._id],
+    is_add_to_liked: !props.song?.is_liked,
+  })
 }
 </script>
 
@@ -94,43 +102,45 @@ const toggleFollow = (artist: Artist) => {
         :size="'200px'"
         class="g-album-profiles__picture"
         :class="{
-          'g-album-profiles__picture-default': !props.artist?.imageUrl,
+          'g-album-profiles__picture-default': !props.album?.imageUrl,
         }"
       >
-        <template v-if="props.artist?.imageUrl">
-          <img :alt="props.artist.name" :src="props.artist?.imageUrl" />
+        <template v-if="props.album?.imageUrl">
+          <img :alt="props.album.name" :src="props.album?.imageUrl" />
         </template>
       </q-avatar>
 
       <h3 class="g-album-profiles__title">
-        {{ props.artist?.album || 'Unknown' }}
+        {{ props.album?.name || 'Unknown' }}
       </h3>
 
       <div class="g-album-profiles__artist-name">
-        {{ props.artist?.name || 'Untitled' }}
-      </div>
-
-      <div v-if="infoLength" class="g-album-profiles__info">
-        <span v-for="(item, index) in props.artist.info" :key="index">
-          {{ item }}
-        </span>
+        {{ props.album?.artists?.at(0)?.name || 'Untitled' }}
       </div>
     </div>
 
     <div class="g-album-profiles__main">
       <div class="g-album-profiles__actions">
-        <DynamicIcon :size="24" name="heart" @click.prevent="emit('like')" />
-
         <DynamicIcon
+          v-if="authStore.user"
           :size="24"
-          name="add_playlist"
-          @click.prevent="emit('add-playlist')"
+          name="heart"
+          :class="{ active: !!props.song?.is_liked }"
+          @click.prevent="setLiked"
         />
 
         <DynamicIcon
+          v-if="authStore.user"
+          :size="24"
+          name="add_playlist"
+          @click.prevent="addPlayList"
+        />
+
+        <DynamicIcon
+          v-if="authStore.user"
           :size="24"
           name="download_song"
-          @click.prevent="emit('download')"
+          @click.prevent="downloadSong"
         />
 
         <i class="g-icon g-icon-dots" @click.prevent.stop="">
@@ -144,17 +154,37 @@ const toggleFollow = (artist: Artist) => {
           >
             <q-list>
               <q-item
-                v-for="(item, index) in data.menu"
-                :key="index"
+                v-if="authStore.user && props.song"
                 v-close-popup
                 clickable
+                @click.prevent="dontPlayThis"
               >
                 <q-item-section avatar>
-                  <DynamicIcon :size="20" :name="item.icon" />
+                  <DynamicIcon :size="20" name="dont_play" />
                 </q-item-section>
 
                 <q-item-section>
-                  {{ item.label }}
+                  {{ t('gAlbumProfiles.dontPlayThis') }}
+                </q-item-section>
+              </q-item>
+
+              <q-item v-close-popup clickable @click.prevent="viewArtist">
+                <q-item-section avatar>
+                  <DynamicIcon :size="20" name="artist" />
+                </q-item-section>
+
+                <q-item-section>
+                  {{ t('gAlbumProfiles.viewArtist') }}
+                </q-item-section>
+              </q-item>
+
+              <q-item v-close-popup clickable @click.prevent="setShare">
+                <q-item-section avatar>
+                  <DynamicIcon :size="20" name="share" />
+                </q-item-section>
+
+                <q-item-section>
+                  {{ t('gAlbumProfiles.share') }}
                 </q-item-section>
               </q-item>
             </q-list>
@@ -162,24 +192,16 @@ const toggleFollow = (artist: Artist) => {
         </i>
       </div>
 
-      <div class="g-album-profiles__side-actions">
-        <q-btn
-          :class="followBtnClass"
-          :label="followBtnText"
-          class="q-btn-medium"
-          rounded
-          text-color="''"
-          unelevated
-          @click.prevent="toggleFollow(props.artist)"
+      <div v-if="props.song" class="g-album-profiles__side-actions">
+        <g-play-btn
+          :playing="playerStore.playing"
+          @click.prevent="onAudioToggle"
         />
       </div>
     </div>
 
-    <div class="g-album-profiles__info-cell">
-      <Readmore
-        :slice="20"
-        :long-text="'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad'"
-      />
+    <div v-if="infoLength" class="g-album-profiles__info-cell">
+      <Readmore :slice="20" :long-text="props.album.info" />
     </div>
   </div>
 </template>

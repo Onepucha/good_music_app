@@ -1,0 +1,51 @@
+.g-music-filtered {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin: 24px 0;
+  padding: 0 0 24px;
+
+  &::before {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 1px;
+    content: "";
+    background: $greyscale200;
+  }
+
+  &__label {
+    font-size: $size-20;
+    font-weight: 700;
+    line-height: $lh-24;
+    color: $greyscale900;
+  }
+
+  &__recently {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: $size-16;
+    font-weight: 700;
+    line-height: $lh-22;
+    letter-spacing: 0.2px;
+    color: $primary;
+    cursor: pointer;
+    transition: $animate-delay;
+
+    @include hover-supported {
+      color: $primary400;
+    }
+  }
+}
+
+body.body--dark {
+  .g-music-filtered {
+    &__label {
+      color: $white;
+    }
+  }
+}
