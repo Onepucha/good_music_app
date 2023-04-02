@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, reactive } from 'vue'
+import { computed } from 'vue'
 import { Chart } from '@/types/artist'
 import { isEmpty } from '@/utils/utils'
 
@@ -9,53 +9,9 @@ import { useUsersStore } from '@/stores'
 const { t } = useTranslation()
 const usersStore = useUsersStore()
 
-interface Menu {
-  label: string
-  icon: string
-}
-
-interface Data {
-  menuTheme: boolean
-  menu: Menu[]
-}
-
 const props = defineProps<{
   chart?: Chart | undefined
 }>()
-
-const data: Data = reactive({
-  menuTheme: usersStore.menuTheme,
-  menu: [
-    {
-      label: t('gMusicSong.like'),
-      icon: 'like',
-    },
-    {
-      label: t('gMusicSong.addToPlaylist'),
-      icon: 'add_playlist',
-    },
-    {
-      label: t('gMusicSong.dontPlayThis'),
-      icon: 'dont_play',
-    },
-    {
-      label: t('gMusicSong.download'),
-      icon: 'download_song',
-    },
-    {
-      label: t('gMusicSong.viewArtist'),
-      icon: 'artist',
-    },
-    {
-      label: t('gMusicSong.gotoAlbum'),
-      icon: 'play_album',
-    },
-    {
-      label: t('gMusicSong.share'),
-      icon: 'share',
-    },
-  ],
-})
 
 const infoLength = computed<boolean>(() => {
   return props.chart?.info ? props.chart?.info?.length > 0 : false

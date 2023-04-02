@@ -17,5 +17,7 @@ module.exports = {
     'no-invalid-position-at-import-rule': null,
     'max-line-length': null,
     'function-no-unknown': null,
+    'no-descending-specificity': null,
+    'function-url-quotes': null,
   },
 }

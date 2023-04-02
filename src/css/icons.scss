@@ -54,7 +54,7 @@
       width: 100%;
       height: 100%;
       margin: 0 auto;
-      content: '';
+      content: "";
       background-repeat: no-repeat;
       background-position: 50% 50%;
       background-size: contain;
@@ -94,7 +94,7 @@
 
       &::before,
       &::after {
-        content: '';
+        content: "";
         display: inline-block;
         position: absolute;
         top: 0;
@@ -162,7 +162,7 @@
 
       &::before,
       &::after {
-        content: '';
+        content: "";
         display: inline-block;
         position: absolute;
         top: 0;
@@ -190,6 +190,22 @@
 
   &-like,
   &-heart {
+    path {
+      stroke: black;
+      fill: transparent;
+    }
+
+    @include hover-supported {
+      path {
+        stroke: $primary;
+        fill: transparent;
+
+        &:nth-child(2) {
+          stroke: $primary;
+        }
+      }
+    }
+
     &.active {
       path {
         stroke: $primary;
@@ -197,6 +213,16 @@
 
         &:nth-child(2) {
           stroke: $white;
+        }
+      }
+
+      @include hover-supported {
+        path {
+          fill: transparent;
+
+          &:nth-child(2) {
+            stroke: $primary;
+          }
         }
       }
     }

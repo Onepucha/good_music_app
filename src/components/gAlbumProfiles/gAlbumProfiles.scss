@@ -104,30 +104,9 @@
     .g-icon {
       cursor: pointer;
 
-      @include hover-supported {
-        path {
-          fill: $primary;
-        }
-      }
-
       &-dots {
         width: 24px;
         height: 24px;
-      }
-
-      &-heart,
-      &-download_song {
-        path {
-          stroke: black;
-          fill: transparent;
-        }
-
-        @include hover-supported {
-          path {
-            stroke: $primary;
-            fill: transparent;
-          }
-        }
       }
     }
   }
