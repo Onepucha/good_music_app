@@ -2,6 +2,8 @@
 // so you can safely delete all default props below
 
 export default {
+  play: 'Play',
+  pause: 'Pause',
   layouts: {
     navs: {
       home: 'Home',
@@ -39,6 +41,20 @@ export default {
         subTitle: 'See All',
       },
     },
+    albums: {
+      titleHead: 'Good music - Albums',
+      contentHead: 'Good music - Albums',
+      buttonBackAlbums: 'Albums',
+      buttonBackPopularAlbums: 'Popular Albums',
+      gMusicSongList: {
+        title: 'Popular Songs',
+        subTitle: 'See All',
+      },
+      gMusicSongListTrack: {
+        title: 'More Like This',
+        subTitle: 'See All',
+      },
+    },
     artist: {
       monthlyListeners: 'monthly listeners',
     },
@@ -55,11 +71,6 @@ export default {
       contentHead: 'Good music - New Releases',
       buttonBackReleases: 'New Releases',
       buttonBackRelease: 'New Releases',
-    },
-    albums: {
-      titleHead: 'Good music - Albums',
-      contentHead: 'Good music - Albums',
-      buttonBackAlbums: 'Albums',
     },
     notFound: {
       titleHead: 'Good music - Not Found',
@@ -256,6 +267,18 @@ export default {
       titleHead: 'Good music - Playlists',
       contentHead: 'Good music - Playlists',
       buttonBackPlaylists: 'Playlists',
+      playlistLabel: 'Public',
+      label: 'Sort by',
+      recently: 'Recently Added',
+      popup: {
+        title: 'New Playlist',
+        buttonCancel: 'Cancel',
+        buttonConfirm: 'Create',
+        namePlaceholder: 'Name',
+        descriptionPlaceholder: 'Description',
+        nameValidDescription: 'Please use minimum 6 characters',
+        descriptionValidDescription: 'Please use minimum 6 characters',
+      },
     },
     downloads: {
       titleHead: 'Good music - Downloads',
@@ -297,8 +320,29 @@ export default {
     gotoAlbum: 'Go to Album',
     share: 'Share',
   },
+  gMusicGenericArtist: {
+    addToPlaylist: 'Add to Playlist',
+    dontPlayThis: 'Don’t Play This',
+    download: 'Download',
+    share: 'Share',
+    successClipboard: 'Copied to clipboard',
+    errorClipboard: 'Error copying to clipboard',
+  },
+  gAlbumProfiles: {
+    dontPlayThis: 'Don’t Play This',
+    viewArtist: 'View Artist',
+    gotoAlbum: 'Go to Album',
+    share: 'Share',
+  },
   gPlaylistHeader: {
     buttonShuffle: 'Shuffle',
     buttonPlay: 'Play',
+  },
+  gMusicSongListNotFound: {
+    title: 'Not Found',
+    description: 'Something went wrong.<br> Please try again later.',
+  },
+  gMusicPlaylistItem: {
+    songs: 'songs',
   },
 }

@@ -1,16 +1,16 @@
 <script lang="ts" setup>
 import { defineComponent } from 'vue'
 
-import gBack from '@/components/gBack/gBack.vue'
 import DynamicIcon from '@/components/DynamicIcon.vue'
+import gBack from '@/components/gBack/gBack.vue'
 import { useTranslation } from '@/composables/lang'
 
 const { t } = useTranslation()
 
 defineComponent({
   components: {
-    gBack,
     DynamicIcon,
+    gBack,
   },
 })
 </script>
@@ -22,7 +22,7 @@ defineComponent({
         <div class="q-page__header">
           <g-back
             icon="back"
-            :label="t('pages.albums.buttonBackAlbums')"
+            :label="t('pages.playlists.buttonBackPlaylists')"
             @click.prevent="$router.go(-1)"
           />
 

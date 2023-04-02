@@ -1,0 +1,105 @@
+.g-music-playlist-item {
+  position: relative;
+  display: flex;
+  gap: 16px;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+
+  & + & {
+    margin: 24px 0;
+  }
+
+  &__content {
+    display: flex;
+    gap: 16px;
+    align-items: center;
+    justify-content: flex-start;
+  }
+
+  &__cover {
+    width: 80px;
+    height: 80px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 12px;
+
+    &-default {
+      background: linear-gradient(286.17deg, #cb4800 0%, #ff7b33 100%);
+      box-shadow: 4px 8px 24px rgb(255 90 0 / 25%);
+      border-radius: 100px;
+      pointer-events: none;
+    }
+
+    img {
+      height: auto;
+      max-width: 100%;
+    }
+
+    .g-icon {
+      &-heart {
+        path {
+          fill: $white;
+          stroke: $white;
+
+          &:nth-child(2) {
+            stroke: $primary;
+          }
+        }
+      }
+    }
+  }
+
+  &__content-text {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  &__title {
+    font-size: $size-18;
+    font-weight: 700;
+    line-height: $lh-22;
+    letter-spacing: 0.2px;
+    color: $greyscale900;
+  }
+
+  &__description {
+    font-size: $size-12;
+    font-weight: 500;
+    line-height: $lh-14;
+    letter-spacing: 0.2px;
+    color: $greyscale700;
+  }
+
+  &__action {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 16px;
+  }
+}
+
+body.body--dark {
+  .g-music-playlist-item {
+    &__title {
+      color: $white;
+    }
+
+    &__description {
+      color: $white;
+    }
+
+    &__action {
+      .g-icon {
+        &-play,
+        &-track-next {
+          path {
+            fill: $primary;
+          }
+        }
+      }
+    }
+  }
+}

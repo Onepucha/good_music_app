@@ -103,3 +103,23 @@ export function calculateLineHeadPosition(event: MouseEvent, element: Element) {
 export function isEmpty(obj: object) {
   return Object.keys(obj).length === 0 && obj.constructor === Object
 }
+
+let downloadUrl = ''
+
+export async function downloadSong(src: string, name: string) {
+  try {
+    const response = await fetch(src)
+    const blob = await response.blob()
+    const url = window.URL.createObjectURL(blob)
+    downloadUrl = url
+
+    const link = document.createElement('a')
+    link.href = url
+    link.download = `${name}.mp3`
+    document.body.appendChild(link)
+    link.click()
+    document.body.removeChild(link)
+  } catch (error) {
+    console.error(error)
+  }
+}

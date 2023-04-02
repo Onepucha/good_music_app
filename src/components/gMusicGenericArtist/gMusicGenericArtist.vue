@@ -1,15 +1,24 @@
 <script setup lang="ts">
+import { useRoute } from 'vue-router'
 import { computed, defineComponent, reactive, ref } from 'vue'
 import { Artist, Song } from '@/types/artist'
 
 import DynamicIcon from '@/components/DynamicIcon.vue'
 import gPlayBtn from '@/components/gPlayBtn/gPlayBtn.vue'
 import { useTranslation } from '@/composables/lang'
-import { useAuthStore, usePlayerStore, useUsersStore } from '@/stores'
+import {
+  useAlertStore,
+  useAuthStore,
+  usePlayerStore,
+  useUsersStore,
+} from '@/stores'
+import { copyToClipboard } from 'quasar'
 
+const route = useRoute()
 const { t } = useTranslation()
 const usersStore = useUsersStore()
 const playerStore = usePlayerStore()
+const alertStore = useAlertStore()
 
 defineComponent({
   components: {
@@ -18,56 +27,20 @@ defineComponent({
   },
 })
 
-interface Menu {
-  label: string
-  icon: string
-}
-
 interface Data {
   menuTheme: boolean
-  menu: Menu[]
 }
 
 const props = defineProps<{
   artist?: Artist | undefined
-  song?: Song | undefined
+  song: Song
   songs?: Array<Song> | undefined
 }>()
 
 const data: Data = reactive({
   menuTheme: usersStore.menuTheme,
-  menu: [
-    {
-      label: t('gMusicSong.like'),
-      icon: 'like',
-    },
-    {
-      label: t('gMusicSong.addToPlaylist'),
-      icon: 'add_playlist',
-    },
-    {
-      label: t('gMusicSong.dontPlayThis'),
-      icon: 'dont_play',
-    },
-    {
-      label: t('gMusicSong.download'),
-      icon: 'download_song',
-    },
-    {
-      label: t('gMusicSong.viewArtist'),
-      icon: 'artist',
-    },
-    {
-      label: t('gMusicSong.gotoAlbum'),
-      icon: 'play_album',
-    },
-    {
-      label: t('gMusicSong.share'),
-      icon: 'share',
-    },
-  ],
 })
-
+const authStore = useAuthStore()
 const { user }: any = useAuthStore()
 
 const findFollowArtist = computed<boolean>(() => {
@@ -84,7 +57,13 @@ const followBtnClass = computed<string>(() => {
   return follow.value ? 'q-btn-border' : ''
 })
 
-const emit = defineEmits(['add-follow', 'toggleplay'])
+const emit = defineEmits([
+  'add-follow',
+  'toggleplay',
+  'download',
+  'add-playlist',
+  'dont-play-this',
+])
 
 const toggleFollow = (artist: Artist | undefined) => {
   follow.value = !follow.value
@@ -93,6 +72,28 @@ const toggleFollow = (artist: Artist | undefined) => {
 
 const onAudioToggle = () => {
   emit('toggleplay', { song: props.song, index: playerStore.getMusicIndex })
+}
+
+const setShare = () => {
+  copyToClipboard(`${import.meta.env.VITE_API_URL}${route.path}`)
+    .then(() => {
+      alertStore.success(t('gMusicGenericArtist.successClipboard'))
+    })
+    .catch(() => {
+      alertStore.error(t('gMusicGenericArtist.errorClipboard'))
+    })
+}
+
+const downloadSong = () => {
+  emit('download', props.song.url, props.song.name)
+}
+
+const addPlayList = () => {
+  emit('add-playlist', props.song)
+}
+
+const dontPlayThis = () => {
+  emit('dont-play-this', props.song)
 }
 </script>
 
@@ -149,17 +150,57 @@ const onAudioToggle = () => {
           >
             <q-list>
               <q-item
-                v-for="(item, index) in data.menu"
-                :key="index"
+                v-if="authStore.user"
                 v-close-popup
                 clickable
+                @click.prevent="addPlayList"
               >
                 <q-item-section avatar>
-                  <DynamicIcon :size="20" :name="item.icon" />
+                  <DynamicIcon :size="20" name="add_playlist" />
                 </q-item-section>
 
                 <q-item-section>
-                  {{ item.label }}
+                  {{ t('gMusicGenericArtist.addToPlaylist') }}
+                </q-item-section>
+              </q-item>
+
+              <q-item
+                v-if="authStore.user"
+                v-close-popup
+                clickable
+                @click.prevent="dontPlayThis"
+              >
+                <q-item-section avatar>
+                  <DynamicIcon :size="20" name="dont_play" />
+                </q-item-section>
+
+                <q-item-section>
+                  {{ t('gMusicGenericArtist.dontPlayThis') }}
+                </q-item-section>
+              </q-item>
+
+              <q-item
+                v-if="authStore.user && props.song"
+                v-close-popup
+                clickable
+                @click.prevent="downloadSong"
+              >
+                <q-item-section avatar>
+                  <DynamicIcon :size="20" name="download_song" />
+                </q-item-section>
+
+                <q-item-section>
+                  {{ t('gMusicGenericArtist.download') }}
+                </q-item-section>
+              </q-item>
+
+              <q-item v-close-popup clickable @click.prevent="setShare">
+                <q-item-section avatar>
+                  <DynamicIcon :size="20" name="share" />
+                </q-item-section>
+
+                <q-item-section>
+                  {{ t('gMusicGenericArtist.share') }}
                 </q-item-section>
               </q-item>
             </q-list>
@@ -167,7 +208,7 @@ const onAudioToggle = () => {
         </i>
       </div>
 
-      <div class="g-music-generic-artist__side-actions">
+      <div v-if="props.song" class="g-music-generic-artist__side-actions">
         <g-play-btn
           :playing="playerStore.playing"
           @click.prevent="onAudioToggle"

@@ -3,13 +3,30 @@ export interface Artist {
   __v?: string
   imageUrl?: string
   name?: string
-  album?: string
   info?: string | undefined
   monthlyListeners?: string
   code: string
   is_verified?: boolean
   song?: Array<Song> | Song
   genre?: Array<Genre> | Genre
+  album?: Array<Album> | Album
+  is_liked?: boolean
+}
+
+export interface Album {
+  _id: string
+  __v?: string
+  imageUrl?: string
+  name?: string
+  album?: string
+  info?: string | undefined
+  monthlyListeners?: string
+  code: string
+  is_verified?: boolean
+  artists?: Array<Artist>
+  songs?: Array<Song>
+  genres?: Array<Genre>
+  is_liked?: boolean
 }
 
 export interface Song {
@@ -27,13 +44,14 @@ export interface Song {
   description?: Array<string>
   artists?: Array<string> | string | undefined
   is_verified?: boolean
-  url?: string
+  url: RequestInfo | URL
   release_data?: string
   label?: string
   title?: string
   artist?: string
   src?: string
   pic?: string
+  is_liked?: boolean
 }
 
 export interface Genre {
@@ -51,4 +69,15 @@ export interface Chart {
   code: string
   imageUrl?: string
   info?: string[] | string | undefined
+}
+
+export interface Playlists {
+  _id: string
+  __v?: string
+  name: string
+  icon?: string
+  imageUrl?: string
+  code: string
+  public: true
+  songs: Array<string>
 }

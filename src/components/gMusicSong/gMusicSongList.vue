@@ -1,41 +1,76 @@
 <script setup lang="ts">
 import { defineComponent } from 'vue'
-import { Song } from '@/types/artist'
+import { Artist, Song } from '@/types/artist'
 
-import gMusicAlbum from '@/components/gMusicSong/gMusicSong.vue'
+import gMusicSong from '@/components/gMusicSong/gMusicSong.vue'
 
 defineComponent({
   components: {
-    gMusicAlbum,
+    // gMusicAlbum,
+    gMusicSong,
   },
 })
 
 interface Props {
+  artist: Artist
   title?: string
   subTitle?: string
-  artist: string
   artistId?: string
   list: Array<Song> | undefined
 }
 
-const props = withDefaults(defineProps<Props>(), {
-  title: '',
-  subTitle: '',
-  list: () => [],
-  artist: '',
-  artistId: '',
-})
+const props = defineProps<{
+  title?: string
+  subTitle?: string
+  artist: Artist
+  artistId?: string
+  list: Array<Song> | undefined
+}>()
 
-const emit = defineEmits(['toggleplay', 'like'])
+const emit = defineEmits([
+  'toggleplay',
+  'set-liked',
+  'download',
+  'view-artist',
+  'go-to-album',
+  'add-playlist',
+  'dont-play-this',
+])
 
 const onAudioToggle = (song: Song, index: number) => {
   emit('toggleplay', { song, index })
 }
 
-const setLiked = (object: { ids: string; is_add_to_liked: boolean }) => {
+const setLiked = (
+  isSingle: boolean,
+  object: { ids: string; is_add_to_liked: boolean }
+) => {
   let idsSong = [] as Array<string>
   idsSong.push(object.ids)
-  emit('like', { ids: idsSong, is_add_to_liked: object.is_add_to_liked })
+  emit('set-liked', isSingle, {
+    ids: object.ids,
+    is_add_to_liked: object.is_add_to_liked,
+  })
+}
+
+const downloadSong = (url: string, name: string) => {
+  emit('download', url, name)
+}
+
+const viewArtist = (url: string) => {
+  emit('view-artist', url)
+}
+
+const goToAlbum = (url: string) => {
+  emit('go-to-album', url)
+}
+
+const addPlayList = (song: Song) => {
+  emit('add-playlist', song)
+}
+
+const dontPlayThis = (song: Song) => {
+  emit('dont-play-this', song)
 }
 </script>
 
@@ -56,14 +91,19 @@ const setLiked = (object: { ids: string; is_add_to_liked: boolean }) => {
       </div>
 
       <div class="g-music-album-list__body">
-        <g-music-album
+        <g-music-song
           v-for="(item, index) of list"
           :key="item._id"
           :artist="artist"
           :artist-id="artistId"
           :song="item"
           @toggleplay="onAudioToggle(item, index)"
-          @like="setLiked"
+          @set-liked="setLiked"
+          @download="downloadSong"
+          @view-artist="viewArtist"
+          @go-to-album="goToAlbum"
+          @add-playlist="addPlayList"
+          @dont-play-this="dontPlayThis"
         />
       </div>
     </div>

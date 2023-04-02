@@ -1,17 +1,25 @@
 <script lang="ts" setup>
-import { computed, defineComponent, reactive, ref } from 'vue'
-import { Song } from '@/types/artist'
+import { computed, defineComponent, reactive } from 'vue'
+import { Artist, Song } from '@/types/artist'
 
 import DynamicIcon from '@/components/DynamicIcon.vue'
 import gPlayBtn from '@/components/gPlayBtn/gPlayBtn.vue'
 import { useTranslation } from '@/composables/lang'
-import { RouteLocationRaw } from 'vue-router'
-import { useAuthStore, usePlayerStore, useUsersStore } from '@/stores/'
+import { RouteLocationRaw, useRoute } from 'vue-router'
+import {
+  useAlertStore,
+  useAuthStore,
+  usePlayerStore,
+  useUsersStore,
+} from '@/stores/'
+import { copyToClipboard } from 'quasar'
 
+const route = useRoute()
 const { t } = useTranslation()
 const authStore = useAuthStore()
 const usersStore = useUsersStore()
 const playerStore = usePlayerStore()
+const alertStore = useAlertStore()
 
 defineComponent({
   components: {
@@ -22,14 +30,9 @@ defineComponent({
 
 const props = defineProps<{
   song: Song
-  artist?: string
+  artist: Artist
   artistId?: RouteLocationRaw
 }>()
-
-interface Menu {
-  label: string
-  icon: string
-}
 
 interface Data {
   menuTheme: boolean
@@ -39,21 +42,74 @@ const data: Data = reactive({
   menuTheme: usersStore.menuTheme,
 })
 
-const songLiked = computed<boolean>(() => {
-  return authStore.findSongLiked(props.song?._id)
-})
-
-const like = ref<boolean>(songLiked.value)
-
-const emit = defineEmits(['toggleplay', 'like'])
+const emit = defineEmits([
+  'toggleplay',
+  'set-liked',
+  'download',
+  'go-to-album',
+  'add-playlist',
+  'dont-play-this',
+  'view-artist',
+])
 
 const onAudioToggle = () => {
   emit('toggleplay', props.song)
 }
 
 const setLiked = () => {
-  emit('like', { ids: props.song?._id, is_add_to_liked: !songLiked.value })
+  emit('set-liked', false, {
+    ids: [props.song?._id],
+    is_add_to_liked: !props.song?.is_liked,
+  })
 }
+
+const addPlayList = () => {
+  emit('add-playlist', props.song)
+}
+
+const dontPlayThis = () => {
+  emit('dont-play-this', props.song)
+}
+
+const downloadSong = () => {
+  emit('download', props.song.url, props.song.name)
+}
+
+const goToAlbum = () => {
+  emit('go-to-album', props.song?.albums?.at(0))
+}
+
+const setShare = () => {
+  copyToClipboard(
+    `${import.meta.env.VITE_API_URL}/artist/${props.artist._id}/track/${
+      props.song._id
+    }`
+  )
+    .then(() => {
+      alertStore.success(t('gMusicGenericArtist.successClipboard'))
+    })
+    .catch(() => {
+      alertStore.error(t('gMusicGenericArtist.errorClipboard'))
+    })
+}
+
+const viewArtist = () => {
+  emit('view-artist', props.artist._id)
+}
+
+const parentRouteName = computed(() => {
+  const matchedRoutes = route.matched
+  const parentRoute = matchedRoutes[matchedRoutes.length - 2]
+  return parentRoute ? parentRoute.name : null
+})
+
+const findArtistPath = computed<boolean>(() => {
+  return parentRouteName.value === 'artist'
+})
+
+const findAlbumPath = computed<boolean>(() => {
+  return parentRouteName.value === 'album'
+})
 </script>
 
 <template>
@@ -84,7 +140,7 @@ const setLiked = () => {
           :to="`/artist/${props.artistId}`"
           class="g-music-song__title-description"
         >
-          {{ props.artist || 'Unknown' }}
+          {{ props.artist.name || 'Unknown' }}
         </router-link>
       </div>
     </div>
@@ -106,10 +162,15 @@ const setLiked = () => {
           anchor="bottom right"
         >
           <q-list>
-            <q-item v-close-popup clickable @click.prevent="setLiked">
+            <q-item
+              v-if="authStore.user"
+              v-close-popup
+              clickable
+              @click.prevent="setLiked"
+            >
               <q-item-section avatar>
                 <DynamicIcon
-                  :class="{ active: songLiked }"
+                  :class="{ active: !!props.song?.is_liked }"
                   :size="20"
                   name="like"
                 />
@@ -120,7 +181,12 @@ const setLiked = () => {
               </q-item-section>
             </q-item>
 
-            <q-item v-close-popup clickable>
+            <q-item
+              v-if="authStore.user"
+              v-close-popup
+              clickable
+              @click.prevent="addPlayList"
+            >
               <q-item-section avatar>
                 <DynamicIcon :size="20" name="add_playlist" />
               </q-item-section>
@@ -130,7 +196,12 @@ const setLiked = () => {
               </q-item-section>
             </q-item>
 
-            <q-item v-close-popup clickable>
+            <q-item
+              v-if="authStore.user"
+              v-close-popup
+              clickable
+              @click.prevent="dontPlayThis"
+            >
               <q-item-section avatar>
                 <DynamicIcon :size="20" name="dont_play" />
               </q-item-section>
@@ -140,7 +211,12 @@ const setLiked = () => {
               </q-item-section>
             </q-item>
 
-            <q-item v-close-popup clickable>
+            <q-item
+              v-if="authStore.user && props.song"
+              v-close-popup
+              clickable
+              @click.prevent="downloadSong"
+            >
               <q-item-section avatar>
                 <DynamicIcon :size="20" name="download_song" />
               </q-item-section>
@@ -150,7 +226,12 @@ const setLiked = () => {
               </q-item-section>
             </q-item>
 
-            <q-item v-close-popup clickable>
+            <q-item
+              v-if="!findArtistPath"
+              v-close-popup
+              clickable
+              @click.prevent="viewArtist"
+            >
               <q-item-section avatar>
                 <DynamicIcon :size="20" name="artist" />
               </q-item-section>
@@ -160,7 +241,12 @@ const setLiked = () => {
               </q-item-section>
             </q-item>
 
-            <q-item v-close-popup clickable>
+            <q-item
+              v-if="!findAlbumPath"
+              v-close-popup
+              clickable
+              @click.prevent="goToAlbum"
+            >
               <q-item-section avatar>
                 <DynamicIcon :size="20" name="play_album" />
               </q-item-section>
@@ -170,7 +256,7 @@ const setLiked = () => {
               </q-item-section>
             </q-item>
 
-            <q-item v-close-popup clickable>
+            <q-item v-close-popup clickable @click.prevent="setShare">
               <q-item-section avatar>
                 <DynamicIcon :size="20" name="share" />
               </q-item-section>
