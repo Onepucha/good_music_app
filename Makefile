@@ -8,7 +8,7 @@ deploy-stage:
 deploy:
 	npx quasar build
 	git checkout main
-	git pull origin
+	git pull origin main
 	git merge dev
 	git push origin
 	git checkout dev
