@@ -32,6 +32,24 @@
           }
         }
 
+        &-private {
+          path {
+            &:nth-child(1) {
+              fill: transparent;
+              stroke: $primary;
+            }
+
+            &:nth-child(2) {
+              fill: transparent;
+            }
+
+            &:nth-child(3) {
+              fill: $primary;
+              stroke: transparent;
+            }
+          }
+        }
+
         &-playlists,
         &-songs {
           path {

@@ -54,7 +54,7 @@
       width: 100%;
       height: 100%;
       margin: 0 auto;
-      content: "";
+      content: '';
       background-repeat: no-repeat;
       background-position: 50% 50%;
       background-size: contain;
@@ -94,7 +94,7 @@
 
       &::before,
       &::after {
-        content: "";
+        content: '';
         display: inline-block;
         position: absolute;
         top: 0;
@@ -162,7 +162,7 @@
 
       &::before,
       &::after {
-        content: "";
+        content: '';
         display: inline-block;
         position: absolute;
         top: 0;
@@ -242,6 +242,26 @@
     @include hover-supported {
       path {
         fill: $primary;
+      }
+    }
+  }
+
+  &-private {
+    @include hover-supported {
+      path {
+        &:nth-child(1) {
+          fill: transparent;
+          stroke: $primary;
+        }
+
+        &:nth-child(2) {
+          fill: transparent;
+        }
+
+        &:nth-child(3) {
+          fill: $primary;
+          stroke: transparent;
+        }
       }
     }
   }

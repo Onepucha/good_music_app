@@ -19,5 +19,6 @@ module.exports = {
     'function-no-unknown': null,
     'no-descending-specificity': null,
     'function-url-quotes': null,
+    'string-quotes': 'single',
   },
 }

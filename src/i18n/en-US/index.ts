@@ -270,6 +270,10 @@ export default {
       playlistLabel: 'Public',
       label: 'Sort by',
       recently: 'Recently Added',
+      gMusicSongListTrack: {
+        title: 'Songs',
+        subTitle: 'See All',
+      },
       popup: {
         title: 'New Playlist',
         buttonCancel: 'Cancel',

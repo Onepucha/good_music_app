@@ -150,7 +150,7 @@ const dontPlayThis = () => {
           >
             <q-list>
               <q-item
-                v-if="authStore.user"
+                v-if="authStore.user && props.song"
                 v-close-popup
                 clickable
                 @click.prevent="addPlayList"
@@ -165,7 +165,7 @@ const dontPlayThis = () => {
               </q-item>
 
               <q-item
-                v-if="authStore.user"
+                v-if="authStore.user && props.song"
                 v-close-popup
                 clickable
                 @click.prevent="dontPlayThis"

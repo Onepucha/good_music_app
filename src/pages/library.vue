@@ -5,7 +5,7 @@ import { Song } from '@/types/artist'
 
 import DynamicIcon from '@/components/DynamicIcon.vue'
 // import gPlayer from '@/components/gPlayer/gPlayer.vue'
-// import gPodcastList from '@/components/gPodcastList/gPodcastList.vue'
+// import gPodcastList from '@/components/gPodcastList/gMusicPlaylistInfo.vue'
 // import gPaymentMethods from '@/components/gPaymentMethods/gPaymentMethods.vue'
 // import gPlayOverscreen from '@/components/gPlayOverscreen/gPlayOverscreen.vue'
 // import gPlaylistHeader from '@/components/gPlaylistHeader/gPlaylistHeader.vue'

@@ -19,15 +19,23 @@ class Playlists {
   //   })
   // }
 
-  setFollow(
-    name: string,
-    code: string,
-    hasPublic: boolean,
-    songs: Array<string>
-  ) {
+  setPlaylist({
+    name,
+    description,
+    code,
+    hasPublic,
+    songs,
+  }: {
+    name: string
+    code: string
+    description?: string
+    hasPublic: boolean
+    songs?: Array<string>
+  }) {
     return api.post('/playlist', {
       name,
       code,
+      description,
       public: hasPublic,
       songs,
     })
