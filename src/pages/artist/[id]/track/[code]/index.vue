@@ -48,8 +48,6 @@ const data: Data = reactive({
   artistSong: [],
 })
 
-console.log(route)
-
 const artistSongLength = computed<boolean>(() => {
   return data?.artistSong ? data.artistSong?.length > 0 : false
 })

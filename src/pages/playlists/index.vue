@@ -10,6 +10,7 @@ import gInput from '@/components/gInput/gInput.vue'
 import { useTranslation } from '@/composables/lang'
 import { minLength, required } from '@vuelidate/validators'
 import { useVuelidate } from '@vuelidate/core'
+import Playlists from '@/services/playlists'
 
 const { t } = useTranslation()
 
@@ -26,7 +27,7 @@ defineComponent({
 interface Playlist {
   name: string
   description: string
-  playlistOptions: object
+  playlistOptions: any
 }
 
 const data: Playlist = reactive({
@@ -40,7 +41,6 @@ const data: Playlist = reactive({
 
 const dialog = ref<boolean>(false)
 const qDialogPopup = ref<any>(null)
-const hasPublic = ref<boolean>(false)
 const position = ref<any>('bottom')
 const isLoading = ref<boolean>(false)
 const dense = ref<boolean>(false)
@@ -86,6 +86,10 @@ const rules = computed(() => {
 
 const v$ = useVuelidate(rules, data)
 
+const hasPublic = computed<boolean>(() => {
+  return data.playlistOptions.label === 'Public'
+})
+
 const isDisabledButton = computed<boolean>(() => {
   return v$.value.$invalid
 })
@@ -99,8 +103,18 @@ const addPlayList = () => {
   openAddPlaylist('bottom')
 }
 
-const createPlaylist = () => {
-  console.log('Creating playlist')
+const createPlaylist = async () => {
+  try {
+    let code = data.name.replaceAll(' ', '_').toLowerCase()
+    await Playlists.setPlaylist({
+      name: data.name,
+      code: code, // TODO description: data.description,
+      hasPublic: hasPublic.value,
+    })
+    dialog.value = false
+  } catch (error: unknown) {
+    console.error(error)
+  }
 }
 
 const onRecently = () => {
