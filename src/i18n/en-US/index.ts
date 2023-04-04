@@ -343,6 +343,7 @@ export default {
     description: 'Something went wrong.<br> Please try again later.',
   },
   gMusicPlaylistItem: {
+    song: 'song',
     songs: 'songs',
   },
 }

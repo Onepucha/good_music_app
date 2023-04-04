@@ -130,21 +130,6 @@ const data: Data = reactive({
 
 let player = ref<any>(null)
 
-onMounted(() => {
-  usersStore.setMenuTheme(
-    !!JSON.parse(localStorage.getItem('darkMode') as string)
-  )
-  playerStore.player = player.value
-
-  window.addEventListener('resize', classesLayout)
-  window.addEventListener('DOMContentLoaded', classesLayout)
-})
-
-onUnmounted(() => {
-  window.removeEventListener('resize', classesLayout)
-  window.removeEventListener('DOMContentLoaded', classesLayout)
-})
-
 const classesLayout = () => {
   usersStore.systemInformation = { ...$q.platform, ...$q.screen }
 
@@ -157,6 +142,60 @@ const avatarOrFullName = computed<string>(() =>
     ? authUser.value.avatar
     : authStore.fullname[0].toUpperCase()
 )
+
+interface ScrollPos {
+  prev: number
+  current: number
+}
+
+const isHidden = ref<boolean>(false)
+const scrollPos = ref<ScrollPos>({ prev: 0, current: 0 })
+
+const handleScroll = () => {
+  scrollPos.value = {
+    prev: scrollPos.value.current,
+    current: window.pageYOffset,
+  }
+  isHidden.value = scrollPos.value.prev < scrollPos.value.current
+}
+
+const throttle = <T extends any[]>(
+  callback: (...args: T) => void,
+  delay: number
+) => {
+  let timeout: ReturnType<typeof setTimeout> | null = null
+  return function (this: unknown, ...args: T) {
+    if (!timeout) {
+      timeout = setTimeout(() => {
+        callback.apply(this, args)
+        timeout = null
+      }, delay)
+    }
+  }
+}
+
+const handleThrottledScroll = throttle(handleScroll, 250)
+
+onMounted(() => {
+  usersStore.setMenuTheme(
+    !!JSON.parse(localStorage.getItem('darkMode') as string)
+  )
+  playerStore.player = player.value
+
+  window.addEventListener('resize', classesLayout)
+  window.addEventListener('DOMContentLoaded', classesLayout)
+  window.addEventListener('scroll', () => {
+    if ($q.platform.is.mobile) {
+      handleThrottledScroll()
+    }
+  })
+})
+
+onUnmounted(() => {
+  window.removeEventListener('resize', classesLayout)
+  window.removeEventListener('DOMContentLoaded', classesLayout)
+  window.removeEventListener('scroll', handleThrottledScroll)
+})
 
 // const toggleLeftDrawer = () => {
 //   leftDrawerOpen.value = !leftDrawerOpen.value
@@ -230,49 +269,51 @@ const avatarOrFullName = computed<string>(() =>
       </q-toolbar>
     </q-header>
 
-    <q-drawer
-      v-model="leftDrawerOpen"
-      :width="240"
-      behavior="desktop"
-      bordered
-      class="q-drawer q-drawer__default"
-      show-if-above
-      side="left"
-    >
-      <div v-if="!data.isMobile" class="q-drawer__logo">
-        <router-link to="/"></router-link>
-      </div>
-
-      <div class="q-drawer__nav">
-        <router-link
-          v-for="(item, index) in navs"
-          :key="index"
-          :to="item.path"
-          class="q-drawer__nav-item"
-        >
-          <DynamicIcon
-            :size="28"
-            :name="item.icon"
-            class="q-drawer__nav-icon"
-          />
-
-          <span class="q-drawer__nav-label">{{ item.name }}</span>
-        </router-link>
-      </div>
-
-      <g-card-premium class="q-drawer__card" />
-
-      <q-btn
-        :label="t('layouts.buttonInstallApp')"
-        :ripple="false"
-        class="q-drawer__install-app icon-left"
-        flat
-        text-color="''"
-        unelevated
+    <div class="q-drawer" :class="{ 'is-hidden': isHidden }">
+      <q-drawer
+        v-model="leftDrawerOpen"
+        :width="240"
+        behavior="desktop"
+        bordered
+        class="q-drawer q-drawer__default"
+        show-if-above
+        side="left"
       >
-        <DynamicIcon class="on-left" name="download" />
-      </q-btn>
-    </q-drawer>
+        <div v-if="!data.isMobile" class="q-drawer__logo">
+          <router-link to="/"></router-link>
+        </div>
+
+        <div class="q-drawer__nav">
+          <router-link
+            v-for="(item, index) in navs"
+            :key="index"
+            :to="item.path"
+            class="q-drawer__nav-item"
+          >
+            <DynamicIcon
+              :size="28"
+              :name="item.icon"
+              class="q-drawer__nav-icon"
+            />
+
+            <span class="q-drawer__nav-label">{{ item.name }}</span>
+          </router-link>
+        </div>
+
+        <g-card-premium class="q-drawer__card" />
+
+        <q-btn
+          :label="t('layouts.buttonInstallApp')"
+          :ripple="false"
+          class="q-drawer__install-app icon-left"
+          flat
+          text-color="''"
+          unelevated
+        >
+          <DynamicIcon class="on-left" name="download" />
+        </q-btn>
+      </q-drawer>
+    </div>
 
     <q-page-container>
       <RouterViewTransition></RouterViewTransition>
@@ -280,6 +321,7 @@ const avatarOrFullName = computed<string>(() =>
 
     <g-player
       ref="player"
+      class="g-player__home"
       shuffle
       repeat="list"
       :muted="data.muted"

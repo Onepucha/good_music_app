@@ -5,6 +5,7 @@ import { Playlists } from '@/types/artist'
 import DynamicIcon from '@/components/DynamicIcon.vue'
 import { useTranslation } from '@/composables/lang'
 import { useRouter } from 'vue-router'
+import { declensionOfWord } from '@/utils/utils'
 
 const usersStore = useUsersStore()
 const { t } = useTranslation()
@@ -69,7 +70,13 @@ const emitEvent = () => {
         </div>
 
         <div v-if="songsLength" class="g-music-playlist-item__description">
-          {{ props.item?.songs?.length }} {{ t('gMusicPlaylistItem.songs') }}
+          {{ props.item?.songs?.length }}
+          {{
+            declensionOfWord(props.item?.songs?.length, [
+              t('gMusicPlaylistItem.song'),
+              t('gMusicPlaylistItem.songs'),
+            ])
+          }}
         </div>
       </div>
     </div>

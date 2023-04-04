@@ -901,6 +901,7 @@ defineExpose({ data, play, pause, toggle })
 <style lang="scss">
 .g-player {
   position: relative;
+  transition: $animate-duration;
 
   &.g-player-fixed {
     position: fixed;
@@ -908,6 +909,12 @@ defineExpose({ data, play, pause, toggle })
     right: 0;
     bottom: 0;
     left: 0;
+
+    &.g-player__home {
+      @media #{$mobile} {
+        bottom: 88px;
+      }
+    }
   }
 
   .g-player-lrc-content {
@@ -919,14 +926,14 @@ defineExpose({ data, play, pause, toggle })
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 15px 16px 10px 16px;
+    padding: 15px 16px 10px;
     background-color: $white;
     border-top: 1px solid $gray200;
     overflow: hidden;
     user-select: none;
 
     @media #{$mobile} {
-      padding: 24px 24px 36px 24px;
+      padding: 24px 24px 36px;
       border: 1px solid $greyscale100;
       border-radius: 32px 32px 0 0;
     }

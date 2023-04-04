@@ -129,6 +129,7 @@ const onAudioPlay = (item: { song: Song; index: number }) => {
       artist: data?.artist?.name,
       src: item.song?.url,
       pic: '',
+      genres: item.song?.genres,
     } as Song,
     item.index as number
   )
