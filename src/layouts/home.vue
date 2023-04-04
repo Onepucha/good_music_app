@@ -132,7 +132,6 @@ let player = ref<any>(null)
 
 const classesLayout = () => {
   usersStore.systemInformation = { ...$q.platform, ...$q.screen }
-
   data.isMobile = $q.screen.name === 'xs'
   return $q.screen.name === 'xs' ? 'hHh lpR fFf' : 'lHh lpR fFf'
 }
