@@ -41,14 +41,6 @@ const routes: RouteRecordRaw[] = [
         path: ':id',
         component: () => import('pages/album/[id]/index.vue'),
       },
-      {
-        path: ':id/tracks',
-        component: () => import('pages/album/[id]/tracks/index.vue'),
-      },
-      {
-        path: ':id/album/:code',
-        component: () => import('pages/album/[id]/album/[code]/index.vue'),
-      },
     ],
   },
   {

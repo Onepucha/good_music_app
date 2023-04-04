@@ -5,6 +5,14 @@ deploy-stage:
 	rm -rf dist/spa
 	@pm2 start ecosystem.config.cjs --only frontend-stage
 
+deploy:
+	npx quasar build
+	git checkout main
+	git pull origin
+	git merge dev
+	git push origin
+	git checkout dev
+
 dev:
 	@cp .env.dev .env
 	quasar dev
@@ -21,3 +29,7 @@ build-ios:
 	@cp .env.app .env
 	quasar build -m capacitor -T ios
 
+
+build:
+	@cp .env.production .env
+	quasar build
