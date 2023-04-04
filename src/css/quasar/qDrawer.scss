@@ -2,18 +2,37 @@
   position: fixed;
   background: $gray;
 
+  &.is-hidden {
+    opacity: 0;
+    transform: translateY(100%);
+    transition: opacity 0.3s ease-out, transform 0.3s ease-out;
+
+    & ~ .g-player {
+      &.g-player-fixed {
+        &.g-player__home {
+          bottom: 0;
+        }
+      }
+    }
+
+    &.is-visible {
+      opacity: 1;
+      transform: translateY(0%);
+      transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
+    }
+  }
+
   @media #{$mobile} {
     position: fixed;
     width: 100% !important;
-    height: 90px;
     top: auto !important;
     background: $white;
-    border-radius: 24px 24px 0 0;
-  }
+    border: none;
 
-  &__default {
-    &.q-drawer__content {
-      height: calc(100% - 88px) !important;
+    &.q-drawer--left {
+      &.q-drawer--bordered {
+        border: none;
+      }
     }
   }
 
@@ -25,7 +44,7 @@
 
     @media #{$mobile} {
       gap: 19px;
-      padding: 13px 32px 39px;
+      padding: 16px 32px 34px;
       overflow: hidden;
     }
   }

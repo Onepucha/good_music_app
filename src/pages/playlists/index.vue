@@ -26,13 +26,16 @@ defineComponent({
 interface Playlist {
   name: string
   description: string
-  playlistOptions: string
+  playlistOptions: object
 }
 
 const data: Playlist = reactive({
   name: '',
   description: '',
-  playlistOptions: 'Public',
+  playlistOptions: {
+    icon: 'public',
+    label: 'Public',
+  },
 })
 
 const dialog = ref<boolean>(false)
@@ -62,11 +65,11 @@ const items = ref([
     _id: 2,
     icon: 'heart',
     name: 'Your Likes',
-    songs: ['123131', '123131'],
+    songs: ['123131'],
   },
   {
     _id: 3,
-    imageUrl: 'public/images/albums/breackMySoul.png',
+    imageUrl: '/images/albums/breackMySoul.png',
     name: 'My Favorite Pop Songs',
     code: '1',
     songs: ['123131', '123131'],
@@ -183,7 +186,18 @@ const onRecently = () => {
             outlined
           >
             <template #prepend>
-              <DynamicIcon name="public" :size="20" />
+              <DynamicIcon :name="data.playlistOptions.icon" :size="20" />
+            </template>
+
+            <template #option="scope">
+              <q-item v-bind="scope.itemProps">
+                <q-item-section avatar>
+                  <DynamicIcon :name="scope.opt.icon" :size="20" />
+                </q-item-section>
+                <q-item-section>
+                  <q-item-label>{{ scope.opt.label }}</q-item-label>
+                </q-item-section>
+              </q-item>
             </template>
           </q-select>
 

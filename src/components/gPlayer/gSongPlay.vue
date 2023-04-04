@@ -123,6 +123,16 @@ const allGenres = computed<string>(() => {
     padding: 8px 0;
     min-height: 48px;
 
+    @media #{$mobile} {
+      @supports (padding-top: constant(safe-area-inset-top)) {
+        padding: constant(safe-area-inset-top) 24px 16px 24px;
+      }
+
+      @supports (padding: max(0px)) {
+        padding: max(24px, env(safe-area-inset-top)) 24px 16px 24px;
+      }
+    }
+
     &-title {
       display: flex;
       align-items: center;
@@ -161,6 +171,8 @@ const allGenres = computed<string>(() => {
       width: 100%;
       height: 100%;
       border-radius: 24px;
+      max-width: 360px;
+      min-height: 360px;
 
       &-default {
         background: linear-gradient(

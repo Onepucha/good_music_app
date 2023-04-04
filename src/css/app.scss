@@ -174,7 +174,7 @@ body,
 
         @supports (padding-top: env(safe-area-inset-top)) {
           padding-top: max(84px, calc(env(safe-area-inset-top) + 64px));
-          padding-bottom: max(144px, calc(env(safe-area-inset-top) + 64px));
+          padding-bottom: max(234px, calc(env(safe-area-inset-top) + 64px));
         }
       }
     }
