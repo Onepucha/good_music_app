@@ -6,10 +6,10 @@
   text-size-adjust: 100%;
 }
 
-@import "quasar.variables";
-@import "css-ios-pwa-viewport.css";
-@import "fonts.css";
-@import "global";
+@import 'quasar.variables';
+@import 'css-ios-pwa-viewport.css';
+@import 'fonts.css';
+@import 'global';
 
 html,
 body,
@@ -106,7 +106,7 @@ body,
         &::before {
           width: 100%;
           height: 100%;
-          content: " ";
+          content: ' ';
           position: absolute;
           top: 0;
           left: 0;
