@@ -36,6 +36,49 @@ defineComponent({
   },
 })
 
+const navs = computed(() =>
+  isAuth.value
+    ? [
+        {
+          path: '/',
+          name: t('layouts.navs.home'),
+          icon: 'home',
+        },
+        {
+          path: '/explore',
+          name: t('layouts.navs.explore'),
+          icon: 'explore',
+        },
+        {
+          path: '/library',
+          name: t('layouts.navs.library'),
+          icon: 'library',
+        },
+        {
+          path: '/profile',
+          name: t('layouts.navs.profile'),
+          icon: 'profile',
+        },
+      ]
+    : [
+        {
+          path: '/',
+          name: t('layouts.navs.home'),
+          icon: 'home',
+        },
+        {
+          path: '/explore',
+          name: t('layouts.navs.explore'),
+          icon: 'explore',
+        },
+        {
+          path: '/login',
+          name: t('layouts.navs.login'),
+          icon: 'profile',
+        },
+      ]
+)
+
 const $q = useQuasar()
 
 interface Data {
@@ -133,6 +176,23 @@ const avatarOrFullName = computed<string>(() =>
     >
       <div v-if="!data.isMobile" class="q-drawer__logo">
         <router-link to="/"></router-link>
+      </div>
+
+      <div v-if="!data.isMobile" class="q-drawer__nav">
+        <router-link
+          v-for="(item, index) in navs"
+          :key="index"
+          :to="item.path"
+          class="q-drawer__nav-item"
+        >
+          <DynamicIcon
+            :size="28"
+            :name="item.icon"
+            class="q-drawer__nav-icon"
+          />
+
+          <span class="q-drawer__nav-label">{{ item.name }}</span>
+        </router-link>
       </div>
 
       <g-card-premium class="q-drawer__card" />
