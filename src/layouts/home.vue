@@ -196,18 +196,12 @@ onUnmounted(() => {
   window.removeEventListener('DOMContentLoaded', classesLayout)
   window.removeEventListener('scroll', handleThrottledScroll)
 })
-
-// const toggleLeftDrawer = () => {
-//   leftDrawerOpen.value = !leftDrawerOpen.value
-// }
 </script>
 
 <template>
   <q-layout :view="classesLayout()">
     <q-header class="q-header" reveal>
       <q-toolbar class="q-header__toolbar">
-        <!--        <q-btn dense flat icon="menu" round @click="toggleLeftDrawer" />-->
-
         <div
           v-if="data.isMobile"
           :class="{ 'q-header__logo-full': !isAuth }"
