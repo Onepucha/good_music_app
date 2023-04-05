@@ -201,11 +201,15 @@ const routes: RouteRecordRaw[] = [
     component: () => import('layouts/default.vue'),
     children: [
       {
+        path: '',
+        component: () => import('pages/library/index.vue'),
+      },
+      {
         path: ':nickname',
         component: () => import('pages/library/[nickname]/index.vue'),
       },
       {
-        path: '/library/:nickname/playlists',
+        path: ':nickname/playlists',
         name: 'Playlists',
         component: () => import('pages/library/[nickname]/playlists/index.vue'),
       },

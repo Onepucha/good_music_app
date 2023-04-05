@@ -47,6 +47,6 @@ if (JSON.parse(localStorage.getItem('darkMode') as string)) {
 </script>
 
 <template>
-  <router-view />
-  <main-loader />
+  <router-view v-if="!isLoading" />
+  <main-loader v-else />
 </template>
