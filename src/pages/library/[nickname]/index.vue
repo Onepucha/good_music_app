@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import { useTranslation } from '@/composables/lang'
 import { defineComponent, reactive, ref } from 'vue'
+import { useAuthStore } from '@/stores'
 import { Song } from '@/types/artist'
 
 import DynamicIcon from '@/components/DynamicIcon.vue'
@@ -13,6 +14,7 @@ import DynamicIcon from '@/components/DynamicIcon.vue'
 // import gAlbumProfiles from '@/components/gAlbumProfiles/gAlbumProfiles.vue'
 
 const { t } = useTranslation()
+const authStore = useAuthStore()
 
 defineComponent({
   components: {
@@ -122,7 +124,7 @@ const payment = ref<string>('')
           </div>
 
           <q-list class="g-library__nav">
-            <q-item to="/playlists">
+            <q-item :to="`/library/${authStore.user?.nickname}/playlists`">
               <q-item-section avatar>
                 <DynamicIcon :size="28" name="playlists" />
               </q-item-section>
@@ -136,7 +138,7 @@ const payment = ref<string>('')
               </q-item-section>
             </q-item>
 
-            <q-item to="/downloads">
+            <q-item :to="`/library/${authStore.user?.nickname}/downloads`">
               <q-item-section avatar>
                 <DynamicIcon :size="28" name="downloads" />
               </q-item-section>
@@ -150,7 +152,7 @@ const payment = ref<string>('')
               </q-item-section>
             </q-item>
 
-            <q-item to="/albums">
+            <q-item :to="`/library/${authStore.user?.nickname}/albums`">
               <q-item-section avatar>
                 <DynamicIcon :size="28" name="albums" />
               </q-item-section>
@@ -164,7 +166,7 @@ const payment = ref<string>('')
               </q-item-section>
             </q-item>
 
-            <q-item to="/songs">
+            <q-item :to="`/library/${authStore.user?.nickname}/songs`">
               <q-item-section avatar>
                 <DynamicIcon :size="28" name="songs" />
               </q-item-section>
@@ -178,7 +180,7 @@ const payment = ref<string>('')
               </q-item-section>
             </q-item>
 
-            <q-item to="/artist">
+            <q-item :to="`/library/${authStore.user?.nickname}/artists`">
               <q-item-section avatar>
                 <DynamicIcon :size="28" name="artists" />
               </q-item-section>

@@ -44,6 +44,8 @@ export const useAuthStore = defineStore('auth', () => {
     fullname: string,
     nickname: string,
     birth_date: Date,
+    language_descriptor: string,
+    dark_theme: boolean,
     gender: string
   ) => {
     const response: AxiosResponse = await api.post<SaveProfileInput>(
@@ -53,6 +55,8 @@ export const useAuthStore = defineStore('auth', () => {
         fullname,
         nickname,
         birth_date,
+        language_descriptor,
+        dark_theme,
         gender,
       }
     )

@@ -104,11 +104,11 @@ const parentRouteName = computed(() => {
 })
 
 const findArtistPath = computed<boolean>(() => {
-  return parentRouteName.value === 'artist'
+  return parentRouteName.value === 'Artist'
 })
 
 const findAlbumPath = computed<boolean>(() => {
-  return parentRouteName.value === 'album'
+  return parentRouteName.value === 'Album'
 })
 </script>
 

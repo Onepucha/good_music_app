@@ -1,19 +1,11 @@
 <script lang="ts" setup>
-import {
-  computed,
-  defineComponent,
-  nextTick,
-  onMounted,
-  reactive,
-  ref,
-} from 'vue'
+import { defineComponent, nextTick, onMounted, reactive, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { Artist, Song } from '@/types/artist'
 
 import gBack from '@/components/gBack/gBack.vue'
 import gSongInfo from '@/components/gSongInfo/gSongInfo.vue'
 import gMusicSongList from '@/components/gMusicSong/gMusicSongList.vue'
-import gMusicSongListNotFound from '@/components/gMusicSong/gMusicSongListNotFound.vue'
 import { useTranslation } from '@/composables/lang'
 import Songs from '@/services/songs'
 import { downloadSong } from '@/utils/utils'
@@ -26,7 +18,6 @@ defineComponent({
     gBack,
     gSongInfo,
     gMusicSongList,
-    gMusicSongListNotFound,
   },
 })
 
@@ -46,10 +37,6 @@ const data: Data = reactive({
   song: undefined,
   artist: undefined,
   artistSong: [],
-})
-
-const artistSongLength = computed<boolean>(() => {
-  return data?.artistSong ? data.artistSong?.length > 0 : false
 })
 
 const getSong = async () => {
@@ -214,10 +201,9 @@ onMounted(async () => {
       />
 
       <g-music-song-list
-        v-if="artistSongLength"
         :list="data.artistSong"
         :artist="playerStore.artist"
-        :artist-id="playerStore.artist._id"
+        :artist-id="playerStore.artist?._id"
         :sub-title="t('pages.artists.gMusicSongListTrack.subTitle')"
         :title="t('pages.artists.gMusicSongListTrack.title')"
         @toggleplay="onAudioToggle"
@@ -228,7 +214,6 @@ onMounted(async () => {
         @add-playlist="addPlayList"
         @dont-play-this="dontPlayThis"
       />
-      <g-music-song-list-not-found v-else />
     </template>
   </div>
 </template>

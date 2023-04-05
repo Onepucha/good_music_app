@@ -3,7 +3,7 @@ import { AxiosResponse } from 'axios'
 import { Song } from 'src/types/artist'
 
 class Songs {
-  getAll(query: any): Promise<Array<Song>> {
+  getAll(query: any): Promise<AxiosResponse> {
     return api.get('/song/artist', {
       params: query,
     })

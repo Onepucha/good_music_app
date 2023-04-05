@@ -48,7 +48,7 @@
     margin: 20px 0 0;
   }
 
-  &__artist-name {
+  &__playlist-name {
     margin: 12px 0 0;
     font-size: $size-18;
     font-weight: 500;
@@ -72,7 +72,7 @@
         top: 50%;
         transform: translateY(-50%);
         left: -13.5px;
-        content: "";
+        content: '';
         width: 1px;
         height: calc(100% - 4px);
         background: $greyscale700;
@@ -97,7 +97,7 @@
       width: 100%;
       height: 1px;
       background: $greyscale200;
-      content: "";
+      content: '';
     }
   }
 

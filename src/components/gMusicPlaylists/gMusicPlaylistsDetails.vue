@@ -40,7 +40,7 @@ interface Data {
 }
 
 const props = defineProps<{
-  song?: Song | undefined
+  playlist?: Song | undefined
   artist: Artist
 }>()
 
@@ -49,11 +49,11 @@ const data: Data = reactive({
 })
 
 const infoLength = computed<boolean>(() => {
-  return props.song?.info ? props.song?.info?.length > 0 : false
+  return props.playlist?.info ? props.playlist?.info?.length > 0 : false
 })
 
 const allGenres = computed<string>(() => {
-  let genres = props.song?.genres || []
+  let genres = props.playlist?.genres || []
 
   return genres
     .map((genre) => {
@@ -74,25 +74,21 @@ const setShare = () => {
 
 const setLiked = () => {
   emit('set-liked', true, {
-    ids: [props.song?._id],
-    is_add_to_liked: !props.song?.is_liked,
+    ids: [props.playlist?._id],
+    is_add_to_liked: !props.playlist?.is_liked,
   })
 }
 
 const onAudioToggle = () => {
-  emit('toggleplay', { song: props.song, index: playerStore.getMusicIndex })
+  emit('toggleplay', { song: props.playlist, index: playerStore.getMusicIndex })
 }
 
 const downloadSong = () => {
-  emit('download', props.song?.url, props.song?.name)
-}
-
-const addPlayList = () => {
-  emit('add-playlist', props.song)
+  emit('download', props.playlist?.url, props.playlist?.name)
 }
 
 const dontPlayThis = () => {
-  emit('dont-play-this', props.song)
+  emit('dont-play-this', props.playlist)
 }
 </script>
 
@@ -103,26 +99,30 @@ const dontPlayThis = () => {
         :size="'200px'"
         class="g-music-playlists-details__picture"
         :class="{
-          'g-music-playlists-details__picture-default': !props.song?.imageUrl,
+          'g-music-playlists-details__picture-default':
+            !props.playlist?.imageUrl,
         }"
       >
-        <template v-if="props.song?.imageUrl">
-          <img :alt="props.song.name" :src="props.song?.imageUrl" />
+        <template v-if="props.playlist?.imageUrl">
+          <img :alt="props.playlist.name" :src="props.playlist?.imageUrl" />
         </template>
       </q-avatar>
 
       <h3 class="g-music-playlists-details__title">
-        {{ props.song?.name || 'Unknown' }}
+        {{ props.playlist?.name || 'Unknown' }}
       </h3>
 
-      <div class="g-music-playlists-details__artist-name">
-        <span>{{ props.artist.name || 'Untitled' }}</span>
+      <div
+        v-if="props.artist?.name"
+        class="g-music-playlists-details__playlist-name"
+      >
+        <span>{{ props.artist?.name || 'Untitled' }}</span>
 
         <span v-if="allGenres.length">, {{ allGenres }} </span>
       </div>
 
       <div v-if="infoLength" class="g-music-playlists-details__info">
-        <span v-for="(item, index) in props.song?.info" :key="index">
+        <span v-for="(item, index) in props.playlist?.info" :key="index">
           {{ item }}
         </span>
       </div>
@@ -134,15 +134,8 @@ const dontPlayThis = () => {
           v-if="authStore.user"
           :size="24"
           name="heart"
-          :class="{ active: !!props.song?.is_liked }"
+          :class="{ active: !!props.playlist?.is_liked }"
           @click.prevent="setLiked"
-        />
-
-        <DynamicIcon
-          v-if="authStore.user"
-          :size="24"
-          name="add_playlist"
-          @click.prevent="addPlayList"
         />
 
         <i class="g-icon g-icon-dots" @click.prevent.stop="">
@@ -156,7 +149,7 @@ const dontPlayThis = () => {
           >
             <q-list>
               <q-item
-                v-if="authStore.user && props.song"
+                v-if="authStore.user && props.playlist"
                 v-close-popup
                 clickable
                 @click.prevent="dontPlayThis"

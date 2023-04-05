@@ -31,6 +31,7 @@ interface Data {
   dob: string
   avatar: string
   gender: string
+  language_descriptor: string
   options: Array<string>
   isLoading: boolean
   isDisabled: boolean
@@ -44,6 +45,7 @@ const data: Data = reactive({
   dob: dayjs(authStore?.user?.birth_date).format('DD/MM/YYYY') || '',
   avatar: authStore?.user?.avatar || '',
   gender: authStore?.user?.gender || '',
+  language_descriptor: authStore?.user?.language_descriptor || 'en',
   isLoading: false,
   isDisabled: false,
   options: ['Male', 'Female'],
@@ -79,6 +81,8 @@ const onSaveProfile = async () => {
         data.fullname,
         data.nickname,
         new Date(dob),
+        data.language_descriptor,
+        data.datepickerTheme,
         data.gender
       )
 
