@@ -5,7 +5,6 @@ import { Artist, Song } from '@/types/artist'
 import gBack from '@/components/gBack/gBack.vue'
 import gLoader from '@/components/gLoader/gLoader.vue'
 import gMusicSongList from '@/components/gMusicSong/gMusicSongList.vue'
-import gMusicSongListNotFound from '@/components/gMusicSong/gMusicSongListNotFound.vue'
 import { useTranslation } from '@/composables/lang'
 import Songs from '@/services/songs'
 import { useRoute, useRouter } from 'vue-router'
@@ -19,7 +18,6 @@ defineComponent({
     gBack,
     gLoader,
     gMusicSongList,
-    gMusicSongListNotFound,
   },
 })
 
@@ -31,36 +29,46 @@ const isLoading = ref<boolean>(true)
 
 interface Data {
   artist: Artist | undefined
-  artistSong: Array<Song>
   page: number
 }
 
 const data: Data = reactive({
   artist: undefined,
-  artistSong: [],
   page: 0,
 })
 
-const scrollTargetRef = ref<any>(document.createElement('div'))
+const state = reactive({
+  artistSong: [] as Array<Song>,
+  page: 1,
+  loading: false,
+  finished: false,
+})
 
-const getArtistSongs = async (index: number, done: () => void) => {
+const getArtistSongs = async () => {
+  if (state.loading || state.finished) return
+  state.loading = true
+
   try {
-    data.page++
     let id: string | string[] = route.params.id
-    const response: any = await Songs.getAll({
+
+    const response: Array<Song> = await Songs.getAll({
       id: id,
-      page: data.page,
+      page: state.page,
     })
 
-    if (response.data.songs.length === 0) {
-      scrollTargetRef.value.stop()
-    }
+    console.log(response)
 
-    done()
-    data.artistSong = data.artistSong.concat(response.data.songs)
-  } catch (error: unknown) {
-    console.error(error)
-    scrollTargetRef.value.stop()
+    const newSongs = response.data.songs
+    if (newSongs.length === 0) {
+      state.finished = true
+    } else {
+      state.artistSong = [...state.artistSong, ...newSongs]
+      state.page += 1
+    }
+  } catch (error) {
+    console.log(error)
+  } finally {
+    state.loading = false
   }
 }
 
@@ -88,12 +96,12 @@ const setLiked = async (
   try {
     await Songs.setLiked(object.ids, object.is_add_to_liked)
 
-    const index = data.artistSong?.findIndex(
+    const index = state.artistSong?.findIndex(
       (song) => song._id === object.ids.at(0)
     )
 
-    if (data.artistSong && index !== undefined) {
-      data.artistSong[index].is_liked = object.is_add_to_liked
+    if (state.artistSong && index !== undefined) {
+      state.artistSong[index].is_liked = object.is_add_to_liked
     }
   } catch (error: unknown) {
     console.error(error)
@@ -120,7 +128,7 @@ const onAudioToggle = (item: { song: Song; index: number }) => {
 }
 
 const onAudioPlay = (item: { song: Song; index: number }) => {
-  playerStore.setMusicList(data.artistSong || [])
+  playerStore.setMusicList(state.artistSong || [])
 
   playerStore.setMusic(
     {
@@ -181,15 +189,14 @@ onMounted(async () => {
 
     <q-list class="scroll">
       <q-infinite-scroll
-        ref="scrollTargetRef"
+        v-model="state.loading"
         :offset="250"
         @load="getArtistSongs"
       >
         <g-music-song-list
-          v-if="data.artistSong.length"
-          :list="data.artistSong"
+          :list="state.artistSong"
           :artist="playerStore.artist"
-          :artist-id="playerStore.artist._id"
+          :artist-id="playerStore.artist?._id"
           @toggleplay="onAudioToggle"
           @download="downloadSong"
           @go-to-album="goToAlbum"
@@ -198,9 +205,8 @@ onMounted(async () => {
           @add-playlist="addPlayList"
           @dont-play-this="dontPlayThis"
         />
-        <g-music-song-list-not-found v-else />
 
-        <template #loading>
+        <template v-if="state.loading && !state.finished" #loading>
           <div class="row justify-center q-my-md">
             <g-loader />
           </div>

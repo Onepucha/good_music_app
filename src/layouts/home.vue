@@ -50,7 +50,7 @@ const navs = computed(() =>
           icon: 'explore',
         },
         {
-          path: '/library',
+          path: `/library/${authStore.user?.nickname}`,
           name: t('layouts.navs.library'),
           icon: 'library',
         },

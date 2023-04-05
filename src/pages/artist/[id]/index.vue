@@ -6,7 +6,6 @@ import { Artist, Song } from '@/types/artist'
 import gBack from '@/components/gBack/gBack.vue'
 import gMusicGenericArtist from '@/components/gMusicGenericArtist/gMusicGenericArtist.vue'
 import gMusicSongList from '@/components/gMusicSong/gMusicSongList.vue'
-import gMusicSongListNotFound from '@/components/gMusicSong/gMusicSongListNotFound.vue'
 import { useTranslation } from '@/composables/lang'
 import {
   useAlertStore,
@@ -26,7 +25,6 @@ defineComponent({
     gBack,
     gMusicGenericArtist,
     gMusicSongList,
-    gMusicSongListNotFound,
   },
 })
 
@@ -205,7 +203,6 @@ onMounted(async () => {
       />
 
       <g-music-song-list
-        v-if="data.artistSong.length"
         :list="data.artistSong"
         :artist="playerStore.artist"
         :artist-id="data.artist?._id"
@@ -219,7 +216,6 @@ onMounted(async () => {
         @add-playlist="addPlayList"
         @dont-play-this="dontPlayThis"
       />
-      <g-music-song-list-not-found v-else />
     </template>
   </div>
 </template>

@@ -3,11 +3,12 @@ import { defineComponent } from 'vue'
 import { Artist, Song } from '@/types/artist'
 
 import gMusicSong from '@/components/gMusicSong/gMusicSong.vue'
+import gMusicSongListNotFound from '@/components/gMusicSong/gMusicSongListNotFound.vue'
 
 defineComponent({
   components: {
-    // gMusicAlbum,
     gMusicSong,
+    gMusicSongListNotFound,
   },
 })
 
@@ -91,20 +92,23 @@ const dontPlayThis = (song: Song) => {
       </div>
 
       <div class="g-music-album-list__body">
-        <g-music-song
-          v-for="(item, index) of list"
-          :key="item._id"
-          :artist="artist"
-          :artist-id="artistId"
-          :song="item"
-          @toggleplay="onAudioToggle(item, index)"
-          @set-liked="setLiked"
-          @download="downloadSong"
-          @view-artist="viewArtist"
-          @go-to-album="goToAlbum"
-          @add-playlist="addPlayList"
-          @dont-play-this="dontPlayThis"
-        />
+        <template v-if="list.length">
+          <g-music-song
+            v-for="(item, index) of list"
+            :key="item._id"
+            :artist="artist"
+            :artist-id="artistId"
+            :song="item"
+            @toggleplay="onAudioToggle(item, index)"
+            @set-liked="setLiked"
+            @download="downloadSong"
+            @view-artist="viewArtist"
+            @go-to-album="goToAlbum"
+            @add-playlist="addPlayList"
+            @dont-play-this="dontPlayThis"
+          />
+        </template>
+        <g-music-song-list-not-found v-else />
       </div>
     </div>
   </div>
