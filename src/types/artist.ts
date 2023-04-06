@@ -7,9 +7,9 @@ export interface Artist {
   monthlyListeners?: string
   code: string
   is_verified?: boolean
-  song?: Array<Song> | Song
-  genre?: Array<Genre> | Genre
-  album?: Array<Album> | Album
+  song?: Array<string>
+  genre?: Array<string>
+  album?: Array<string>
   is_liked?: boolean
 }
 
@@ -23,10 +23,41 @@ export interface Album {
   monthlyListeners?: string
   code: string
   is_verified?: boolean
-  artists?: Array<Artist>
-  songs?: Array<Song>
-  genres?: Array<Genre>
+  artists?: Array<AlbumArtist>
+  songs?: Array<AlbumSong>
+  genres?: Array<AlbumGenre>
   is_liked?: boolean
+}
+
+export interface AlbumArtist {
+  album: Array<string>
+  code: string
+  genre: Array<string>
+  is_verified: boolean
+  name: string
+  song: Array<string>
+  __v: number | string
+  _id: string
+}
+
+export interface AlbumSong {
+  albums: Array<string>
+  artists: Array<string>
+  code: string
+  genres: Array<string>
+  label: string
+  name: string
+  release_date: string
+  url: string
+  __v: number | string
+  _id: string
+}
+
+export interface AlbumGenre {
+  code: string
+  name: string
+  __v: number | string
+  _id: string
 }
 
 export interface Song {

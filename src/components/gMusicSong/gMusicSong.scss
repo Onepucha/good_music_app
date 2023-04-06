@@ -5,6 +5,10 @@
   align-items: center;
   justify-content: space-between;
 
+  & + & {
+    margin: 24px 0 0;
+  }
+
   &__content {
     display: flex;
     gap: 16px;
@@ -21,12 +25,12 @@
 
     &-default {
       background: linear-gradient(
-        141.82deg,
-        #42d0e1 0%,
-        #f2e58d 32.64%,
-        #fec856 50.01%,
-        #f77e0c 78.11%,
-        #f0de51 101.07%
+          141.82deg,
+          #42d0e1 0%,
+          #f2e58d 32.64%,
+          #fec856 50.01%,
+          #f77e0c 78.11%,
+          #f0de51 101.07%
       );
       animation: rotate-hue 6s alternate infinite;
     }
@@ -71,8 +75,10 @@
       color: $greyscale700;
       letter-spacing: 0.2px;
 
-      @include hover-supported {
-        color: $primary;
+      a {
+        @include hover-supported {
+          color: $primary;
+        }
       }
     }
   }

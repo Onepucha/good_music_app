@@ -1,69 +1,86 @@
 <script lang="ts" setup>
-import { defineComponent, reactive } from 'vue'
+import { computed, defineComponent, reactive } from 'vue'
 
 import DynamicIcon from '@/components/DynamicIcon.vue'
-import gPlayBtn from '@/components/gPlayBtn/gPlayBtn.vue'
 import { useTranslation } from '@/composables/lang'
-import { Song } from '@/types/artist'
-import { useUsersStore } from '@/stores'
+import { Album, AlbumArtist } from '@/types/artist'
+import {
+  useAlertStore,
+  useAuthStore,
+  usePlayerStore,
+  useUsersStore,
+} from '@/stores'
+import { copyToClipboard } from 'quasar'
+
 const { t } = useTranslation()
+const authStore = useAuthStore()
 const usersStore = useUsersStore()
+const playerStore = usePlayerStore()
+const alertStore = useAlertStore()
 
 defineComponent({
   components: {
     DynamicIcon,
-    gPlayBtn,
   },
 })
 
 const props = defineProps<{
-  album: Song
-  artist?: string
+  album: Album
 }>()
-
-interface Menu {
-  label: string
-  icon: string
-}
 
 interface Data {
   menuTheme: boolean
-  menu: Menu[]
 }
 
 const data: Data = reactive({
   menuTheme: usersStore.menuTheme,
-  menu: [
-    {
-      label: t('gMusicAlbum.shufflePlay'),
-      icon: 'shuffle',
-    },
-    {
-      label: t('gMusicAlbum.addToPlaylist'),
-      icon: 'add_playlist',
-    },
-    {
-      label: t('gMusicAlbum.download'),
-      icon: 'download_song',
-    },
-    {
-      label: t('gMusicAlbum.removeFromLibrary'),
-      icon: 'remove',
-    },
-    {
-      label: t('gMusicAlbum.viewArtist'),
-      icon: 'artist',
-    },
-    {
-      label: t('gMusicAlbum.share'),
-      icon: 'share',
-    },
-  ],
 })
+
+const findArtist = computed<AlbumArtist | undefined>(() => {
+  return props.album?.artists?.at(0)
+})
+
+const emit = defineEmits([
+  'shuffle-play',
+  'add-playlist',
+  'download',
+  'remove-library',
+  'view-artist',
+])
+
+const shufflePlay = () => {
+  emit('shuffle-play', props.album?.songs, findArtist.value)
+}
+
+const addPlayList = () => {
+  emit('add-playlist', props.album)
+}
+
+const downloadSong = () => {
+  emit('download', props.album.name)
+}
+
+const removeLibrary = () => {
+  emit('remove-library', props.album)
+}
+
+const viewArtist = () => {
+  emit('view-artist', props.album?.artists?.at(0)?._id)
+}
+
+const setShare = () => {
+  copyToClipboard(`${import.meta.env.VITE_API_URL}/album/${props.album._id}`)
+    .then(() => {
+      alertStore.success(t('gMusicGenericArtist.successClipboard'))
+    })
+    .catch(() => {
+      alertStore.error(t('gMusicGenericArtist.errorClipboard'))
+    })
+}
 </script>
 
 <template>
-  <router-link :to="props.album.code" class="g-music-album">
+  <div class="g-music-album">
     <div class="g-music-album__content">
       <div v-if="props.album.position" class="g-music-album__position">
         {{ props.album.position }}
@@ -81,23 +98,23 @@ const data: Data = reactive({
 
       <div class="g-music-album__title">
         <div class="g-music-album__title-top">
-          <span>{{ props.album.name || 'Untitled' }}</span>
+          <router-link :to="`/album/${props.album._id}`"
+            >{{ props.album.name || 'Untitled' }}
+          </router-link>
 
           <DynamicIcon v-if="props.album.is_verified" name="verified" />
         </div>
 
-        <div
-          v-if="props.artist || props.album.issueYear"
-          class="g-music-album__title-description"
-        >
-          <span v-if="props.artist">{{ props.artist }}</span>
-          <span>{{ props.album.issueYear }}</span>
+        <div v-if="findArtist" class="g-music-album__title-description">
+          <router-link v-if="findArtist?.name" :to="`/artist/${findArtist._id}`"
+            >{{ findArtist.name }}
+          </router-link>
+          <span v-if="findArtist?.issueYear">{{ findArtist.issueYear }}</span>
         </div>
       </div>
     </div>
 
     <div class="g-music-album__action">
-      <g-play-btn :playing="false" />
       <i class="g-icon g-icon-dots" @click.prevent.stop="">
         <span></span>
 
@@ -109,24 +126,89 @@ const data: Data = reactive({
         >
           <q-list>
             <q-item
-              v-for="(item, index) in data.menu"
-              :key="index"
+              v-if="authStore.user && props.album?.songs.length"
               v-close-popup
               clickable
+              @click.prevent="shufflePlay"
             >
               <q-item-section avatar>
-                <DynamicIcon :size="20" :name="item.icon" />
+                <DynamicIcon :size="20" name="shuffle" />
               </q-item-section>
 
               <q-item-section>
-                {{ item.label }}
+                {{ t('gMusicAlbum.shufflePlay') }}
+              </q-item-section>
+            </q-item>
+
+            <q-item
+              v-if="authStore.user"
+              v-close-popup
+              clickable
+              @click.prevent="addPlayList"
+            >
+              <q-item-section avatar>
+                <DynamicIcon :size="20" name="add_playlist" />
+              </q-item-section>
+
+              <q-item-section>
+                {{ t('gMusicAlbum.addToPlaylist') }}
+              </q-item-section>
+            </q-item>
+
+            <q-item
+              v-if="authStore.user && props.album?.songs.length"
+              v-close-popup
+              clickable
+              @click.prevent="downloadSong"
+            >
+              <q-item-section avatar>
+                <DynamicIcon :size="20" name="download_song" />
+              </q-item-section>
+
+              <q-item-section>
+                {{ t('gMusicAlbum.download') }}
+              </q-item-section>
+            </q-item>
+
+            <q-item
+              v-if="authStore.user"
+              v-close-popup
+              clickable
+              @click.prevent="removeLibrary"
+            >
+              <q-item-section avatar>
+                <DynamicIcon :size="20" name="remove" />
+              </q-item-section>
+
+              <q-item-section>
+                {{ t('gMusicAlbum.removeFromLibrary') }}
+              </q-item-section>
+            </q-item>
+
+            <q-item v-close-popup clickable @click.prevent="viewArtist">
+              <q-item-section avatar>
+                <DynamicIcon :size="20" name="artist" />
+              </q-item-section>
+
+              <q-item-section>
+                {{ t('gMusicAlbum.viewArtist') }}
+              </q-item-section>
+            </q-item>
+
+            <q-item v-close-popup clickable @click.prevent="setShare">
+              <q-item-section avatar>
+                <DynamicIcon :size="20" name="share" />
+              </q-item-section>
+
+              <q-item-section>
+                {{ t('gMusicAlbum.share') }}
               </q-item-section>
             </q-item>
           </q-list>
         </q-menu>
       </i>
     </div>
-  </router-link>
+  </div>
 </template>
 
 <style scoped></style>
