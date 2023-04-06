@@ -60,9 +60,17 @@ const currentLocale = computed<any>(
     )[0]
 )
 
-const toggleDarkMode = () => {
+const toggleDarkMode = async () => {
   localStorage.setItem('darkMode', data.theme)
-  $q.dark.toggle()
+
+  try {
+    await authStore.setProfile({ dark_theme: data.theme })
+    $q.dark.toggle()
+  } catch (error: unknown) {
+    data.theme = false
+    localStorage.removeItem('darkMode')
+    console.error(error)
+  }
 }
 
 const openLogout = (pos: string) => {

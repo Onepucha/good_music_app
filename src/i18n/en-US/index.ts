@@ -4,6 +4,8 @@
 export default {
   play: 'Play',
   pause: 'Pause',
+  success: 'Success',
+  error: 'Error',
   layouts: {
     navs: {
       home: 'Home',

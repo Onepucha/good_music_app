@@ -31,7 +31,6 @@ defineComponent({
 })
 
 const emit = defineEmits([
-  'add-follow',
   'toggleplay',
   'add-playlist',
   'download',
@@ -89,8 +88,8 @@ const viewArtist = () => {
 
 const setLiked = () => {
   emit('set-liked', true, {
-    ids: [props.song?._id],
-    is_add_to_liked: !props.song?.is_liked,
+    ids: [props.album?._id],
+    is_add_to_liked: !props.album?.is_liked,
   })
 }
 </script>
@@ -125,7 +124,7 @@ const setLiked = () => {
           v-if="authStore.user"
           :size="24"
           name="heart"
-          :class="{ active: !!props.song?.is_liked }"
+          :class="{ active: !!props.album?.is_liked }"
           @click.prevent="setLiked"
         />
 

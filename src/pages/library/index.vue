@@ -17,5 +17,5 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="q-page">131</div>
+  <div class="q-page"></div>
 </template>

@@ -50,10 +50,6 @@ const data: Data = reactive({
   menuTheme: usersStore.menuTheme,
 })
 
-const hasLiked = computed<boolean>(() => {
-  return !!props.song?.is_liked
-})
-
 const infoLength = computed<boolean>(() => {
   return props.song?.info ? props.song?.info?.length > 0 : false
 })
