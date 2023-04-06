@@ -76,15 +76,13 @@ const onSaveProfile = async () => {
       data.isLoading = true
       let dob: Date | string = dayjs(data.dob).format('YYYY-DD-MM')
 
-      await authStore.setProfile(
-        data.avatar,
-        data.fullname,
-        data.nickname,
-        new Date(dob),
-        data.language_descriptor,
-        data.datepickerTheme,
-        data.gender
-      )
+      await authStore.setProfile({
+        avatar: data.avatar,
+        fullname: data.fullname,
+        nickname: data.nickname,
+        birth_date: new Date(dob),
+        gender: data.gender,
+      })
 
       data.isLoading = false
     } catch (error: unknown) {

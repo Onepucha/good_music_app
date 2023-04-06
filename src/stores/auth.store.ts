@@ -39,26 +39,18 @@ export const useAuthStore = defineStore('auth', () => {
     }
   }
 
-  const setProfile = async (
-    avatar: string,
-    fullname: string,
-    nickname: string,
-    birth_date: Date,
-    language_descriptor: string,
-    dark_theme: boolean,
-    gender: string
-  ) => {
+  const setProfile = async (option: {
+    fullname?: string
+    nickname?: string
+    birth_date?: Date
+    gender?: string
+    avatar?: string
+    language_descriptor?: string
+    dark_theme?: boolean
+  }) => {
     const response: AxiosResponse = await api.post<SaveProfileInput>(
       '/user/edit',
-      {
-        avatar,
-        fullname,
-        nickname,
-        birth_date,
-        language_descriptor,
-        dark_theme,
-        gender,
-      }
+      option
     )
 
     user.value = {

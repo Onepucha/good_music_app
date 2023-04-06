@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { defineComponent, reactive } from 'vue'
-import { useAuthStore } from '@/stores'
+import { useAlertStore, useAuthStore } from '@/stores'
 import { allLocales } from '@/boot/i18n'
 
 import gBack from '@/components/gBack/gBack.vue'
@@ -8,6 +8,7 @@ import { useTranslation } from '@/composables/lang'
 
 const { t, locale } = useTranslation()
 const authStore = useAuthStore()
+const alertStore = useAlertStore()
 
 defineComponent({
   components: {
@@ -23,9 +24,21 @@ const data: Data = reactive({
   lang: locale,
 })
 
-const setUserLocale = (item: object | any) => {
-  // setLocale(item.value)
-  authStore.setLocale(item.value)
+const setUserLocale = async (item: {
+  title?: string
+  label?: string
+  value?: string
+}) => {
+  let lang = item.value || 'en'
+
+  try {
+    await authStore.setProfile({ language_descriptor: lang })
+    authStore.setLocale(lang)
+    alertStore.success(t('success'))
+  } catch (error: unknown) {
+    console.error(error)
+    alertStore.error(t('error'))
+  }
 }
 </script>
 

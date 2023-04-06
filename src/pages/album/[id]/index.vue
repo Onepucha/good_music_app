@@ -9,12 +9,12 @@ import gMusicSongList from '@/components/gMusicSong/gMusicSongList.vue'
 import { useTranslation } from '@/composables/lang'
 import { useAlertStore, useAuthStore, usePlayerStore } from '@/stores'
 import { downloadSong } from '@/utils/utils'
-import Songs from '@/services/songs'
 import Albums from '@/services/albums'
 
 const { t } = useTranslation()
 const authStore = useAuthStore()
 const playerStore = usePlayerStore()
+const alertStore = useAlertStore()
 
 defineComponent({
   components: {
@@ -30,15 +30,15 @@ const router = useRouter()
 const isLoading = ref<boolean>(true)
 
 interface Data {
-  artist: Artist
+  artist: Artist | undefined
   album: Album
   albumSong: Array<Song>
   isLoading: boolean
 }
 
 const data: Data = reactive({
-  artist: null,
-  album: {},
+  artist: {} as Artist,
+  album: {} as Album,
   albumSong: [],
   isLoading: false,
 })
@@ -54,24 +54,6 @@ const getAlbumCode = async () => {
   }
 }
 
-const addFollow = async (object: { follow: boolean; album: Album }) => {
-  const alertStore = useAlertStore()
-
-  try {
-    data.isLoading = true
-
-    await Albums.setFollow([object.album._id], object.follow)
-
-    data.isLoading = false
-  } catch (error: unknown) {
-    console.error(error)
-    data.isLoading = false
-    if (error instanceof Error) {
-      alertStore.error(error.message)
-    }
-  }
-}
-
 const setLiked = async (
   isSingle: boolean,
   object: {
@@ -80,17 +62,16 @@ const setLiked = async (
   }
 ) => {
   try {
-    await Songs.setLiked(object.ids, object.is_add_to_liked)
+    await Albums.setFollow(object.ids, object.is_add_to_liked)
 
-    const index = data.albumSong?.findIndex(
-      (song) => song._id === object.ids.at(0)
-    )
-
-    if (data.albumSong && index !== undefined) {
-      data.albumSong[index].is_liked = object.is_add_to_liked
+    if (data.album && data.album.is_liked !== undefined) {
+      data.album.is_liked = object.is_add_to_liked
     }
+
+    alertStore.success(t('success'))
   } catch (error: unknown) {
     console.error(error)
+    alertStore.error(t('error'))
   }
 }
 
@@ -179,7 +160,6 @@ onMounted(async () => {
         :album="data?.album"
         :songs="data.albumSong"
         :song="data.albumSong.at(0)"
-        @add-follow="addFollow"
         @toggleplay="onAudioToggle"
         @set-liked="setLiked"
         @download="downloadSong"
