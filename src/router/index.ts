@@ -15,7 +15,6 @@ import routes from './routes'
  * async/await or return a Promise which resolves
  * with the Router instance.
  */
-
 export default route(function (/* { store, ssrContext } */) {
   const createHistory = process.env.SERVER
     ? createMemoryHistory
@@ -23,7 +22,7 @@ export default route(function (/* { store, ssrContext } */) {
     ? createWebHistory
     : createWebHashHistory
 
-  return createRouter({
+  const router = createRouter({
     scrollBehavior: () => ({ left: 0, top: 0 }),
     routes,
 
@@ -34,4 +33,12 @@ export default route(function (/* { store, ssrContext } */) {
       process.env.MODE === 'ssr' ? void 0 : process.env.VUE_ROUTER_BASE
     ),
   })
+
+  router.beforeEach((to, from, next) => {
+    import('@/middleware/auth').then((authMiddleware) => {
+      authMiddleware.default(to, from, next)
+    })
+  })
+
+  return router
 })

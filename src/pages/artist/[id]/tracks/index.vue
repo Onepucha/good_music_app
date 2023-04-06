@@ -51,12 +51,10 @@ const getArtistSongs = async () => {
   try {
     let id: string | string[] = route.params.id
 
-    const response: Array<Song> = await Songs.getAll({
+    const response = await Songs.getAll({
       id: id,
       page: state.page,
     })
-
-    console.log(response)
 
     const newSongs = response.data.songs
     if (newSongs.length === 0) {

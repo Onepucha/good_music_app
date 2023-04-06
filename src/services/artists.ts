@@ -12,7 +12,7 @@ class Artists {
     return api.get(`/artist/info/${id}`)
   }
 
-  getFollow(query: any): Promise<Array<Artist>> {
+  getLiked(query: any): Promise<Array<Artist>> {
     return api.get('/artist/liked', {
       params: query,
     })

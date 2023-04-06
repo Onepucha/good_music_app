@@ -15,7 +15,7 @@ class Albums {
     })
   }
 
-  getFollow(query: any): Promise<Array<Artist>> {
+  getLiked(query: any): Promise<Array<Artist>> {
     return api.get('/album/liked', {
       params: query,
     })

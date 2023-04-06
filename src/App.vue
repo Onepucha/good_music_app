@@ -1,8 +1,5 @@
 <script lang="ts" setup>
-import { defineComponent, ref } from 'vue'
-import { useAuthStore } from '@/stores'
-import { deleteCookie, getCookie } from '@/utils/utils'
-import { api } from '@/boot/axios'
+import { defineComponent } from 'vue'
 import { useQuasar } from 'quasar'
 import MainLoader from '@/components/MainLoader.vue'
 
@@ -12,30 +9,6 @@ defineComponent({
     MainLoader,
   },
 })
-
-const isLoading = ref<boolean>(true)
-
-const getUser = async () => {
-  const authStore = useAuthStore()
-
-  try {
-    if (getCookie('test-session')) {
-      let response = await api.get('user/info')
-      isLoading.value = false
-      authStore.user = response.data.user
-    } else {
-      await deleteCookie('test-session')
-      isLoading.value = false
-      // await router.push('/login')
-    }
-  } catch (error: unknown) {
-    console.error(error)
-    isLoading.value = false
-    // await router.push('/login')
-  }
-}
-
-getUser()
 
 const $q = useQuasar()
 
@@ -47,6 +20,6 @@ if (JSON.parse(localStorage.getItem('darkMode') as string)) {
 </script>
 
 <template>
-  <router-view v-if="!isLoading" />
-  <main-loader v-else />
+  <router-view />
+  <main-loader />
 </template>

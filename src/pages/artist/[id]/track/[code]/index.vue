@@ -30,7 +30,7 @@ const isLoading = ref<boolean>(true)
 interface Data {
   song: Song | undefined
   artist: Artist | undefined
-  artistSong: Array<Song> | undefined
+  artistSong: Array<Song>
 }
 
 const data: Data = reactive({
@@ -87,14 +87,31 @@ const setLiked = async (
   try {
     await Songs.setLiked(object.ids, object.is_add_to_liked)
 
+    const index = data.artistSong?.findIndex(
+      (song) => song._id === object.ids.at(0)
+    )
+
     if (isSingle) {
       if (data.song) {
         data.song.is_liked = object.is_add_to_liked
       }
+
+      if (
+        data.song &&
+        data.artistSong &&
+        data.song._id === data.artistSong[index]._id &&
+        index !== undefined
+      ) {
+        data.artistSong[index].is_liked = object.is_add_to_liked
+      }
     } else {
-      const index = data.artistSong?.findIndex(
-        (song) => song._id === object.ids.at(0)
-      )
+      if (
+        data.song &&
+        data.song._id === data.artistSong[index]._id &&
+        index !== undefined
+      ) {
+        data.song.is_liked = object.is_add_to_liked
+      }
 
       if (data.artistSong && index !== undefined) {
         data.artistSong[index].is_liked = object.is_add_to_liked

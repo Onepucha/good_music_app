@@ -141,6 +141,7 @@ const routes: RouteRecordRaw[] = [
   {
     path: '/profile',
     name: 'Profile',
+    meta: { requiresAuth: true },
     component: () => import('layouts/default.vue'),
     children: [
       {
@@ -198,10 +199,12 @@ const routes: RouteRecordRaw[] = [
   {
     path: '/library',
     name: 'Library',
+    meta: { requiresAuth: true },
     component: () => import('layouts/default.vue'),
     children: [
       {
         path: '',
+        name: 'Library',
         component: () => import('pages/library/index.vue'),
       },
       {
