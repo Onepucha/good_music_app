@@ -183,6 +183,7 @@ const findArtist = computed<any>(() => {
       :label="t('pages.albums.gMusicFiltered.label')"
       :recently="t('pages.albums.gMusicFiltered.recently')"
       :song="data.songs?.at(0)"
+      action
       @recently="onRecently"
       @toggleplay="onAudioToggle"
       @shuffle="onShuffle"

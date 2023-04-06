@@ -15,9 +15,10 @@ const { t } = useTranslation()
 const playerStore = usePlayerStore()
 
 const props = defineProps<{
-  song: Song
+  song?: Song
   label: string
   recently: string
+  action?: boolean
 }>()
 
 const isLoading = ref<boolean>(false)
@@ -58,7 +59,7 @@ const playOrPauseBtnLabel = computed<string>(() => {
       </div>
     </div>
 
-    <div class="g-music-filtered__footer">
+    <div v-if="props.action" class="g-music-filtered__footer">
       <q-btn
         :loading="isLoading"
         :label="t('gMusicFiltered.buttonShuffle')"

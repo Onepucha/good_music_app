@@ -64,7 +64,7 @@ const getArtistSongs = async () => {
       state.page += 1
     }
   } catch (error) {
-    console.log(error)
+    console.error(error)
   } finally {
     state.loading = false
   }
