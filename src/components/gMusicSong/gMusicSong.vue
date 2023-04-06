@@ -135,13 +135,11 @@ const findAlbumPath = computed<boolean>(() => {
           </router-link>
         </div>
 
-        <router-link
-          v-if="props.artistId"
-          :to="`/artist/${props.artistId}`"
-          class="g-music-song__title-description"
-        >
-          {{ props.artist.name || 'Unknown' }}
-        </router-link>
+        <div v-if="props.artistId" class="g-music-song__title-description">
+          <router-link :to="`/artist/${props.artistId}`">
+            {{ props.artist.name || 'Unknown' }}
+          </router-link>
+        </div>
       </div>
     </div>
 

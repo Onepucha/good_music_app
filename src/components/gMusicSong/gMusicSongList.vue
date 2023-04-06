@@ -38,7 +38,7 @@ const emit = defineEmits([
   'dont-play-this',
 ])
 
-const onAudioToggle = (song: Song, index: number) => {
+const onAudioToggle = (song: Song, index: number | string) => {
   emit('toggleplay', { song, index })
 }
 
@@ -94,12 +94,12 @@ const dontPlayThis = (song: Song) => {
       <div class="g-music-album-list__body">
         <template v-if="list.length">
           <g-music-song
-            v-for="(item, index) of list"
+            v-for="item of list"
             :key="item._id"
             :artist="artist"
             :artist-id="artistId"
             :song="item"
-            @toggleplay="onAudioToggle(item, index)"
+            @toggleplay="onAudioToggle(item, item._id)"
             @set-liked="setLiked"
             @download="downloadSong"
             @view-artist="viewArtist"

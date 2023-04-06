@@ -56,6 +56,10 @@ export default {
         title: 'More Like This',
         subTitle: 'See All',
       },
+      gMusicFiltered: {
+        label: 'Sort by',
+        recently: 'Recently Added',
+      },
     },
     artist: {
       monthlyListeners: 'monthly listeners',
@@ -351,5 +355,9 @@ export default {
   gMusicPlaylistItem: {
     song: 'song',
     songs: 'songs',
+  },
+  gMusicFiltered: {
+    buttonShuffle: 'Shuffle',
+    buttonPlay: 'Play',
   },
 }

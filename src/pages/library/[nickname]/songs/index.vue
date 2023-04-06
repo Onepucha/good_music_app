@@ -1,107 +1,213 @@
 <script lang="ts" setup>
-import { defineComponent, reactive } from 'vue'
+import { computed, defineComponent, nextTick, reactive, ref } from 'vue'
 
 import gBack from '@/components/gBack/gBack.vue'
-import DynamicIcon from '@/components/DynamicIcon.vue'
-import gLoader from '@/components/gLoader/gLoader.vue'
 import gMusicSongList from '@/components/gMusicSong/gMusicSongList.vue'
-import { useTranslation } from '@/composables/lang'
+import gMusicFiltered from '@/components/gMusicFiltered/gMusicFiltered.vue'
+import gLoader from '@/components/gLoader/gLoader.vue'
+import DynamicIcon from '@/components/DynamicIcon.vue'
 import Songs from '@/services/songs'
-import { Artist, Song } from '@/types/artist'
+import { AlbumArtist, Song } from '@/types/artist'
 
+import { useTranslation } from '@/composables/lang'
+import { useRoute, useRouter } from 'vue-router'
+import { downloadSong } from '@/utils/utils'
+import { useLoadingStore, usePlayerStore } from '@/stores'
+
+const route = useRoute()
+const router = useRouter()
 const { t } = useTranslation()
+const playerStore = usePlayerStore()
+const loadingStore = useLoadingStore()
 
 defineComponent({
   components: {
     gBack,
-    DynamicIcon,
-    gLoader,
     gMusicSongList,
+    gMusicFiltered,
+    gLoader,
+    DynamicIcon,
   },
 })
 
 interface Data {
-  artist: Artist | undefined
   songs: Array<Song>
   page: number
-  loading: boolean
-  finished: boolean
+  albumCount: number
+  isLoading: boolean
 }
 
 const data: Data = reactive({
-  artist: undefined,
   songs: [],
-  page: 1,
-  loading: false,
-  finished: false,
+  page: 0,
+  albumCount: 24,
+  isLoading: false,
 })
 
-const getSongs = async () => {
-  if (data.loading || data.finished) return
-  data.loading = true
+const scrollTargetRef = ref<any>(document.createElement('div'))
 
+const getLikedAlbums = async (index: number, done: () => void) => {
+  loadingStore.setLoading(false)
   try {
-    const response = await Songs.getLiked({
+    data.page++
+    const response: any = await Songs.getLiked({
+      count: data.albumCount,
       page: data.page,
     })
 
-    const newSongs = response.data.songs
-    if (newSongs.length === 0) {
-      data.finished = true
-    } else {
-      data.songs = [...data.songs, ...newSongs]
-      data.page += 1
+    if (response.data.songs.length === 0) {
+      scrollTargetRef.value.stop()
     }
-  } catch (error) {
-    console.log(error)
-  } finally {
-    data.loading = false
+
+    done()
+    data.songs = data.songs.concat(response.data.songs)
+    loadingStore.setLoading(true)
+  } catch (error: unknown) {
+    console.error(error)
+    scrollTargetRef.value.stop()
+    loadingStore.setLoading(true)
   }
 }
+
+const onRecently = () => {
+  console.log('Recently')
+}
+
+const shufflePlay = (songs: Array<Song>, artist: AlbumArtist) => {
+  // Создаем копию массива песен
+  const shuffledSongs = songs.slice()
+
+  // Перемешиваем массив песен
+  for (let i = shuffledSongs.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1))
+    ;[shuffledSongs[i], shuffledSongs[j]] = [shuffledSongs[j], shuffledSongs[i]]
+  }
+
+  // Обновляем массив песен
+  songs = shuffledSongs
+
+  playerStore.setMusicList(songs)
+
+  playerStore.setMusic(
+    {
+      _id: songs?.at(0)?._id,
+      title: songs.at(0)?.name,
+      artist: artist?.name,
+      src: songs.at(0)?.url,
+      pic: '',
+      genres: songs.at(0)?.genres,
+    } as Song,
+    0
+  )
+  playerStore.setPlaying(true)
+
+  nextTick(() => {
+    playerStore.player.play()
+  })
+}
+
+const addPlayList = (song: Song) => {
+  console.log(song)
+}
+
+const viewArtist = (url: string) => {
+  router.push(`/artist/${url}`)
+}
+
+const onAudioToggle = (item: { song: Song; index: number }) => {
+  if (playerStore.playing && playerStore.getMusicIndex === item.index) {
+    onAudioPause()
+  } else {
+    if (
+      playerStore.getMusicIndex !== null &&
+      playerStore.getMusicIndex === item.index
+    ) {
+      playerStore.setPlaying(true)
+
+      nextTick(() => {
+        playerStore.player.play()
+      })
+    } else {
+      onAudioPlay({ song: item.song, index: item.index })
+    }
+  }
+}
+
+const onAudioPlay = (item: { song: Song; index: number }) => {
+  playerStore.setMusicList(data.songs)
+
+  playerStore.setMusic(
+    {
+      _id: item.song?._id,
+      title: item.song?.name,
+      artist: findArtist.value?.name,
+      src: item.song?.url,
+      pic: '',
+      genres: item.song?.genres,
+    } as Song,
+    item.index as number
+  )
+  playerStore.setPlaying(true)
+
+  nextTick(() => {
+    playerStore.player.play()
+  })
+}
+
+const onAudioPause = () => {
+  playerStore.setPlaying(false)
+  playerStore.player.pause()
+}
+
+const onShuffle = () => {
+  console.log(123)
+}
+
+const findArtist = computed<any>(() => {
+  return data.songs.at(0)?.artists?.at(0)
+})
 </script>
 
 <template>
   <div class="q-page">
-    <div class="row">
-      <div class="col-12 col-md-12">
-        <div class="q-page__header">
-          <g-back
-            icon="back"
-            :label="t('pages.songs.buttonBackSongs')"
-            @click.prevent="$router.go(-1)"
-          />
-
-          <div class="q-page__header-actions">
-            <DynamicIcon name="search" :size="28" />
-
-            <div class="q-page__header-dropdown">
-              <i class="g-icon g-icon-dropdown-menu">
-                <span></span>
-              </i>
-            </div>
-          </div>
-        </div>
-
-        <q-list class="scroll">
-          <q-infinite-scroll
-            v-model="data.loading"
-            :offset="250"
-            @load="getSongs"
-          >
-            <g-music-song-list
-              :list="data.songs"
-              :artist="data.artist?.name"
-              :artist-id="data.artist?._id"
-            />
-
-            <template v-if="data.loading && !data.finished" #loading>
-              <div class="row justify-center q-my-md">
-                <g-loader />
-              </div>
-            </template>
-          </q-infinite-scroll>
-        </q-list>
-      </div>
+    <div class="q-page__header">
+      <g-back
+        :label="t('pages.songs.buttonBackSongs')"
+        icon="back"
+        @click.prevent="$router.go(-1)"
+      />
+      <DynamicIcon :size="28" name="search" />
     </div>
+
+    <g-music-filtered
+      :label="t('pages.albums.gMusicFiltered.label')"
+      :recently="t('pages.albums.gMusicFiltered.recently')"
+      :song="data.songs?.at(0)"
+      @recently="onRecently"
+      @toggleplay="onAudioToggle"
+      @shuffle="onShuffle"
+    />
+
+    <q-infinite-scroll
+      ref="scrollTargetRef"
+      :offset="250"
+      @load="getLikedAlbums"
+    >
+      <g-music-song-list
+        :list="data.songs"
+        :artist="findArtist"
+        :artist-id="findArtist?._id"
+        @toggleplay="onAudioToggle"
+        @download="downloadSong"
+        @view-artist="viewArtist"
+        @add-playlist="addPlayList"
+      />
+
+      <template #loading>
+        <div class="row justify-center q-my-md">
+          <g-loader />
+        </div>
+      </template>
+    </q-infinite-scroll>
   </div>
 </template>
