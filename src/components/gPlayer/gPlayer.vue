@@ -99,7 +99,6 @@ interface playStat {
 }
 
 interface Data {
-  songIndex: number
   internalMusic: Song
   internalList: Array<Song>
   isSeeking: boolean
@@ -124,7 +123,6 @@ interface Data {
 }
 
 const data: Data = reactive({
-  songIndex: 0,
   internalMusic: props.music,
   internalList: props.list,
   isSeeking: false,
@@ -307,6 +305,28 @@ const repeatMode = computed<string>({
   },
 })
 
+const previousItem = computed(() => {
+  const currentIndex = data.internalList.findIndex(
+    (item) => item._id === currentMusic.value._id
+  )
+  if (currentIndex > 0) {
+    return data.internalList[currentIndex - 1]
+  } else {
+    return data.internalList[data.internalList.length - 1]
+  }
+})
+
+const nextItem = computed(() => {
+  const currentIndex = data.internalList.findIndex(
+    (item) => item._id === currentMusic.value._id
+  )
+  if (currentIndex < data.internalList.length - 1) {
+    return data.internalList[currentIndex + 1]
+  } else {
+    return data.internalList[0]
+  }
+})
+
 const onDragBegin = () => {
   data.floatOriginX = data.floatOffsetLeft
   data.floatOriginY = data.floatOffsetTop
@@ -469,45 +489,32 @@ const getShuffledList = () => {
 }
 
 const onPrevSong = () => {
-  if (data.songIndex - 1 < 0) {
-    data.songIndex =
-      data.internalList.length - 1 < 0 ? 0 : data.internalList.length - 1
-  } else {
-    data.songIndex -= 1
-  }
-
   let currentMusic: Song
 
   currentMusic = {
-    _id: data.internalList[data.songIndex]._id,
-    title: data.internalList[data.songIndex].name,
+    _id: previousItem.value._id,
+    title: previousItem.value.name,
     artist: playerStore.artist?.name,
-    src: data.internalList[data.songIndex].url,
+    src: previousItem.value.url,
   } as Song
 
   data.internalMusic = currentMusic
-  playerStore.setMusic(currentMusic, data.songIndex)
+  playerStore.setMusic(currentMusic, 0)
   thenPlay()
 }
 
 const onNextSong = () => {
-  if (data.songIndex + 2 > data.internalList.length) {
-    data.songIndex = 0
-  } else {
-    data.songIndex += 1
-  }
-
   let currentMusic: Song
 
   currentMusic = {
-    _id: data.internalList[data.songIndex]._id,
-    title: data.internalList[data.songIndex].name,
+    _id: nextItem.value?._id,
+    title: nextItem.value?.name,
     artist: playerStore.artist?.name,
-    src: data.internalList[data.songIndex].url,
+    src: nextItem.value?.url,
   } as Song
 
   data.internalMusic = currentMusic
-  playerStore.setMusic(currentMusic, data.songIndex)
+  playerStore.setMusic(currentMusic, 0)
   thenPlay()
 }
 
