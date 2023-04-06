@@ -21,6 +21,7 @@ export const usePlayerStore = defineStore('player', () => {
   }
 
   const setMusic = (currentMusic: Song, index: number) => {
+    console.log(index)
     music.value = currentMusic
     musicIndex.value = index
     player.value.data.internalMusic = currentMusic

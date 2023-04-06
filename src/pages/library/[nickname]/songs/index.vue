@@ -1,28 +1,29 @@
 <script lang="ts" setup>
-import { defineComponent, nextTick, reactive, ref } from 'vue'
+import { computed, defineComponent, nextTick, reactive, ref } from 'vue'
 
 import gBack from '@/components/gBack/gBack.vue'
-import gMusicSong from '@/components/gMusicSong/gMusicSong.vue'
+import gMusicSongList from '@/components/gMusicSong/gMusicSongList.vue'
 import gMusicFiltered from '@/components/gMusicFiltered/gMusicFiltered.vue'
 import gLoader from '@/components/gLoader/gLoader.vue'
 import DynamicIcon from '@/components/DynamicIcon.vue'
 import Songs from '@/services/songs'
-import { Album, AlbumArtist, Song } from '@/types/artist'
+import { AlbumArtist, Song } from '@/types/artist'
 
 import { useTranslation } from '@/composables/lang'
 import { useRoute, useRouter } from 'vue-router'
 import { downloadSong } from '@/utils/utils'
-import { usePlayerStore } from '@/stores'
+import { useLoadingStore, usePlayerStore } from '@/stores'
 
 const route = useRoute()
 const router = useRouter()
 const { t } = useTranslation()
 const playerStore = usePlayerStore()
+const loadingStore = useLoadingStore()
 
 defineComponent({
   components: {
     gBack,
-    gMusicSong,
+    gMusicSongList,
     gMusicFiltered,
     gLoader,
     DynamicIcon,
@@ -46,6 +47,7 @@ const data: Data = reactive({
 const scrollTargetRef = ref<any>(document.createElement('div'))
 
 const getLikedAlbums = async (index: number, done: () => void) => {
+  loadingStore.setLoading(false)
   try {
     data.page++
     const response: any = await Songs.getLiked({
@@ -59,9 +61,11 @@ const getLikedAlbums = async (index: number, done: () => void) => {
 
     done()
     data.songs = data.songs.concat(response.data.songs)
+    loadingStore.setLoading(true)
   } catch (error: unknown) {
     console.error(error)
     scrollTargetRef.value.stop()
+    loadingStore.setLoading(true)
   }
 }
 
@@ -110,12 +114,7 @@ const viewArtist = (url: string) => {
   router.push(`/artist/${url}`)
 }
 
-const removeLibrary = (album: Album) => {
-  console.log(album)
-}
-
 const onAudioToggle = (item: { song: Song; index: number }) => {
-  console.log(item)
   if (playerStore.playing && playerStore.getMusicIndex === item.index) {
     onAudioPause()
   } else {
@@ -141,7 +140,7 @@ const onAudioPlay = (item: { song: Song; index: number }) => {
     {
       _id: item.song?._id,
       title: item.song?.name,
-      artist: data.songs?.at(0)?.artists?.at(0)?.name,
+      artist: findArtist.value?.name,
       src: item.song?.url,
       pic: '',
       genres: item.song?.genres,
@@ -163,6 +162,10 @@ const onAudioPause = () => {
 const onShuffle = () => {
   console.log(123)
 }
+
+const findArtist = computed<any>(() => {
+  return data.songs.at(0)?.artists?.at(0)
+})
 </script>
 
 <template>
@@ -190,18 +193,14 @@ const onShuffle = () => {
       :offset="250"
       @load="getLikedAlbums"
     >
-      <g-music-song
-        v-for="(song, index) in data.songs"
-        :key="index"
-        :song="song"
-        :artist="song.artists?.at(0)"
-        :artist-id="song.artists?.at(0)._id"
-        @shuffle-play="shufflePlay"
-        @add-playlist="addPlayList"
-        @view-artist="viewArtist"
-        @remove-library="removeLibrary"
-        @download="downloadSong"
+      <g-music-song-list
+        :list="data.songs"
+        :artist="findArtist"
+        :artist-id="findArtist?._id"
         @toggleplay="onAudioToggle"
+        @download="downloadSong"
+        @view-artist="viewArtist"
+        @add-playlist="addPlayList"
       />
 
       <template #loading>

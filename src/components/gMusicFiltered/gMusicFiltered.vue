@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import DynamicIcon from '@/components/DynamicIcon.vue'
-import { defineComponent, ref } from 'vue'
+import { computed, defineComponent, ref } from 'vue'
 import { useTranslation } from '@/composables/lang'
 import { usePlayerStore } from '@/stores'
 import { Song } from '@/types/artist'
@@ -28,13 +28,17 @@ const onRecently = () => {
   emit('recently')
 }
 
-const onAudioToggle = (song: Song, index: number) => {
+const onAudioToggle = (song: Song, index: number | string) => {
   emit('toggleplay', { song, index })
 }
 
 const onShuffle = () => {
   emit('shuffle')
 }
+
+const playOrPauseBtnLabel = computed<string>(() => {
+  return playerStore.playing ? t('pause') : t('play')
+})
 </script>
 
 <template>
@@ -68,12 +72,12 @@ const onShuffle = () => {
       </q-btn>
 
       <q-btn
-        :label="t('gMusicFiltered.buttonPlay')"
+        :label="playOrPauseBtnLabel"
         class="q-btn-play q-btn--light-primary q-btn-large full-width icon-left"
         rounded
         text-color="''"
         unelevated
-        @click.prevent="onAudioToggle(props.song, 0)"
+        @click.prevent="onAudioToggle(props.song, playerStore.getMusicIndex)"
       >
         <DynamicIcon
           v-if="playerStore.playing"
