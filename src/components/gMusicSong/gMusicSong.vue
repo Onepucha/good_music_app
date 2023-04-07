@@ -30,7 +30,7 @@ defineComponent({
 
 const props = defineProps<{
   song: Song
-  artist: Artist
+  artist?: Artist
   artistId?: RouteLocationRaw
 }>()
 
@@ -40,6 +40,14 @@ interface Data {
 
 const data: Data = reactive({
   menuTheme: usersStore.menuTheme,
+})
+
+const findArtist = computed<any>(() => {
+  return props.artist ? props.artist : props.song?.artists?.at(0)
+})
+
+const findArtistId = computed<any>(() => {
+  return props.artistId ? props.artistId : props.song?.artists?.at(0)?._id
 })
 
 const emit = defineEmits([
@@ -81,7 +89,7 @@ const goToAlbum = () => {
 
 const setShare = () => {
   copyToClipboard(
-    `${import.meta.env.VITE_API_URL}/artist/${props.artist._id}/track/${
+    `${import.meta.env.VITE_API_URL}/artist/${findArtist.value._id}/track/${
       props.song._id
     }`
   )
@@ -94,7 +102,7 @@ const setShare = () => {
 }
 
 const viewArtist = () => {
-  emit('view-artist', props.artist._id)
+  emit('view-artist', findArtist.value._id)
 }
 
 const parentRouteName = computed(() => {
@@ -128,16 +136,14 @@ const findAlbumPath = computed<boolean>(() => {
 
       <div class="g-music-song__title">
         <div class="g-music-song__title-top">
-          <router-link
-            :to="`/artist/${props.artistId}/track/${props.song?._id}`"
-          >
+          <router-link :to="`/artist/${findArtistId}/track/${props.song?._id}`">
             {{ props.song?.name || 'Untitled' }}
           </router-link>
         </div>
 
-        <div v-if="props.artistId" class="g-music-song__title-description">
-          <router-link :to="`/artist/${props.artistId}`">
-            {{ props.artist.name || 'Unknown' }}
+        <div v-if="findArtistId" class="g-music-song__title-description">
+          <router-link :to="`/artist/${findArtistId}`">
+            {{ findArtist.name || 'Unknown' }}
           </router-link>
         </div>
       </div>

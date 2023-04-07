@@ -73,7 +73,7 @@ export interface Song {
   genres?: Array<Genre>
   song?: Array<string>
   description?: Array<string>
-  artists?: Array<string> | string | undefined
+  artists?: Array<Artist> | undefined
   is_verified?: boolean
   url: RequestInfo | URL
   release_data?: string

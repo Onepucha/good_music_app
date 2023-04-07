@@ -196,8 +196,6 @@ const findArtist = computed<any>(() => {
     >
       <g-music-song-list
         :list="data.songs"
-        :artist="findArtist"
-        :artist-id="findArtist?._id"
         @toggleplay="onAudioToggle"
         @download="downloadSong"
         @view-artist="viewArtist"
