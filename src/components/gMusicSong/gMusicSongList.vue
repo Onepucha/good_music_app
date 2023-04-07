@@ -23,7 +23,7 @@ interface Props {
 const props = defineProps<{
   title?: string
   subTitle?: string
-  artist: Artist
+  artist?: Artist
   artistId?: string
   list: Array<Song> | undefined
 }>()
