@@ -494,7 +494,7 @@ const onPrevSong = () => {
   currentMusic = {
     _id: previousItem.value._id,
     title: previousItem.value.name,
-    artist: playerStore.artist?.name,
+    artist: previousItem.value?.artists?.at(0)?.name,
     src: previousItem.value.url,
   } as Song
 
@@ -509,7 +509,7 @@ const onNextSong = () => {
   currentMusic = {
     _id: nextItem.value?._id,
     title: nextItem.value?.name,
-    artist: playerStore.artist?.name,
+    artist: nextItem.value?.artists?.at(0)?.name,
     src: nextItem.value?.url,
   } as Song
 

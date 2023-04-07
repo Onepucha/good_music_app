@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { computed, defineComponent, nextTick, reactive, ref } from 'vue'
+import { defineComponent, nextTick, reactive, ref } from 'vue'
 
 import gBack from '@/components/gBack/gBack.vue'
 import gMusicSongList from '@/components/gMusicSong/gMusicSongList.vue'
@@ -140,7 +140,7 @@ const onAudioPlay = (item: { song: Song; index: number }) => {
     {
       _id: item.song?._id,
       title: item.song?.name,
-      artist: findArtist.value?.name,
+      artist: item.song?.artists?.at(0)?.name,
       src: item.song?.url,
       pic: '',
       genres: item.song?.genres,
@@ -162,10 +162,6 @@ const onAudioPause = () => {
 const onShuffle = () => {
   console.log(123)
 }
-
-const findArtist = computed<any>(() => {
-  return data.songs.at(0)?.artists?.at(0)
-})
 </script>
 
 <template>
