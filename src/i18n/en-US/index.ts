@@ -280,6 +280,10 @@ export default {
         title: 'Songs',
         subTitle: 'See All',
       },
+      tabs: {
+        singers: 'Singers',
+        albums: 'Albums',
+      },
       popup: {
         title: 'New Playlist',
         buttonCancel: 'Cancel',

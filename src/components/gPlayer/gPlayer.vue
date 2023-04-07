@@ -272,6 +272,7 @@ const audioVolume = computed<number>({
   },
   set(val) {
     emit('update:volume', val)
+    localStorage.setItem('volume', val.toString())
     data.internalVolume = val
   },
 })
@@ -791,6 +792,9 @@ watch(
 )
 
 onMounted(() => {
+  data.internalVolume = Number(
+    JSON.parse(localStorage.getItem('volume') as string)
+  )
   initAudio()
   setSelfAdaptingTheme()
   if (props.autoplay) play()
