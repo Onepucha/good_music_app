@@ -244,7 +244,7 @@ const routes: RouteRecordRaw[] = [
       },
       {
         path: ':nickname/artists/albums',
-        name: 'Albums',
+        name: 'Album',
         component: () =>
           import('pages/library/[nickname]/artists/albums/index.vue'),
       },
