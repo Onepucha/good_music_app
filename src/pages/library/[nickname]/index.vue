@@ -5,13 +5,6 @@ import { useAuthStore } from '@/stores'
 import { Song } from '@/types/artist'
 
 import DynamicIcon from '@/components/DynamicIcon.vue'
-// import gPlayer from '@/components/gPlayer/gPlayer.vue'
-// import gPodcastList from '@/components/gPodcastList/gMusicPlaylistInfo.vue'
-// import gPaymentMethods from '@/components/gPaymentMethods/gPaymentMethods.vue'
-// import gPlayOverscreen from '@/components/gPlayOverscreen/gPlayOverscreen.vue'
-// import gPlaylistHeader from '@/components/gPlaylistHeader/gPlaylistHeader.vue'
-// import Readmore from '@/components/Readmore.vue'
-// import gAlbumProfiles from '@/components/gAlbumProfiles/gAlbumProfiles.vue'
 
 const { t } = useTranslation()
 const authStore = useAuthStore()
@@ -34,68 +27,6 @@ interface Data {
 const data: Data = reactive({
   volume: 1,
   muted: false,
-  music: {
-    _id: '1',
-    title: 'Blinding Lights',
-    artist: 'The Weeknd',
-    src: 'https://docs.google.com/uc?id=0BwNMrKZzPF-aT09VS2R3NU91UzQ&export=download',
-    pic: '/audio/avatars/The_Weeknd.jpeg',
-    code: '1',
-  },
-  list: [
-    {
-      _id: '1',
-      title: 'Blinding Lights',
-      artist: 'The Weeknd',
-      src: '/audio/The_Weeknd_Blinding_Lights.mp3',
-      pic: '/audio/avatars/The_Weeknd.jpeg',
-      code: '1',
-    },
-    {
-      _id: '2',
-      title: '7 rings',
-      artist: 'Ariana Grande',
-      src: '/audio/Ariana_Grande_7_rings.mp3',
-      pic: '/audio/avatars/Ariana_Grande.jpeg',
-      code: '2',
-    },
-    {
-      _id: '3',
-      title: 'WITHOUT YOU',
-      artist: 'The Kid LAROI.',
-      src: '/audio/The_Kid_LAROI_WITHOUT_YOU.mp3',
-      pic: '/audio/avatars/The_Kid_LAROI.jpeg',
-      code: '3',
-    },
-  ],
-  song: {
-    _id: '1',
-    imageUrl: '/images/albums/handsome.png',
-    name: 'HANDSOME',
-    artist: 'Warren Hue',
-    src: '/',
-    code: '4',
-  },
-  options: [
-    {
-      default: [
-        { label: 'PayPal', value: 'payPal' },
-        { label: 'Google Pay', value: 'googlePay' },
-        { label: 'Apple Pay', value: 'applePay' },
-        { label: 'Mastercard', value: 'mastercard' },
-        { label: 'Cash Money', value: 'wallet' },
-      ],
-    },
-    {
-      crypto: [
-        { label: 'Monero - XMR', value: 'monero' },
-        { label: 'Monero - XMR', value: 'monero' },
-      ],
-    },
-    {
-      fiat: [{ label: 'Apple Pay', value: 'applePay' }],
-    },
-  ],
 })
 
 const payment = ref<string>('')
@@ -180,7 +111,9 @@ const payment = ref<string>('')
               </q-item-section>
             </q-item>
 
-            <q-item :to="`/library/${authStore.user?.nickname}/artists`">
+            <q-item
+              :to="`/library/${authStore.user?.nickname}/artists/singers`"
+            >
               <q-item-section avatar>
                 <DynamicIcon :size="28" name="artists" />
               </q-item-section>
@@ -195,81 +128,6 @@ const payment = ref<string>('')
             </q-item>
           </q-list>
         </div>
-
-        <!--        <g-player :music="data.music" />-->
-
-        <!--        <g-player-->
-        <!--          shuffle-->
-        <!--          repeat="list"-->
-        <!--          :muted="data.muted"-->
-        <!--          :volume="data.volume"-->
-        <!--          :music="data.list[0]"-->
-        <!--          :list="data.list"-->
-        <!--          :theme="'pic'"-->
-        <!--        />-->
-
-        <!--        <g-podcast-list :playing="false" />-->
-
-        <!--        <template v-for="(item, index) in data.options" :key="index">-->
-        <!--          <div class="g-payment-methods">-->
-        <!--            <div v-if="item.crypto" class="g-payment-methods__label">-->
-        <!--              Crypto:-->
-        <!--            </div>-->
-        <!--            <div v-else-if="item.fiat" class="g-payment-methods__label">-->
-        <!--              Fiat money:-->
-        <!--            </div>-->
-        <!--            <div v-else class="g-payment-methods__label">-->
-        <!--              Select the payment method you want to use.-->
-        <!--            </div>-->
-
-        <!--            <template-->
-        <!--              v-for="(paymentCrypto, indexCrypto) in item.crypto"-->
-        <!--              :key="indexCrypto"-->
-        <!--            >-->
-        <!--              <g-payment-methods v-if="item.crypto" :payment="paymentCrypto">-->
-        <!--                <template #radio>-->
-        <!--                  <q-radio v-model="payment" :val="paymentCrypto" />-->
-        <!--                </template>-->
-        <!--              </g-payment-methods>-->
-        <!--            </template>-->
-
-        <!--            <template-->
-        <!--              v-for="(paymentFiat, indexFiat) in item.fiat"-->
-        <!--              :key="indexFiat"-->
-        <!--            >-->
-        <!--              <g-payment-methods v-if="item.fiat" :payment="paymentFiat">-->
-        <!--                <template #radio>-->
-        <!--                  <q-radio v-model="payment" :val="paymentFiat" />-->
-        <!--                </template>-->
-        <!--              </g-payment-methods>-->
-        <!--            </template>-->
-
-        <!--            <template-->
-        <!--              v-for="(paymentDefault, indexDefault) in item.default"-->
-        <!--              :key="indexDefault"-->
-        <!--            >-->
-        <!--              <g-payment-methods-->
-        <!--                v-if="!item.crypto && !item.fiat"-->
-        <!--                :payment="paymentDefault"-->
-        <!--              >-->
-        <!--                <template #radio>-->
-        <!--                  <q-radio v-model="payment" :val="paymentDefault" />-->
-        <!--                </template>-->
-        <!--              </g-payment-methods>-->
-        <!--            </template>-->
-        <!--          </div>-->
-        <!--        </template>-->
-
-        <!--        <g-play-overscreen :item="data.song" />-->
-
-        <!--        <g-playlist-header :playing="false" />-->
-
-        <!--        <Readmore-->
-        <!--          :slice="20"-->
-        <!--          :long-text="'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad'"-->
-        <!--        />-->
-
-        <!--                <g-album-profiles />-->
       </div>
     </div>
   </div>
