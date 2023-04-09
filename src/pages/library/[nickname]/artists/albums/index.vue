@@ -128,8 +128,8 @@ const getLikedAlbums = async (index: number, done: () => void) => {
         </q-tabs>
 
         <g-music-filtered
-          :label="t('pages.library.albums.tabs.label')"
-          :recently="t('pages.library.albums.tabs.recently')"
+          :label="t('pages.library.albums.label')"
+          :recently="t('pages.library.albums.recently')"
           @recently="onRecently"
         />
 
