@@ -1,21 +1,16 @@
 <script lang="ts" setup>
 import { computed, defineComponent, reactive } from 'vue'
+import { Artist } from '@/types/artist'
 
 import DynamicIcon from '@/components/DynamicIcon.vue'
+import { useAlertStore, useAuthStore, useUsersStore } from '@/stores'
+import { declensionOfWord } from '@/utils/utils'
 import { useTranslation } from '@/composables/lang'
-import { Album, AlbumArtist } from '@/types/artist'
-import {
-  useAlertStore,
-  useAuthStore,
-  usePlayerStore,
-  useUsersStore,
-} from '@/stores'
 import { copyToClipboard } from 'quasar'
 
 const { t } = useTranslation()
 const authStore = useAuthStore()
 const usersStore = useUsersStore()
-const playerStore = usePlayerStore()
 const alertStore = useAlertStore()
 
 defineComponent({
@@ -24,8 +19,15 @@ defineComponent({
   },
 })
 
+const emit = defineEmits([
+  'add-playlist',
+  'download',
+  'remove-library',
+  'view-artist',
+])
+
 const props = defineProps<{
-  album: Album
+  singer: Artist
 }>()
 
 interface Data {
@@ -36,89 +38,78 @@ const data: Data = reactive({
   menuTheme: usersStore.menuTheme,
 })
 
-const findArtist = computed<AlbumArtist | undefined>(() => {
-  return props.album?.artists?.at(0)
+const songsLength = computed<boolean>(() => {
+  return props.singer?.song ? props.singer?.song?.length > 0 : false
 })
 
-const emit = defineEmits([
-  'shuffle-play',
-  'add-playlist',
-  'download',
-  'remove-library',
-  'view-artist',
-])
-
-const shufflePlay = () => {
-  emit('shuffle-play', props.album?.songs, findArtist.value)
-}
-
 const addPlayList = () => {
-  emit('add-playlist', props.album)
+  emit('add-playlist', props.singer)
 }
 
 const downloadSong = () => {
-  emit('download', props.album.name)
+  emit('download', props.singer.name)
 }
 
 const removeLibrary = () => {
-  emit('remove-library', props.album)
+  emit('remove-library', props.singer)
 }
 
 const viewArtist = () => {
-  emit('view-artist', props.album?.artists?.at(0)?._id)
+  emit('view-artist', props.singer?._id)
 }
 
 const setShare = () => {
-  copyToClipboard(`${import.meta.env.VITE_API_URL}/album/${props.album._id}`)
+  copyToClipboard(`${import.meta.env.VITE_API_URL}/artist/${props.singer?._id}`)
     .then(() => {
-      alertStore.success(t('gMusicGenericArtist.successClipboard'))
+      alertStore.success(t('gMusicSingersItem.successClipboard'))
     })
     .catch(() => {
-      alertStore.error(t('gMusicGenericArtist.errorClipboard'))
+      alertStore.error(t('gMusicSingersItem.errorClipboard'))
     })
 }
 </script>
 
 <template>
-  <div class="g-music-album">
-    <div class="g-music-album__content">
-      <div v-if="props.album.position" class="g-music-album__position">
-        {{ props.album.position }}
-      </div>
+  <div class="g-music-singers-item">
+    <div class="g-music-singers-item__content">
       <div
-        class="g-music-album__picture"
-        :class="{ 'g-music-album__picture-default': !props.album?.imageUrl }"
+        class="g-music-singers-item__picture"
+        :class="{
+          'g-music-singers-item__picture-default': !props.singer?.imageUrl,
+        }"
       >
         <img
-          v-if="props.album?.imageUrl"
-          :alt="props.album.name"
-          :src="props.album?.imageUrl"
+          v-if="props.singer?.imageUrl"
+          :alt="props.singer.name"
+          :src="props.singer?.imageUrl"
         />
       </div>
 
-      <div class="g-music-album__title">
-        <div class="g-music-album__title-top">
-          <router-link :to="`/album/${props.album._id}`"
-            >{{ props.album.name || 'Untitled' }}
+      <div class="g-music-singers-item__title">
+        <div class="g-music-singers-item__title-top">
+          <router-link :to="`/artist/${props.singer?._id}`">
+            {{ props.singer?.name || 'Untitled' }}
           </router-link>
-
           <DynamicIcon
-            v-if="props.album.is_verified"
+            v-if="props.singer?.is_verified"
             name="verified"
             :size="20"
           />
         </div>
 
-        <div v-if="findArtist" class="g-music-album__title-description">
-          <router-link v-if="findArtist?.name" :to="`/artist/${findArtist._id}`"
-            >{{ findArtist.name }}
-          </router-link>
-          <span v-if="findArtist?.issueYear">{{ findArtist.issueYear }}</span>
+        <div v-if="songsLength" class="g-music-singers-item__title-description">
+          {{ props.singer?.song?.length }}
+          {{
+            declensionOfWord(props.singer?.song?.length, [
+              t('gMusicSingersItem.song'),
+              t('gMusicSingersItem.songs'),
+            ])
+          }}
         </div>
       </div>
     </div>
 
-    <div class="g-music-album__action">
+    <div class="g-music-singers-item__action">
       <i class="g-icon g-icon-dots" @click.prevent.stop="">
         <span></span>
 
@@ -130,21 +121,6 @@ const setShare = () => {
         >
           <q-list>
             <q-item
-              v-if="authStore.user && props.album?.songs.length"
-              v-close-popup
-              clickable
-              @click.prevent="shufflePlay"
-            >
-              <q-item-section avatar>
-                <DynamicIcon :size="20" name="shuffle" />
-              </q-item-section>
-
-              <q-item-section>
-                {{ t('gMusicAlbum.shufflePlay') }}
-              </q-item-section>
-            </q-item>
-
-            <q-item
               v-if="authStore.user"
               v-close-popup
               clickable
@@ -155,7 +131,7 @@ const setShare = () => {
               </q-item-section>
 
               <q-item-section>
-                {{ t('gMusicAlbum.addToPlaylist') }}
+                {{ t('gMusicSingersItem.addToPlaylist') }}
               </q-item-section>
             </q-item>
 
@@ -170,7 +146,7 @@ const setShare = () => {
               </q-item-section>
 
               <q-item-section>
-                {{ t('gMusicAlbum.download') }}
+                {{ t('gMusicSingersItem.download') }}
               </q-item-section>
             </q-item>
 
@@ -185,7 +161,7 @@ const setShare = () => {
               </q-item-section>
 
               <q-item-section>
-                {{ t('gMusicAlbum.removeFromLibrary') }}
+                {{ t('gMusicSingersItem.removeFromLibrary') }}
               </q-item-section>
             </q-item>
 
@@ -195,7 +171,7 @@ const setShare = () => {
               </q-item-section>
 
               <q-item-section>
-                {{ t('gMusicAlbum.viewArtist') }}
+                {{ t('gMusicSingersItem.viewArtist') }}
               </q-item-section>
             </q-item>
 
@@ -205,7 +181,7 @@ const setShare = () => {
               </q-item-section>
 
               <q-item-section>
-                {{ t('gMusicAlbum.share') }}
+                {{ t('gMusicSingersItem.share') }}
               </q-item-section>
             </q-item>
           </q-list>
