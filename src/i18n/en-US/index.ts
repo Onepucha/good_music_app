@@ -97,7 +97,21 @@ export default {
         songs: 'Songs',
         artists: 'Artists',
       },
+      playlists: {
+        label: 'Sort by',
+        recently: 'Recently Added',
+      },
+      downloads: {
+        label: 'Sort by',
+        recently: 'Recently Downloaded',
+      },
+      songs: {
+        label: 'Sort by',
+        recently: 'Recently Downloaded',
+      },
       singers: {
+        label: 'Sort by',
+        recently: 'Recently Downloaded',
         buttonBackArtists: 'Artists',
         tabs: {
           singers: 'Singers',
@@ -107,12 +121,12 @@ export default {
         },
       },
       albums: {
+        label: 'Sort by',
+        recently: 'Recently Added',
         buttonBackArtists: 'Artists',
         tabs: {
           singers: 'Singers',
           albums: 'Albums',
-          label: 'Sort by',
-          recently: 'Recently Downloaded',
         },
       },
     },

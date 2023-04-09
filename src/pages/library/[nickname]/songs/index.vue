@@ -176,8 +176,8 @@ const onShuffle = () => {
     </div>
 
     <g-music-filtered
-      :label="t('pages.albums.gMusicFiltered.label')"
-      :recently="t('pages.albums.gMusicFiltered.recently')"
+      :label="t('pages.library.songs.label')"
+      :recently="t('pages.library.songs.recently')"
       :song="data.songs?.at(0)"
       action
       @recently="onRecently"
