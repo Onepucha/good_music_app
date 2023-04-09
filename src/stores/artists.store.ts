@@ -3,7 +3,6 @@ import { defineStore } from 'pinia'
 import { fetchWrapper } from '@/helpers'
 import Artists from '@/services/artists'
 import { ref } from 'vue'
-import { useAuthStore } from '@/stores/auth.store'
 import { Artist } from '@/types/artist'
 
 const baseUrl = `${import.meta.env.VITE_API_URL}/artist`
@@ -41,8 +40,6 @@ export const useArtistsStore = defineStore('artists', () => {
 
   const saveFollowArtist = async (is_follow: boolean, ids: string[]) => {
     await Artists.setFollow(ids, is_follow)
-    const authStore = useAuthStore()
-    await authStore.userInfo()
   }
 
   return { artists, getArtists, getArtistCode, getAllArtists, saveFollowArtist }

@@ -80,6 +80,10 @@ const addFollow = async (object: { follow: boolean; artist: Artist }) => {
 
     await artistStore.saveFollowArtist(object.follow, [object.artist._id])
 
+    if (data.artist && data.artist.is_liked !== undefined) {
+      data.artist.is_liked = object.follow
+    }
+
     data.isLoading = false
   } catch (error: unknown) {
     console.error(error)

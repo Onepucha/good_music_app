@@ -76,22 +76,19 @@ const dontPlayThis = (song: Song) => {
 </script>
 
 <template>
-  <div class="g-music-album-list">
-    <div class="g-music-album-list__wrap">
-      <div
-        v-if="props.title || props.subTitle"
-        class="g-music-album-list__head"
-      >
-        <h4 class="g-music-album-list__head-title" v-html="props.title"></h4>
+  <div class="g-music-song-list">
+    <div class="g-music-song-list__wrap">
+      <div v-if="props.title || props.subTitle" class="g-music-song-list__head">
+        <h4 class="g-music-song-list__head-title" v-html="props.title"></h4>
         <router-link
           :to="`/artist/${props.artistId}/tracks`"
-          class="g-music-album-list__head-sub-title"
+          class="g-music-song-list__head-sub-title"
         >
           {{ props.subTitle }}
         </router-link>
       </div>
 
-      <div class="g-music-album-list__body">
+      <div class="g-music-song-list__body">
         <template v-if="list.length">
           <g-music-song
             v-for="item of list"
