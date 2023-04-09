@@ -23,7 +23,8 @@
     gap: 12px;
     width: 100%;
 
-    & + .g-music-gallery-list__body {
+    & + .g-music-gallery-list__body,
+    & + .g-music-song-list__body {
       margin: 24px 0 0;
     }
 
@@ -48,7 +49,7 @@
     position: relative;
     display: flex;
     flex-direction: column;
-    gap: 16px;
+    gap: 24px;
   }
 }
 

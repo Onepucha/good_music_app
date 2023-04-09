@@ -46,7 +46,7 @@ const data: Data = reactive({
 
 const scrollTargetRef = ref<any>(document.createElement('div'))
 
-const getLikedAlbums = async (index: number, done: () => void) => {
+const getLikedSongs = async (index: number, done: () => void) => {
   loadingStore.setLoading(false)
   try {
     data.page++
@@ -188,7 +188,7 @@ const onShuffle = () => {
     <q-infinite-scroll
       ref="scrollTargetRef"
       :offset="250"
-      @load="getLikedAlbums"
+      @load="getLikedSongs"
     >
       <g-music-song-list
         :list="data.songs"

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { useRoute } from 'vue-router'
-import { computed, defineComponent, reactive, ref } from 'vue'
+import { computed, defineComponent, reactive } from 'vue'
 import { Artist, Song } from '@/types/artist'
 
 import DynamicIcon from '@/components/DynamicIcon.vue'
@@ -43,18 +43,12 @@ const data: Data = reactive({
 const authStore = useAuthStore()
 const { user }: any = useAuthStore()
 
-const findFollowArtist = computed<boolean>(() => {
-  return user?.artists.includes(props.artist?._id)
-})
-
-const follow = ref<boolean>(findFollowArtist.value || false)
-
 const followBtnText = computed<string>(() => {
-  return follow.value ? 'Following' : 'Follow'
+  return props.artist?.is_liked ? 'Following' : 'Follow'
 })
 
 const followBtnClass = computed<string>(() => {
-  return follow.value ? 'q-btn-border' : ''
+  return props.artist?.is_liked ? 'q-btn-border' : ''
 })
 
 const emit = defineEmits([
@@ -66,8 +60,7 @@ const emit = defineEmits([
 ])
 
 const toggleFollow = (artist: Artist | undefined) => {
-  follow.value = !follow.value
-  emit('add-follow', { follow: follow.value, artist })
+  emit('add-follow', { follow: !props.artist?.is_liked, artist })
 }
 
 const onAudioToggle = () => {
@@ -130,6 +123,7 @@ const dontPlayThis = () => {
     <div class="g-music-generic-artist__main">
       <div class="g-music-generic-artist__actions">
         <q-btn
+          v-if="authStore.user"
           :class="followBtnClass"
           :label="followBtnText"
           class="q-btn-medium"

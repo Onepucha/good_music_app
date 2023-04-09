@@ -9,9 +9,12 @@ import gInput from '@/components/gInput/gInput.vue'
 import { useTranslation } from '@/composables/lang'
 import { minLength, required } from '@vuelidate/validators'
 import { useVuelidate } from '@vuelidate/core'
-import Playlists from '@/services/playlists'
+import PlaylistsApi from '@/services/playlists'
+import { Playlists } from '@/types/artist'
+import { useAuthStore } from '@/stores'
 
 const { t } = useTranslation()
+const authStore = useAuthStore()
 
 defineComponent({
   components: {
@@ -24,6 +27,10 @@ defineComponent({
 })
 
 interface Playlist {
+  playlists: Array<Playlists>
+  page: number
+  playlistsCount: number
+  isLoading: boolean
   name: string
   description: string
   playlistOptions: any
@@ -36,6 +43,10 @@ const data: Playlist = reactive({
     icon: 'public',
     label: 'Public',
   },
+  playlists: [],
+  page: 0,
+  playlistsCount: 24,
+  isLoading: false,
 })
 
 const dialog = ref<boolean>(false)
@@ -54,26 +65,18 @@ const playlistsOptions = ref([
   },
 ])
 
-const items = ref([
-  {
-    _id: 1,
-    icon: 'plus',
-    name: 'Add New Playlist',
-  },
-  {
-    _id: 2,
-    icon: 'heart',
-    name: 'Your Likes',
-    songs: ['123131'],
-  },
-  {
-    _id: 3,
-    imageUrl: '/images/albums/breackMySoul.png',
-    name: 'My Favorite Pop Songs',
-    code: '1',
-    songs: ['123131', '123131'],
-  },
-])
+const addPlaylistItem = ref({
+  _id: 1,
+  icon: 'plus',
+  name: 'Add New Playlist',
+})
+
+const yourLikes = ref({
+  _id: 2,
+  icon: 'heart',
+  name: 'Your Likes',
+  songs: authStore.user?.songs,
+})
 
 const rules = computed(() => {
   return {
@@ -105,7 +108,7 @@ const addPlayList = () => {
 const createPlaylist = async () => {
   try {
     let code = data.name.replaceAll(' ', '_').toLowerCase()
-    await Playlists.setPlaylist({
+    await PlaylistsApi.setPlaylist({
       name: data.name,
       code: code, // TODO description: data.description,
       hasPublic: hasPublic.value,
@@ -118,6 +121,28 @@ const createPlaylist = async () => {
 
 const onRecently = () => {
   console.log('Recently')
+}
+
+const scrollTargetRef = ref<any>(document.createElement('div'))
+
+const getPlaylists = async (index: number, done: () => void) => {
+  try {
+    data.page++
+    const response: any = await PlaylistsApi.getAll({
+      count: data.playlistsCount,
+      page: data.page,
+    })
+
+    if (response.data.playlists.length === 0) {
+      scrollTargetRef.value.stop()
+    }
+
+    done()
+    data.playlists = data.playlists.concat(response.data.playlists)
+  } catch (error: unknown) {
+    console.error(error)
+    scrollTargetRef.value.stop()
+  }
 }
 </script>
 
@@ -149,12 +174,30 @@ const onRecently = () => {
           @recently="onRecently"
         />
 
-        <g-music-playlist-item
-          v-for="(item, index) in items"
-          :key="index"
-          :item="item"
-          @add-playlist="addPlayList"
-        />
+        <q-infinite-scroll
+          ref="scrollTargetRef"
+          :offset="250"
+          @load="getPlaylists"
+        >
+          <g-music-playlist-item
+            :item="addPlaylistItem"
+            @add-playlist="addPlayList"
+          />
+          <g-music-playlist-item :item="yourLikes" />
+
+          <g-music-playlist-item
+            v-for="(playlist, index) in data.playlists"
+            :key="index"
+            :item="playlist"
+            @add-playlist="addPlayList"
+          />
+
+          <template #loading>
+            <div class="row justify-center q-my-md">
+              <g-loader />
+            </div>
+          </template>
+        </q-infinite-scroll>
       </div>
     </div>
   </div>
@@ -175,10 +218,9 @@ const onRecently = () => {
             :dense="dense"
             :placeholder="t('pages.playlists.popup.namePlaceholder')"
             class="g-popup-playlist__inputs-label"
-            :rules="[
-            (val: string) => val.length >= 6 || t('pages.playlists.popup.nameValidDescription'),
-          ]"
             standout
+            :rules="[
+            (val: string) => val.length >= 6 || t('pages.playlists.popup.nameValidDescription')]"
           />
 
           <g-input
@@ -186,10 +228,9 @@ const onRecently = () => {
             :dense="dense"
             :placeholder="t('pages.playlists.popup.descriptionPlaceholder')"
             class="g-popup-playlist__inputs-label"
-            :rules="[
-            (val: string) => val.length >= 6 || t('pages.playlists.popup.descriptionValidDescription'),
-          ]"
             standout
+            :rules="[
+            (val: string) => val.length >= 6 || t('pages.playlists.popup.descriptionValidDescription')]"
           />
 
           <q-select

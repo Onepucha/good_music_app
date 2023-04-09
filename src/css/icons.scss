@@ -77,7 +77,17 @@
     border: 1.5px solid $black;
     box-shadow: 0 0 0 0.5px $black;
     cursor: pointer;
-    transition: $animate-delay;
+    transition:
+      color 0.1s linear,
+      border-color 0.1s linear,
+      background 0.15s linear,
+      transform 0.1s linear,
+      opacity 0.15s linear,
+      -webkit-transform 0.1s linear;
+
+    &:active {
+      transform: scale(0.96);
+    }
 
     &::before,
     &::after {
