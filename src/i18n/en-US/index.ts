@@ -1,6 +1,3 @@
-// This is just an example,
-// so you can safely delete all default props below
-
 export default {
   play: 'Play',
   pause: 'Pause',
@@ -99,6 +96,24 @@ export default {
         albums: 'Albums',
         songs: 'Songs',
         artists: 'Artists',
+      },
+      singers: {
+        buttonBackArtists: 'Artists',
+        tabs: {
+          singers: 'Singers',
+          albums: 'Albums',
+          label: 'Sort by',
+          recently: 'Recently Downloaded',
+        },
+      },
+      albums: {
+        buttonBackArtists: 'Artists',
+        tabs: {
+          singers: 'Singers',
+          albums: 'Albums',
+          label: 'Sort by',
+          recently: 'Recently Downloaded',
+        },
       },
     },
     home: {
@@ -359,6 +374,30 @@ export default {
   gMusicPlaylistItem: {
     song: 'song',
     songs: 'songs',
+    successClipboard: 'Copied to clipboard',
+    errorClipboard: 'Error copying to clipboard',
+  },
+  gMusicSingersItem: {
+    song: 'song',
+    songs: 'songs',
+    successClipboard: 'Copied to clipboard',
+    errorClipboard: 'Error copying to clipboard',
+    addToPlaylist: 'Add to Playlist',
+    download: 'Download',
+    removeFromLibrary: 'Remove From Library',
+    viewArtist: 'View Artist',
+    share: 'Share',
+  },
+  gMusicAlbumsItem: {
+    episode: 'Episode',
+    episodes: 'Episodes',
+    successClipboard: 'Copied to clipboard',
+    errorClipboard: 'Error copying to clipboard',
+    addToPlaylist: 'Add to Playlist',
+    download: 'Download',
+    removeFromLibrary: 'Remove From Library',
+    viewArtist: 'View Artist',
+    share: 'Share',
   },
   gMusicFiltered: {
     buttonShuffle: 'Shuffle',

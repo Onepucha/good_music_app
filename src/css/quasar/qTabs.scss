@@ -1,0 +1,53 @@
+.q-tabs {
+  &__content {
+    overflow: inherit;
+  }
+
+  .q-tab {
+    min-height: 41px;
+    text-transform: capitalize;
+    color: $greyscale500;
+
+    @include hover-supported {
+      color: $primary;
+    }
+
+    &--active {
+      color: $primary;
+
+      .q-tab__indicator {
+        height: 4px;
+        bottom: -2px;
+        background: $primary;
+      }
+    }
+
+    &__indicator {
+      background: $greyscale200;
+      border-radius: 100px;
+      opacity: 1;
+    }
+
+    &__label {
+      font-size: $size-18;
+      font-weight: 600;
+      line-height: $lh-25;
+      letter-spacing: 0.2px;
+    }
+
+    &.q-hoverable {
+      &:hover {
+        & > .q-focus-helper {
+          background: transparent;
+        }
+      }
+    }
+
+    .q-focus-helper {
+      &::before,
+      &::after {
+        display: none;
+      }
+    }
+  }
+}

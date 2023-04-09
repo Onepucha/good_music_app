@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { defineComponent, computed, ref } from 'vue'
+import { computed, defineComponent, ref } from 'vue'
 import { Artist } from '@/types/artist'
 
 import DynamicIcon from '@/components/DynamicIcon.vue'
@@ -49,7 +49,11 @@ const followBtnClass = computed<string>(() => {
       <div class="g-follow-artist__title">
         <span>{{ props.artist.name }}</span>
 
-        <DynamicIcon v-if="props.artist?.is_verified" name="verified" />
+        <DynamicIcon
+          v-if="props.artist?.is_verified"
+          name="verified"
+          :size="20"
+        />
       </div>
     </div>
 

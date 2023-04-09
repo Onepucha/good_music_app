@@ -1,0 +1,106 @@
+.g-music-albums-item {
+  position: relative;
+  display: flex;
+  gap: 16px;
+  align-items: center;
+  justify-content: space-between;
+
+  & + & {
+    margin: 16px 0 0;
+  }
+
+  &__content {
+    display: flex;
+    gap: 16px;
+    align-items: center;
+    justify-content: flex-start;
+  }
+
+  &__picture {
+    width: 80px;
+    height: 80px;
+    display: block;
+    border-radius: 12px;
+
+    &-default {
+      background:
+        linear-gradient(
+          141.82deg,
+          #42d0e1 0%,
+          #f2e58d 32.64%,
+          #fec856 50.01%,
+          #f77e0c 78.11%,
+          #f0de51 101.07%
+        );
+      animation: rotate-hue 6s alternate infinite;
+
+      @keyframes rotate-hue {
+        to {
+          filter: hue-rotate(1turn);
+        }
+      }
+    }
+
+    img {
+      width: 100%;
+      height: 100%;
+    }
+  }
+
+  &__title {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+
+    &-top {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      font-size: $size-18;
+      font-weight: 700;
+      line-height: $lh-22;
+      color: $greyscale900;
+
+      a {
+        transition: $animate-delay;
+
+        @include hover-supported {
+          color: $primary;
+        }
+      }
+    }
+
+    &-description {
+      display: inline-block;
+      width: fit-content;
+      font-size: $size-12;
+      font-weight: 500;
+      line-height: $lh-14;
+      color: $greyscale700;
+      letter-spacing: 0.2px;
+
+      a {
+        @include hover-supported {
+          color: $primary;
+        }
+      }
+    }
+  }
+
+  &__action {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 20px;
+  }
+}
+
+body.body--dark {
+  .g-music-albums-item {
+    &__title {
+      &-top {
+        color: $white;
+      }
+    }
+  }
+}
