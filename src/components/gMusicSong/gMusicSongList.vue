@@ -62,8 +62,8 @@ const viewArtist = (url: string) => {
   emit('view-artist', url)
 }
 
-const goToAlbum = (url: string) => {
-  emit('go-to-album', url)
+const goToAlbum = (artist: Artist) => {
+  emit('go-to-album', artist)
 }
 
 const addPlayList = (song: Song) => {
