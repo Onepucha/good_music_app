@@ -7,7 +7,7 @@ import gMusicFiltered from '@/components/gMusicFiltered/gMusicFiltered.vue'
 import gLoader from '@/components/gLoader/gLoader.vue'
 import DynamicIcon from '@/components/DynamicIcon.vue'
 import Songs from '@/services/songs'
-import { AlbumArtist, Song } from '@/types/artist'
+import { Song } from '@/types/artist'
 
 import { useTranslation } from '@/composables/lang'
 import { useRoute, useRouter } from 'vue-router'
@@ -73,9 +73,9 @@ const onRecently = () => {
   console.log('Recently')
 }
 
-const shufflePlay = (songs: Array<Song>, artist: AlbumArtist) => {
+const shufflePlay = () => {
   // Создаем копию массива песен
-  const shuffledSongs = songs.slice()
+  const shuffledSongs = data.songs.slice()
 
   // Перемешиваем массив песен
   for (let i = shuffledSongs.length - 1; i > 0; i--) {
@@ -83,19 +83,16 @@ const shufflePlay = (songs: Array<Song>, artist: AlbumArtist) => {
     ;[shuffledSongs[i], shuffledSongs[j]] = [shuffledSongs[j], shuffledSongs[i]]
   }
 
-  // Обновляем массив песен
-  songs = shuffledSongs
-
-  playerStore.setMusicList(songs)
+  playerStore.setMusicList(shuffledSongs)
 
   playerStore.setMusic(
     {
-      _id: songs?.at(0)?._id,
-      title: songs.at(0)?.name,
-      artist: artist?.name,
-      src: songs.at(0)?.url,
+      _id: shuffledSongs?.at(0)?._id,
+      title: shuffledSongs.at(0)?.name,
+      artist: shuffledSongs?.at(0)?.artists?.at(0)?.name,
+      src: shuffledSongs.at(0)?.url,
       pic: '',
-      genres: songs.at(0)?.genres,
+      genres: shuffledSongs.at(0)?.genres,
     } as Song,
     0
   )
@@ -107,6 +104,10 @@ const shufflePlay = (songs: Array<Song>, artist: AlbumArtist) => {
 }
 
 const addPlayList = (song: Song) => {
+  console.log(song)
+}
+
+const dontPlayThis = (song: Song) => {
   console.log(song)
 }
 
@@ -159,10 +160,6 @@ const onAudioPause = () => {
   playerStore.player.pause()
 }
 
-const onShuffle = () => {
-  console.log(123)
-}
-
 const goToAlbum = (url: string) => {
   router.push(`/album/${url}`)
 }
@@ -186,7 +183,7 @@ const goToAlbum = (url: string) => {
       action
       @recently="onRecently"
       @toggleplay="onAudioToggle"
-      @shuffle="onShuffle"
+      @shuffle="shufflePlay"
     />
 
     <q-infinite-scroll
@@ -200,6 +197,7 @@ const goToAlbum = (url: string) => {
         @download="downloadSong"
         @view-artist="viewArtist"
         @add-playlist="addPlayList"
+        @dont-play-this="dontPlayThis"
         @go-to-album="goToAlbum"
       />
 

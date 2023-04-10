@@ -165,8 +165,8 @@ const viewArtist = (url: string) => {
   router.push(`/artist/${url}`)
 }
 
-const goToAlbum = (url: string) => {
-  router.push(`/album/${url}`)
+const goToAlbum = (artist: Artist) => {
+  router.push(`/album/${artist._id}`)
 }
 
 const addPlayList = (song: Song) => {
