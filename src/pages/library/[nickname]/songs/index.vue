@@ -162,6 +162,10 @@ const onAudioPause = () => {
 const onShuffle = () => {
   console.log(123)
 }
+
+const goToAlbum = (url: string) => {
+  router.push(`/album/${url}`)
+}
 </script>
 
 <template>
@@ -196,6 +200,7 @@ const onShuffle = () => {
         @download="downloadSong"
         @view-artist="viewArtist"
         @add-playlist="addPlayList"
+        @go-to-album="goToAlbum"
       />
 
       <template #loading>
