@@ -92,6 +92,7 @@ const shufflePlay = () => {
       artist: shuffledSongs?.at(0)?.artists?.at(0)?.name,
       src: shuffledSongs.at(0)?.url,
       pic: '',
+      is_liked: shuffledSongs.at(0)?.is_liked,
       genres: shuffledSongs.at(0)?.genres,
     } as Song,
     0
@@ -144,6 +145,7 @@ const onAudioPlay = (item: { song: Song; index: number }) => {
       artist: item.song?.artists?.at(0)?.name,
       src: item.song?.url,
       pic: '',
+      is_liked: item.song?.is_liked,
       genres: item.song?.genres,
     } as Song,
     item.index as number

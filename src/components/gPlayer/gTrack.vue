@@ -1,9 +1,11 @@
 <script setup lang="ts">
 import gThumbnail from './gThumbnail.vue'
 import DynamicIcon from '@/components/DynamicIcon.vue'
+import { Song } from '@/types/artist'
 
 import { defineComponent } from 'vue'
 import { useQuasar } from 'quasar'
+import { useAuthStore } from '@/stores'
 
 defineComponent({
   components: {
@@ -13,13 +15,7 @@ defineComponent({
 })
 
 const $q = useQuasar()
-
-interface Song {
-  title: string
-  artist: string
-  src: string
-  pic: string
-}
+const authStore = useAuthStore()
 
 interface Props {
   currentMusic: Song
@@ -35,7 +31,14 @@ const props = withDefaults(defineProps<Props>(), {
   enableDrag: false,
 })
 
-const emit = defineEmits(['toggleplay', 'dragbegin', 'dragging', 'like'])
+const emit = defineEmits(['toggleplay', 'dragbegin', 'dragging', 'set-liked'])
+
+const setLiked = () => {
+  emit('set-liked', true, {
+    ids: [props.currentMusic?._id],
+    is_add_to_liked: !props.currentMusic?.is_liked,
+  })
+}
 </script>
 
 <template>
@@ -54,17 +57,24 @@ const emit = defineEmits(['toggleplay', 'dragbegin', 'dragging', 'like'])
 
     <div class="g-player-track__info">
       <div class="g-player-track__info-song-name">
-        {{ currentMusic.title || 'Untitled' }}
+        {{ props.currentMusic.title || 'Untitled' }}
       </div>
 
       <div v-if="$q.platform.is.desktop" class="g-player-track__info-artists">
-        {{ currentMusic.artist || 'Unknown' }}
+        {{ props.currentMusic.artist || 'Unknown' }}
       </div>
     </div>
 
-    <div v-if="$q.platform.is.desktop" class="g-player-track__action">
+    <div
+      v-if="$q.platform.is.desktop && authStore.user"
+      class="g-player-track__action"
+    >
       <div class="g-player-track__action-like">
-        <DynamicIcon name="heart" @click.prevent="emit('like')" />
+        <DynamicIcon
+          :class="{ active: !!props.currentMusic?.is_liked }"
+          name="heart"
+          @click.prevent="setLiked"
+        />
       </div>
     </div>
   </div>
