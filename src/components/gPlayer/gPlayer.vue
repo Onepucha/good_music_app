@@ -840,9 +840,14 @@ watch(
 )
 
 onMounted(() => {
-  data.internalVolume = Number(
-    JSON.parse(localStorage.getItem('volume') as string)
-  )
+  if (localStorage.getItem('volume')) {
+    try {
+      data.internalVolume = JSON.parse(localStorage.getItem('volume') as string)
+    } catch (error) {
+      localStorage.removeItem('favorite')
+    }
+  }
+
   initAudio()
   setSelfAdaptingTheme()
   if (props.autoplay) play()

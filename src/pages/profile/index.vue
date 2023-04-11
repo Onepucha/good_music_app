@@ -9,7 +9,9 @@ import DynamicIcon from '@/components/DynamicIcon.vue'
 import gCardPremium from '@/components/gCardPremium/gCardPremium.vue'
 import gDisplayer from '@/components/gCropper/gDisplayer.vue'
 import { useQuasar } from 'quasar'
+import { useRouter } from 'vue-router'
 
+const router = useRouter()
 const { t } = useTranslation()
 
 defineComponent({
@@ -83,9 +85,12 @@ const logout = async () => {
     isLoading.value = true
     await authStore.logout()
     isLoading.value = false
+    dialog.value = false
+    await router.push('/login')
   } catch (error: unknown) {
     console.error(error)
     isLoading.value = false
+    dialog.value = false
   }
 }
 </script>
@@ -138,7 +143,7 @@ const logout = async () => {
                   </q-item-section>
                 </q-item>
 
-                <q-item to="/notification">
+                <q-item to="/profile/notification">
                   <q-item-section avatar>
                     <DynamicIcon :size="28" name="notification" />
                   </q-item-section>
@@ -152,7 +157,7 @@ const logout = async () => {
                   </q-item-section>
                 </q-item>
 
-                <q-item to="/security">
+                <q-item to="/profile/security">
                   <q-item-section avatar>
                     <DynamicIcon :size="28" name="security" />
                   </q-item-section>
@@ -166,7 +171,7 @@ const logout = async () => {
                   </q-item-section>
                 </q-item>
 
-                <q-item to="/language">
+                <q-item to="/profile/language">
                   <q-item-section avatar>
                     <DynamicIcon :size="28" name="language" />
                   </q-item-section>

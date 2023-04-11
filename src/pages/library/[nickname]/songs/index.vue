@@ -4,6 +4,7 @@ import { defineComponent, nextTick, reactive, ref } from 'vue'
 import gBack from '@/components/gBack/gBack.vue'
 import gMusicSongList from '@/components/gMusicSong/gMusicSongList.vue'
 import gMusicFiltered from '@/components/gMusicFiltered/gMusicFiltered.vue'
+import gMusicAddPlaylistModal from '@/components/gMusicAddPlaylistModal/gMusicAddPlaylistModal.vue'
 import gLoader from '@/components/gLoader/gLoader.vue'
 import DynamicIcon from '@/components/DynamicIcon.vue'
 import Songs from '@/services/songs'
@@ -25,6 +26,7 @@ defineComponent({
     gBack,
     gMusicSongList,
     gMusicFiltered,
+    gMusicAddPlaylistModal,
     gLoader,
     DynamicIcon,
   },
@@ -32,6 +34,7 @@ defineComponent({
 
 interface Data {
   songs: Array<Song>
+  songPlaylist: Song | undefined
   page: number
   albumCount: number
   isLoading: boolean
@@ -39,12 +42,14 @@ interface Data {
 
 const data: Data = reactive({
   songs: [],
+  songPlaylist: undefined,
   page: 0,
   albumCount: 24,
   isLoading: false,
 })
 
 const scrollTargetRef = ref<any>(document.createElement('div'))
+const dialog = ref<boolean>(false)
 
 const getLikedSongs = async (index: number, done: () => void) => {
   loadingStore.setLoading(false)
@@ -105,7 +110,8 @@ const shufflePlay = () => {
 }
 
 const addPlayList = (song: Song) => {
-  console.log(song)
+  dialog.value = true
+  data.songPlaylist = song
 }
 
 const dontPlayThis = (song: Song) => {
@@ -210,4 +216,5 @@ const goToAlbum = (url: string) => {
       </template>
     </q-infinite-scroll>
   </div>
+  <g-music-add-playlist-modal v-model="dialog" :song="data.songPlaylist" />
 </template>
