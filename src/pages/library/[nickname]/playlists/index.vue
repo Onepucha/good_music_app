@@ -3,6 +3,7 @@ import { computed, defineComponent, reactive, ref } from 'vue'
 
 import DynamicIcon from '@/components/DynamicIcon.vue'
 import gBack from '@/components/gBack/gBack.vue'
+import gLoader from '@/components/gLoader/gLoader.vue'
 import gMusicFiltered from '@/components/gMusicFiltered/gMusicFiltered.vue'
 import gMusicPlaylistItem from '@/components/gMusicPlaylists/gMusicPlaylistItem.vue'
 import gInput from '@/components/gInput/gInput.vue'
@@ -20,13 +21,14 @@ defineComponent({
   components: {
     DynamicIcon,
     gBack,
+    gLoader,
     gMusicFiltered,
     gMusicPlaylistItem,
     gInput,
   },
 })
 
-interface Playlist {
+interface Data {
   playlists: Array<Playlists>
   page: number
   playlistsCount: number
@@ -36,7 +38,7 @@ interface Playlist {
   playlistOptions: any
 }
 
-const data: Playlist = reactive({
+const data: Data = reactive({
   name: '',
   description: '',
   playlistOptions: {

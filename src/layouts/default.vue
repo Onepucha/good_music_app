@@ -15,6 +15,7 @@ import DynamicIcon from '@/components/DynamicIcon.vue'
 import RouterViewTransition from '@/components/RouterViewTransition.vue'
 import gCardPremium from '@/components/gCardPremium/gCardPremium.vue'
 import gPlayer from '@/components/gPlayer/gPlayer.vue'
+import Songs from '@/services/songs'
 
 const { t } = useTranslation()
 
@@ -158,9 +159,50 @@ const avatarOrFullName = computed<string>(() =>
     : authStore.fullname[0].toUpperCase()
 )
 
-// const toggleLeftDrawer = () => {
-//   leftDrawerOpen.value = !leftDrawerOpen.value
-// }
+const setLiked = async (
+  isSingle: boolean,
+  object: {
+    ids: string[]
+    is_add_to_liked: boolean
+  }
+) => {
+  try {
+    await Songs.setLiked(object.ids, object.is_add_to_liked)
+
+    const index = data.artistSong?.findIndex(
+      (song) => song._id === object.ids.at(0)
+    )
+
+    if (isSingle) {
+      if (data.song) {
+        data.song.is_liked = object.is_add_to_liked
+      }
+
+      if (
+        data.song &&
+        data.artistSong &&
+        data.song._id === data.artistSong[index]._id &&
+        index !== undefined
+      ) {
+        data.artistSong[index].is_liked = object.is_add_to_liked
+      }
+    } else {
+      if (
+        data.song &&
+        data.song._id === data.artistSong[index]._id &&
+        index !== undefined
+      ) {
+        data.song.is_liked = object.is_add_to_liked
+      }
+
+      if (data.artistSong && index !== undefined) {
+        data.artistSong[index].is_liked = object.is_add_to_liked
+      }
+    }
+  } catch (error: unknown) {
+    console.error(error)
+  }
+}
 </script>
 
 <template>

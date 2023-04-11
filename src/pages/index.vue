@@ -26,7 +26,12 @@
           overflow
         />
 
-        <q-dialog v-model="showModal">
+        <q-dialog
+          v-model="showModal"
+          :maximized="maximizedToggle"
+          transition-show="slide-up"
+          transition-hide="slide-down"
+        >
           <q-card>
             <q-card-section>
               <q-input
@@ -36,6 +41,9 @@
                 @keyup="search"
                 @clear="clearSearch"
               />
+            </q-card-section>
+            <q-separator />
+            <q-card-section class="scroll">
               <div>
                 <q-btn
                   v-for="category in categories"
@@ -57,6 +65,7 @@
                 <p>No results found.</p>
               </div>
             </q-card-section>
+
             <q-card-actions>
               <q-btn label="Clear Filters" @click="clearFilters" />
               <q-btn label="Close" @click="showModal = false" />
@@ -154,6 +163,7 @@ const getCharts = async () => {
 const searchQuery = ref('')
 const searchResults = ref([])
 const showModal = ref(false)
+const maximizedToggle = ref(true)
 const categories = ref([
   { id: 'category1', label: 'Category 1', active: false },
   { id: 'category2', label: 'Category 2', active: false },

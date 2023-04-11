@@ -35,6 +35,7 @@ import Hls from 'hls.js'
 import { Song } from '@/types/artist'
 import { usePlayerStore } from '@/stores/'
 import { useQuasar } from 'quasar'
+import Songs from '@/services/songs'
 
 const $q = useQuasar()
 // mutex playing instance
@@ -497,6 +498,7 @@ const onPrevSong = () => {
     title: previousItem.value.name,
     artist: previousItem.value?.artists?.at(0)?.name,
     src: previousItem.value.url,
+    is_liked: previousItem.value.is_liked,
   } as Song
 
   data.internalMusic = currentMusic
@@ -512,6 +514,7 @@ const onNextSong = () => {
     title: nextItem.value?.name,
     artist: nextItem.value?.artists?.at(0)?.name,
     src: nextItem.value?.url,
+    is_liked: nextItem.value.is_liked,
   } as Song
 
   data.internalMusic = currentMusic
@@ -704,6 +707,51 @@ const showSongPlay = () => {
   }
 }
 
+const setLiked = async (
+  isSingle: boolean,
+  object: {
+    ids: string[]
+    is_add_to_liked: boolean
+  }
+) => {
+  try {
+    await Songs.setLiked(object.ids, object.is_add_to_liked)
+
+    const index = data.internalList?.findIndex(
+      (song) => song._id === object.ids.at(0)
+    )
+
+    if (isSingle) {
+      if (currentMusic.value) {
+        currentMusic.value.is_liked = object.is_add_to_liked
+      }
+
+      if (
+        currentMusic.value &&
+        data.internalList &&
+        currentMusic.value._id === data.internalList[index]._id &&
+        index !== undefined
+      ) {
+        data.internalList[index].is_liked = object.is_add_to_liked
+      }
+    } else {
+      if (
+        currentMusic.value &&
+        currentMusic.value._id === data.internalList[index]._id &&
+        index !== undefined
+      ) {
+        currentMusic.value.is_liked = object.is_add_to_liked
+      }
+
+      if (data.internalList && index !== undefined) {
+        data.internalList[index].is_liked = object.is_add_to_liked
+      }
+    }
+  } catch (error: unknown) {
+    console.error(error)
+  }
+}
+
 watch(
   () => props.music,
   (music: any) => {
@@ -830,6 +878,7 @@ defineExpose({ data, play, pause, toggle })
         :theme="currentTheme"
         @dragbegin="onDragBegin"
         @dragging="onDragAround"
+        @set-liked="setLiked"
       />
 
       <div v-show="!mini" class="g-player-info">

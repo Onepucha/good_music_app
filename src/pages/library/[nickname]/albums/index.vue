@@ -91,6 +91,7 @@ const shufflePlay = (songs: Array<Song>, artist: AlbumArtist) => {
       artist: artist?.name,
       src: songs.at(0)?.url,
       pic: '',
+      is_liked: songs.at(0)?.is_liked,
       genres: songs.at(0)?.genres,
     } as Song,
     0
