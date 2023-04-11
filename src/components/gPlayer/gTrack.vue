@@ -84,6 +84,7 @@ const setLiked = () => {
 .g-player-track {
   display: flex;
   align-items: center;
+  min-width: 300px;
 
   &__entity-cover {
     width: 56px;

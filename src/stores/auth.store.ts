@@ -5,10 +5,8 @@ import { api } from '@/boot/axios'
 import { useAlertStore } from '@/stores'
 import { computed, ref } from 'vue'
 import { AxiosResponse } from 'axios'
-import { useRouter } from 'vue-router'
 
 export const useAuthStore = defineStore('auth', () => {
-  const router = useRouter()
   // initial state
   const user = ref<User | undefined>(undefined)
 
@@ -73,7 +71,6 @@ export const useAuthStore = defineStore('auth', () => {
     user.value = undefined
     await api.get('/user/logout')
     deleteCookie('test-session')
-    await router.push('/login')
   }
 
   // getters

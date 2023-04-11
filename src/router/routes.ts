@@ -103,30 +103,6 @@ const routes: RouteRecordRaw[] = [
     ],
   },
   {
-    path: '/language',
-    name: 'Language',
-    component: () => import('layouts/default.vue'),
-    children: [
-      {
-        path: '',
-        name: 'Language',
-        component: () => import('pages/language/index.vue'),
-      },
-    ],
-  },
-  {
-    path: '/notification',
-    name: 'Notification',
-    component: () => import('layouts/default.vue'),
-    children: [
-      {
-        path: '',
-        name: 'Notification',
-        component: () => import('pages/notification/index.vue'),
-      },
-    ],
-  },
-  {
     path: '/premium',
     name: 'Premium',
     component: () => import('layouts/default.vue'),
@@ -148,14 +124,35 @@ const routes: RouteRecordRaw[] = [
         path: '',
         name: 'Profile',
         component: () => import('pages/profile/index.vue'),
+        meta: { requiresAuth: true },
       },
       {
         path: '/profile/details',
         component: () => import('pages/profile/details/index.vue'),
+        meta: { requiresAuth: true },
       },
       {
         path: '/profile/edit',
         component: () => import('pages/profile/edit/index.vue'),
+        meta: { requiresAuth: true },
+      },
+      {
+        path: '/profile/security',
+        name: 'Security',
+        component: () => import('pages/profile/security/index.vue'),
+        meta: { requiresAuth: true },
+      },
+      {
+        path: '/profile/notification',
+        name: 'Notification',
+        component: () => import('pages/notification/index.vue'),
+        meta: { requiresAuth: true },
+      },
+      {
+        path: '/profile/language',
+        name: 'Language',
+        component: () => import('pages/language/index.vue'),
+        meta: { requiresAuth: true },
       },
     ],
   },
@@ -168,18 +165,6 @@ const routes: RouteRecordRaw[] = [
         path: '',
         name: 'Reset password',
         component: () => import('pages/reset-password/index.vue'),
-      },
-    ],
-  },
-  {
-    path: '/security',
-    name: 'Security',
-    component: () => import('layouts/default.vue'),
-    children: [
-      {
-        path: '',
-        name: 'Security',
-        component: () => import('pages/security/index.vue'),
       },
     ],
   },

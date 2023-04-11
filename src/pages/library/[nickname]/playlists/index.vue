@@ -110,7 +110,7 @@ const addPlayList = () => {
 const createPlaylist = async () => {
   try {
     let code = data.name.replaceAll(' ', '_').toLowerCase()
-    await PlaylistsApi.setPlaylist({
+    await PlaylistsApi.getLikedYour({
       name: data.name,
       code: code, // TODO description: data.description,
       hasPublic: hasPublic.value,
