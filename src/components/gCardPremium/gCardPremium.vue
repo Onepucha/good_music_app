@@ -17,7 +17,7 @@ const { t } = useTranslation()
         rounded
         text-color="''"
         unelevated
-        to="/premium"
+        to="/profile/premium"
       />
     </q-card-section>
   </q-card>

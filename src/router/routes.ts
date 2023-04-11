@@ -103,18 +103,6 @@ const routes: RouteRecordRaw[] = [
     ],
   },
   {
-    path: '/premium',
-    name: 'Premium',
-    component: () => import('layouts/default.vue'),
-    children: [
-      {
-        path: '',
-        name: 'Premium',
-        component: () => import('pages/premium/index.vue'),
-      },
-    ],
-  },
-  {
     path: '/profile',
     name: 'Profile',
     meta: { requiresAuth: true },
@@ -152,6 +140,12 @@ const routes: RouteRecordRaw[] = [
         path: '/profile/language',
         name: 'Language',
         component: () => import('pages/language/index.vue'),
+        meta: { requiresAuth: true },
+      },
+      {
+        path: '/profile/premium',
+        name: 'Premium',
+        component: () => import('pages/profile/premium/index.vue'),
         meta: { requiresAuth: true },
       },
     ],

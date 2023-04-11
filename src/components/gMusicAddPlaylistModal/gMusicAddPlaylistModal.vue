@@ -18,6 +18,8 @@ defineComponent({
 const { t } = useTranslation()
 const authStore = useAuthStore()
 
+const emit = defineEmits(['add-playlist-song'])
+
 const props = defineProps<{
   song?: Song | undefined
 }>()
@@ -61,6 +63,10 @@ const getLikedYourPlaylists = async (index: number, done: () => void) => {
     scrollTargetRef.value.stop()
   }
 }
+
+const addPlaylist = (playlist: Playlists) => {
+  emit('add-playlist-song', playlist)
+}
 </script>
 
 <template>
@@ -72,7 +78,7 @@ const getLikedYourPlaylists = async (index: number, done: () => void) => {
   >
     <q-card>
       <q-card-section class="g-music-add-playlist-modal__body text-center">
-        <h4>{{ t('pages.playlists.popup.title') }}</h4>
+        <h4>{{ t('gMusicAddPlaylistModal.popup.title') }}</h4>
 
         <q-list ref="scrollTargetRef" class="scroll" style="max-height: 250px">
           <q-infinite-scroll
@@ -85,6 +91,8 @@ const getLikedYourPlaylists = async (index: number, done: () => void) => {
               v-for="(playlist, index) in data.playlists"
               :key="index"
               :item="playlist"
+              has-add-playlist
+              @add-playlist="addPlaylist"
             />
 
             <template #loading>
@@ -94,27 +102,6 @@ const getLikedYourPlaylists = async (index: number, done: () => void) => {
             </template>
           </q-infinite-scroll>
         </q-list>
-
-        <div class="g-music-add-playlist-modal__action">
-          <q-btn
-            v-close-popup
-            :label="t('pages.playlists.popup.buttonCancel')"
-            class="q-btn--light-primary q-btn-large full-width"
-            rounded
-            text-color="''"
-            unelevated
-          />
-
-          <q-btn
-            :label="t('pages.playlists.popup.buttonConfirm')"
-            :loading="isLoading"
-            class="q-btn-large full-width"
-            rounded
-            text-color="''"
-            unelevated
-            @click.prevent=""
-          />
-        </div>
       </q-card-section>
     </q-card>
   </q-dialog>
