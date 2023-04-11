@@ -34,11 +34,11 @@ const props = defineProps<{
           <div class="g-music-subscribe__description">
             <ol class="g-music-subscribe__list">
               <li
-                v-for="(item, index) in props.item.list"
+                v-for="(list, index) in props.item.list"
                 :key="index"
                 class="g-music-subscribe__list-item"
               >
-                {{ item }}
+                {{ list }}
               </li>
             </ol>
           </div>
