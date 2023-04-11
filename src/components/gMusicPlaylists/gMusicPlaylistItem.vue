@@ -23,6 +23,7 @@ interface Data {
 
 const props = defineProps<{
   item: Playlists
+  hasAddPlaylist?: boolean
 }>()
 
 const data: Data = reactive({
@@ -36,7 +37,7 @@ const songsLength = computed<boolean>(() => {
 })
 
 const emitEvent = () => {
-  if (props.item?.icon === 'plus') {
+  if (props.hasAddPlaylist || props.item?.icon === 'plus') {
     emit('add-playlist', props.item)
   } else {
     router.push(`/playlists/${props.item.code}`)

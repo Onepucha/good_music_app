@@ -8,7 +8,7 @@ import gMusicAddPlaylistModal from '@/components/gMusicAddPlaylistModal/gMusicAd
 import gLoader from '@/components/gLoader/gLoader.vue'
 import DynamicIcon from '@/components/DynamicIcon.vue'
 import Songs from '@/services/songs'
-import { Song } from '@/types/artist'
+import { Playlists, Song } from '@/types/artist'
 
 import { useTranslation } from '@/composables/lang'
 import { useRoute, useRouter } from 'vue-router'
@@ -114,6 +114,12 @@ const addPlayList = (song: Song) => {
   data.songPlaylist = song
 }
 
+const addPlaylistSong = (playlist: Playlists) => {
+  console.log(playlist)
+  console.log(data.songPlaylist)
+  dialog.value = false
+}
+
 const dontPlayThis = (song: Song) => {
   console.log(song)
 }
@@ -216,5 +222,9 @@ const goToAlbum = (url: string) => {
       </template>
     </q-infinite-scroll>
   </div>
-  <g-music-add-playlist-modal v-model="dialog" :song="data.songPlaylist" />
+  <g-music-add-playlist-modal
+    v-model="dialog"
+    :song="data.songPlaylist"
+    @add-playlist-song="addPlaylistSong"
+  />
 </template>

@@ -417,4 +417,9 @@ export default {
     buttonShuffle: 'Shuffle',
     buttonPlay: 'Play',
   },
+  gMusicAddPlaylistModal: {
+    popup: {
+      title: 'Add to Playlist',
+    },
+  },
 }
