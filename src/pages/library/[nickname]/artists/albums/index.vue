@@ -6,7 +6,7 @@ import gBack from '@/components/gBack/gBack.vue'
 import gLoader from '@/components/gLoader/gLoader.vue'
 import gMusicFiltered from '@/components/gMusicFiltered/gMusicFiltered.vue'
 import gMusicAlbumsItem from '@/components/gMusicAlbumsItem/gMusicAlbumsItem.vue'
-import GMusicAlbumsItem from '@/components/gMusicAlbumsItem/gMusicAlbumsItem.vue'
+import gMusicSongListNotFound from '@/components/gMusicSong/gMusicSongListNotFound.vue'
 import { useTranslation } from '@/composables/lang'
 import { downloadSong } from '@/utils/utils'
 import { Album, Song } from '@/types/artist'
@@ -24,6 +24,7 @@ defineComponent({
     gLoader,
     gMusicFiltered,
     gMusicAlbumsItem,
+    gMusicSongListNotFound,
   },
 })
 
@@ -138,14 +139,17 @@ const getLikedAlbums = async (index: number, done: () => void) => {
           :offset="250"
           @load="getLikedAlbums"
         >
-          <g-music-albums-item
-            v-for="album in data.albums"
-            :key="album._id"
-            :album="album"
-            @add-playlist="addPlayList"
-            @remove-library="removeLibrary"
-            @download="downloadSong"
-          />
+          <template v-if="data.albums.length">
+            <g-music-albums-item
+              v-for="album in data.albums"
+              :key="album._id"
+              :album="album"
+              @add-playlist="addPlayList"
+              @remove-library="removeLibrary"
+              @download="downloadSong"
+            />
+          </template>
+          <g-music-song-list-not-found v-else />
 
           <template #loading>
             <div class="row justify-center q-my-md">

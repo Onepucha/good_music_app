@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, defineComponent, reactive } from 'vue'
-import { useUsersStore } from '@/stores'
+import { useAuthStore, useUsersStore } from '@/stores'
 import { Playlists } from '@/types/artist'
 import DynamicIcon from '@/components/DynamicIcon.vue'
 import { useTranslation } from '@/composables/lang'
@@ -16,6 +16,8 @@ defineComponent({
     DynamicIcon,
   },
 })
+
+const authStore = useAuthStore()
 
 interface Data {
   menuTheme: boolean
@@ -40,7 +42,9 @@ const emitEvent = () => {
   if (props.hasAddPlaylist || props.item?.icon === 'plus') {
     emit('add-playlist', props.item)
   } else {
-    router.push(`/playlists/${props.item.code}`)
+    router.push(
+      `/library/${authStore.user?.nickname}/playlists/${props.item._id}`
+    )
   }
 }
 </script>

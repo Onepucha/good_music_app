@@ -1,11 +1,18 @@
 <script setup lang="ts">
 import DynamicIcon from '@/components/DynamicIcon.vue'
-import { defineComponent, reactive, ref } from 'vue'
+import { computed, defineComponent, reactive, ref } from 'vue'
 import { useTranslation } from '@/composables/lang'
-import { useUsersStore } from '@/stores'
+import { useAlertStore, usePlayerStore, useUsersStore } from '@/stores'
+import { declensionOfWord } from '@/utils/utils'
+import { Playlists, Song } from '@/types/artist'
+import { copyToClipboard } from 'quasar'
+import { useRoute } from 'vue-router'
 
+const route = useRoute()
 const { t } = useTranslation()
+const playerStore = usePlayerStore()
 const usersStore = useUsersStore()
+const alertStore = useAlertStore()
 
 defineComponent({
   components: {
@@ -13,18 +20,8 @@ defineComponent({
   },
 })
 
-interface Podcast {
-  id: string | number
-  imageUrl: string
-  title: string
-  name: string
-  author: string
-  duration: string
-}
-
 const props = defineProps<{
-  podcast?: Podcast
-  playing: boolean
+  playlist?: Playlists
 }>()
 
 interface Menu {
@@ -37,7 +34,13 @@ interface Data {
   menu: Menu[]
 }
 
-const emit = defineEmits(['like', 'download', 'share', 'shuffle', 'toggleplay'])
+const emit = defineEmits([
+  'set-liked',
+  'download',
+  'share',
+  'shuffle',
+  'toggleplay',
+])
 
 const data: Data = reactive({
   menuTheme: usersStore.menuTheme,
@@ -74,6 +77,43 @@ const data: Data = reactive({
 })
 
 const isLoading = ref<boolean>(false)
+
+const songsLength = computed<boolean>(() => {
+  return props.playlist?.songs ? props.playlist?.songs?.length > 0 : false
+})
+
+const playOrPauseBtnLabel = computed<string>(() => {
+  return playerStore.playing ? t('pause') : t('play')
+})
+
+const onAudioToggle = (song: Song, index: number | string) => {
+  emit('toggleplay', { song, index })
+}
+
+const onShuffle = () => {
+  emit('shuffle')
+}
+
+const setLiked = () => {
+  emit('set-liked', true, {
+    ids: [props.playlist?._id],
+    is_add_to_liked: !props.playlist?.is_liked,
+  })
+}
+
+const downloadSong = () => {
+  emit('download', props.playlist?.url, props.playlist?.name)
+}
+
+const setShare = () => {
+  copyToClipboard(`${import.meta.env.VITE_API_URL}${route.path}`)
+    .then(() => {
+      alertStore.success(t('gMusicGenericArtist.successClipboard'))
+    })
+    .catch(() => {
+      alertStore.error(t('gMusicGenericArtist.errorClipboard'))
+    })
+}
 </script>
 
 <template>
@@ -84,13 +124,13 @@ const isLoading = ref<boolean>(false)
           class="g-playlist-header__aside-picture"
           :class="{
             'g-playlist-header__aside-picture-default':
-              !props.podcast?.imageUrl,
+              !props.playlist?.imageUrl,
           }"
         >
           <img
-            v-if="props.podcast?.imageUrl"
-            :alt="props.podcast.name"
-            :src="props.podcast?.imageUrl"
+            v-if="props.playlist?.imageUrl"
+            :alt="props.playlist.name"
+            :src="props.playlist?.imageUrl"
           />
         </div>
       </div>
@@ -98,12 +138,20 @@ const isLoading = ref<boolean>(false)
         <div class="g-playlist-header__main-top">
           <div class="g-playlist-header__info">
             <div class="g-playlist-header__info-title">
-              {{ props.podcast?.title || 'Untitled' }}
+              {{ props.playlist?.name || 'Untitled' }}
             </div>
 
             <div class="g-playlist-header__info-description">
-              <span>{{ props.podcast?.author || 'Unknown' }}</span>
-              <span>{{ props.podcast?.duration || 'Unknown' }}</span>
+              <span>{{ t('gPlaylistHeader.playlist') }}</span>
+              <span v-if="songsLength">
+                {{ props.playlist?.songs?.length }}
+                {{
+                  declensionOfWord(props.playlist?.songs?.length, [
+                    t('gPlaylistHeader.song'),
+                    t('gPlaylistHeader.songs'),
+                  ])
+                }}
+              </span>
             </div>
           </div>
         </div>
@@ -113,20 +161,16 @@ const isLoading = ref<boolean>(false)
             <DynamicIcon
               :size="24"
               name="check_like"
-              @click.prevent="$emit('like')"
+              @click.prevent="setLiked"
             />
 
             <DynamicIcon
               :size="24"
               name="download_song"
-              @click.prevent="$emit('download')"
+              @click.prevent="downloadSong"
             />
 
-            <DynamicIcon
-              :size="24"
-              name="share"
-              @click.prevent="$emit('share')"
-            />
+            <DynamicIcon :size="24" name="share" @click.prevent="setShare" />
 
             <i class="g-icon g-icon-dots" @click.prevent.stop="">
               <span></span>
@@ -160,29 +204,34 @@ const isLoading = ref<boolean>(false)
       </div>
     </div>
 
-    <div class="g-playlist-header__actions">
+    <div v-if="playlist?.songs?.length" class="g-playlist-header__actions">
       <q-btn
         :label="t('gPlaylistHeader.buttonShuffle')"
         :loading="isLoading"
-        class="q-btn-large icon-left"
+        class="q-btn-shuffle q-btn-large full-width icon-left"
         rounded
         text-color="''"
         unelevated
-        @click.prevent="$emit('download')"
+        @click.prevent="onShuffle"
       >
         <DynamicIcon :size="20" class="on-left" name="shuffle" />
       </q-btn>
 
       <q-btn
-        v-close-popup
-        :label="t('gPlaylistHeader.buttonPlay')"
-        class="q-btn--light-primary q-btn-large icon-left"
+        :label="playOrPauseBtnLabel"
+        class="q-btn-play q-btn--light-primary q-btn-large full-width icon-left"
         rounded
         text-color="''"
         unelevated
-        @click.prevent="$emit('toggleplay')"
+        @click.prevent="onAudioToggle(props.song, playerStore.getMusicIndex)"
       >
-        <DynamicIcon :size="20" class="on-left" name="play_round" />
+        <DynamicIcon
+          v-if="playerStore.playing"
+          class="on-left"
+          name="pause_over"
+          :size="20"
+        />
+        <DynamicIcon v-else class="on-left" name="play_over" :size="20" />
       </q-btn>
     </div>
   </div>

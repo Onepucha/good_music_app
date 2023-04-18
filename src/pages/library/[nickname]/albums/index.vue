@@ -4,6 +4,7 @@ import { defineComponent, nextTick, reactive, ref } from 'vue'
 import gBack from '@/components/gBack/gBack.vue'
 import gMusicAlbum from '@/components/gMusicAlbum/gMusicAlbum.vue'
 import gMusicFiltered from '@/components/gMusicFiltered/gMusicFiltered.vue'
+import gMusicSongListNotFound from '@/components/gMusicSong/gMusicSongListNotFound.vue'
 import gLoader from '@/components/gLoader/gLoader.vue'
 import DynamicIcon from '@/components/DynamicIcon.vue'
 import Albums from '@/services/albums'
@@ -24,6 +25,7 @@ defineComponent({
     gBack,
     gMusicAlbum,
     gMusicFiltered,
+    gMusicSongListNotFound,
     gLoader,
     DynamicIcon,
   },
@@ -138,16 +140,19 @@ const removeLibrary = (album: Album) => {
       :offset="250"
       @load="getLikedAlbums"
     >
-      <g-music-album
-        v-for="(album, index) in data.albums"
-        :key="index"
-        :album="album"
-        @shuffle-play="shufflePlay"
-        @add-playlist="addPlayList"
-        @view-artist="viewArtist"
-        @remove-library="removeLibrary"
-        @download="downloadSong"
-      />
+      <template v-if="data.albums.length">
+        <g-music-album
+          v-for="(album, index) in data.albums"
+          :key="index"
+          :album="album"
+          @shuffle-play="shufflePlay"
+          @add-playlist="addPlayList"
+          @view-artist="viewArtist"
+          @remove-library="removeLibrary"
+          @download="downloadSong"
+        />
+      </template>
+      <g-music-song-list-not-found v-else />
 
       <template #loading>
         <div class="row justify-center q-my-md">

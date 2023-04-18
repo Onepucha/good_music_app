@@ -130,7 +130,7 @@ const scrollTargetRef = ref<any>(document.createElement('div'))
 const getPlaylists = async (index: number, done: () => void) => {
   try {
     data.page++
-    const response: any = await PlaylistsApi.getAll({
+    const response: any = await PlaylistsApi.getLikedYour({
       count: data.playlistsCount,
       page: data.page,
     })

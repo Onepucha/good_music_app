@@ -380,6 +380,11 @@ export default {
   gPlaylistHeader: {
     buttonShuffle: 'Shuffle',
     buttonPlay: 'Play',
+    playlist: 'Playlist',
+    song: 'song',
+    songs: 'songs',
+    successClipboard: 'Copied to clipboard',
+    errorClipboard: 'Error copying to clipboard',
   },
   gMusicSongListNotFound: {
     title: 'Not Found',

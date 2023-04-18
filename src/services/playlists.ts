@@ -7,11 +7,11 @@ class Playlists {
     })
   }
 
-  // getInfo(query: any): Promise<Artist> {
-  //   return api.get('/album/info', {
-  //     params: query,
-  //   })
-  // }
+  getInfo(query: any): Promise<Playlists> {
+    return api.get('/playlist/info', {
+      params: query,
+    })
+  }
 
   getLikedYour(query: any): Promise<Array<Playlists>> {
     return api.get('/playlist/own', {
