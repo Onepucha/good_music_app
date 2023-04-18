@@ -191,6 +191,7 @@ const goToAlbum = (url: string) => {
     </div>
 
     <g-music-filtered
+      v-if="data.songs.length"
       :label="t('pages.library.songs.label')"
       :recently="t('pages.library.songs.recently')"
       :song="data.songs?.at(0)"

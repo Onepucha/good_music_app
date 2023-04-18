@@ -6,6 +6,7 @@ import gBack from '@/components/gBack/gBack.vue'
 import gLoader from '@/components/gLoader/gLoader.vue'
 import gMusicFiltered from '@/components/gMusicFiltered/gMusicFiltered.vue'
 import gMusicSingersItem from '@/components/gMusicSingersItem/gMusicSingersItem.vue'
+import gMusicSongListNotFound from '@/components/gMusicSong/gMusicSongListNotFound.vue'
 import { useTranslation } from '@/composables/lang'
 import { downloadSong } from '@/utils/utils'
 import { Album, Artist, Song } from '@/types/artist'
@@ -23,6 +24,7 @@ defineComponent({
     gLoader,
     gMusicFiltered,
     gMusicSingersItem,
+    gMusicSongListNotFound,
   },
 })
 
@@ -82,11 +84,14 @@ const scrollTargetRef = ref<any>(document.createElement('div'))
 
 const getLikedSingers = async (index: number, done: () => void) => {
   try {
+    console.log(1231)
     data.page++
     const response: any = await Artists.getLiked({
       count: data.singersCount,
       page: data.page,
     })
+
+    console.log(response)
 
     if (response.data.artists.length === 0) {
       scrollTargetRef.value.stop()
@@ -154,15 +159,18 @@ const getLikedSingers = async (index: number, done: () => void) => {
           :offset="250"
           @load="getLikedSingers"
         >
-          <g-music-singers-item
-            v-for="singer in data.singers"
-            :key="singer._id"
-            :singer="singer"
-            @add-playlist="addPlayList"
-            @remove-library="removeLibrary"
-            @download="downloadSong"
-            @view-artist="viewArtist"
-          />
+          <template v-if="data.singers.length">
+            <g-music-singers-item
+              v-for="singer in data.singers"
+              :key="singer._id"
+              :singer="singer"
+              @add-playlist="addPlayList"
+              @remove-library="removeLibrary"
+              @download="downloadSong"
+              @view-artist="viewArtist"
+            />
+          </template>
+          <g-music-song-list-not-found v-else />
 
           <template #loading>
             <div class="row justify-center q-my-md">

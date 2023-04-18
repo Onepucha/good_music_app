@@ -108,7 +108,9 @@ export interface Playlists {
   name: string
   icon?: string
   imageUrl?: string
+  url: string
   code: string
   public: true
   songs: Array<string>
+  is_liked?: boolean
 }

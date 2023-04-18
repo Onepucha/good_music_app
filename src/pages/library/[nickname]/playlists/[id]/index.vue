@@ -1,23 +1,25 @@
 <script lang="ts" setup>
 import { defineComponent, nextTick, onMounted, reactive, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { Artist, Song } from '@/types/artist'
+import { Artist, Playlists, Song } from '@/types/artist'
 
+import DynamicIcon from '@/components/DynamicIcon.vue'
 import gBack from '@/components/gBack/gBack.vue'
-import gMusicPlaylistsDetails from '@/components/gMusicPlaylists/gMusicPlaylistsDetails.vue'
-import GMusicPlaylistsDetails from '@/components/gMusicPlaylists/gMusicPlaylistsDetails.vue'
+import gPlaylistHeader from '@/components/gPlaylistHeader/gPlaylistHeader.vue'
 import gMusicSongList from '@/components/gMusicSong/gMusicSongList.vue'
 import { useTranslation } from '@/composables/lang'
 import Songs from '@/services/songs'
 import { downloadSong } from '@/utils/utils'
-import { useArtistsStore, usePlayerStore } from '@/stores'
+import { usePlayerStore } from '@/stores'
+import PlaylistsApi from '@/services/playlists'
 
 const { t } = useTranslation()
 
 defineComponent({
   components: {
+    DynamicIcon,
     gBack,
-    gMusicPlaylistsDetails,
+    gPlaylistHeader,
     gMusicSongList,
   },
 })
@@ -29,52 +31,27 @@ const playerStore = usePlayerStore()
 const isLoading = ref<boolean>(true)
 
 interface Data {
+  playlist?: Playlists | undefined
   song: Song | undefined
   artist: Artist | undefined
-  artistSong: Array<Song> | undefined
+  playlistsSong: Array<Song>
 }
 
 const data: Data = reactive({
+  playlist: undefined,
   song: undefined,
   artist: undefined,
-  artistSong: [],
+  playlistsSong: [],
 })
 
-const getSong = async () => {
-  try {
-    let id: string | string[] = route.params.code
-    const response: any = await Songs.get(id)
-
-    data.song = response.data.song
-  } catch (error: unknown) {
-    console.error(error)
-    isLoading.value = false
-  }
-}
-
-const getArtistSongs = async () => {
+const getInfoPlaylist = async () => {
   try {
     let id: string | string[] = route.params.id
-    const response: any = await Songs.getAll({ count: 3, id: id })
+    const response: any = await PlaylistsApi.getInfo({ id })
 
-    data.artistSong = response.data.songs
+    data.playlist = response.data.playlists
   } catch (error: unknown) {
     console.error(error)
-    isLoading.value = false
-  }
-}
-
-const getArtistCode = async () => {
-  const artistStore = useArtistsStore()
-
-  try {
-    let id: string | string[] = route.params.id
-    const response: any = await artistStore.getArtistCode(id)
-
-    data.artist = response?.data?.artist
-  } catch (error: unknown) {
-    console.error(error)
-    isLoading.value = false
   }
 }
 
@@ -93,12 +70,12 @@ const setLiked = async (
         data.song.is_liked = object.is_add_to_liked
       }
     } else {
-      const index = data.artistSong?.findIndex(
+      const index = data.playlistsSong?.findIndex(
         (song) => song._id === object.ids.at(0)
       )
 
-      if (data.artistSong && index !== undefined) {
-        data.artistSong[index].is_liked = object.is_add_to_liked
+      if (data.playlistsSong && index !== undefined) {
+        data.playlistsSong[index].is_liked = object.is_add_to_liked
       }
     }
   } catch (error: unknown) {
@@ -126,7 +103,7 @@ const onAudioToggle = (item: { song: Song; index: number }) => {
 }
 
 const onAudioPlay = (item: { song: Song; index: number }) => {
-  playerStore.setMusicList(data.artistSong || [])
+  playerStore.setMusicList(data.playlistsSong || [])
 
   playerStore.setMusic(
     {
@@ -152,6 +129,37 @@ const onAudioPause = () => {
   playerStore.player.pause()
 }
 
+const shufflePlay = () => {
+  // Создаем копию массива песен
+  const shuffledSongs = data.playlistsSong.slice()
+
+  // Перемешиваем массив песен
+  for (let i = shuffledSongs.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1))
+    ;[shuffledSongs[i], shuffledSongs[j]] = [shuffledSongs[j], shuffledSongs[i]]
+  }
+
+  playerStore.setMusicList(shuffledSongs)
+
+  playerStore.setMusic(
+    {
+      _id: shuffledSongs?.at(0)?._id,
+      title: shuffledSongs.at(0)?.name,
+      artist: shuffledSongs?.at(0)?.artists?.at(0)?.name,
+      src: shuffledSongs.at(0)?.url,
+      pic: '',
+      is_liked: shuffledSongs.at(0)?.is_liked,
+      genres: shuffledSongs.at(0)?.genres,
+    } as Song,
+    0
+  )
+  playerStore.setPlaying(true)
+
+  nextTick(() => {
+    playerStore.player.play()
+  })
+}
+
 const viewArtist = (url: string) => {
   router.push(`/artist/${url}`)
 }
@@ -165,13 +173,7 @@ const dontPlayThis = (song: Song) => {
 }
 
 onMounted(async () => {
-  await getArtistCode()
-  await getSong()
-  await getArtistSongs()
-
-  if (data.artist) {
-    playerStore.setArtistName(data.artist)
-  }
+  await getInfoPlaylist()
   isLoading.value = false
 })
 </script>
@@ -180,29 +182,22 @@ onMounted(async () => {
   <div class="q-page">
     <div class="q-page__header">
       <g-back icon="back" @click.prevent="$router.go(-1)" />
-      <i class="g-icon g-icon-dropdown-menu">
-        <span></span>
-      </i>
+      <DynamicIcon name="search" :size="28" />
     </div>
 
     <template v-if="!isLoading">
-      <g-music-playlists-details
-        :song="data.song"
-        :artist="playerStore.artist"
+      <g-playlist-header
+        :playlist="data.playlist"
         @set-liked="setLiked"
         @download="downloadSong"
-        @dont-play-this="dontPlayThis"
-        @view-artist="viewArtist"
-        @go-to-album="goToAlbum"
         @toggleplay="onAudioToggle"
+        @shuffle="shufflePlay"
       />
 
       <g-music-song-list
-        :list="data.artistSong"
+        :list="data.playlistsSong"
         :artist="playerStore.artist"
         :artist-id="playerStore.artist?._id"
-        :sub-title="t('pages.playlists.gMusicSongListTrack.subTitle')"
-        :title="t('pages.playlists.gMusicSongListTrack.title')"
         @toggleplay="onAudioToggle"
         @download="downloadSong"
         @go-to-album="goToAlbum"

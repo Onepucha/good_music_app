@@ -1,8 +1,9 @@
 <script lang="ts" setup>
-import { defineComponent } from 'vue'
+import { defineComponent, reactive } from 'vue'
 
 import DynamicIcon from '@/components/DynamicIcon.vue'
 import gBack from '@/components/gBack/gBack.vue'
+import gMusicSongListNotFound from '@/components/gMusicSong/gMusicSongListNotFound.vue'
 import { useTranslation } from '@/composables/lang'
 
 const { t } = useTranslation()
@@ -11,7 +12,16 @@ defineComponent({
   components: {
     DynamicIcon,
     gBack,
+    gMusicSongListNotFound,
   },
+})
+
+interface Data {
+  downloads: Array<string>
+}
+
+const data: Data = reactive({
+  downloads: [],
 })
 </script>
 
@@ -36,6 +46,9 @@ defineComponent({
             </div>
           </div>
         </div>
+
+        <template v-if="data.downloads.length"></template>
+        <g-music-song-list-not-found v-else />
       </div>
     </div>
   </div>
