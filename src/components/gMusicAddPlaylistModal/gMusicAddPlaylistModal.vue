@@ -18,7 +18,7 @@ defineComponent({
 const { t } = useTranslation()
 const authStore = useAuthStore()
 
-const emit = defineEmits(['add-playlist-song'])
+const emit = defineEmits(['add-playlist-song', 'close-modal'])
 
 const props = defineProps<{
   song?: Song | undefined
@@ -60,6 +60,7 @@ const getLikedYourPlaylists = async (index: number, done: () => void) => {
     data.playlists = data.playlists.concat(response.data.playlists)
   } catch (error: unknown) {
     console.error(error)
+    emit('close-modal', false)
     scrollTargetRef.value.stop()
   }
 }

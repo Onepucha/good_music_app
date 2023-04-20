@@ -84,14 +84,11 @@ const scrollTargetRef = ref<any>(document.createElement('div'))
 
 const getLikedSingers = async (index: number, done: () => void) => {
   try {
-    console.log(1231)
     data.page++
     const response: any = await Artists.getLiked({
       count: data.singersCount,
       page: data.page,
     })
-
-    console.log(response)
 
     if (response.data.artists.length === 0) {
       scrollTargetRef.value.stop()

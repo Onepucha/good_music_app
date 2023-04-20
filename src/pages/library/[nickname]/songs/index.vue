@@ -8,6 +8,7 @@ import gMusicAddPlaylistModal from '@/components/gMusicAddPlaylistModal/gMusicAd
 import gLoader from '@/components/gLoader/gLoader.vue'
 import DynamicIcon from '@/components/DynamicIcon.vue'
 import Songs from '@/services/songs'
+import PlaylistsApi from '@/services/playlists'
 import { Playlists, Song } from '@/types/artist'
 
 import { useTranslation } from '@/composables/lang'
@@ -114,10 +115,29 @@ const addPlayList = (song: Song) => {
   data.songPlaylist = song
 }
 
-const addPlaylistSong = (playlist: Playlists) => {
-  console.log(playlist)
-  console.log(data.songPlaylist)
-  dialog.value = false
+const addPlaylistSong = async (playlist: Playlists) => {
+  await editPlaylist(playlist)
+}
+
+const editPlaylist = async (playlist: Playlists) => {
+  try {
+    let payload = {
+      public: playlist.public,
+      name: playlist.name,
+      songs: [data.songPlaylist?._id],
+      is_add_to_liked: true,
+    }
+
+    await PlaylistsApi.editPlaylist(playlist._id, payload)
+    dialog.value = false
+  } catch (error: unknown) {
+    dialog.value = false
+    console.error(error)
+  }
+}
+
+const closeModal = (bool: boolean) => {
+  dialog.value = bool
 }
 
 const dontPlayThis = (song: Song) => {
@@ -227,5 +247,6 @@ const goToAlbum = (url: string) => {
     v-model="dialog"
     :song="data.songPlaylist"
     @add-playlist-song="addPlaylistSong"
+    @close-modal="closeModal"
   />
 </template>
