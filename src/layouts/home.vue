@@ -16,6 +16,7 @@ import RouterViewTransition from '@/components/RouterViewTransition.vue'
 import gCardPremium from '@/components/gCardPremium/gCardPremium.vue'
 import gPlayer from '@/components/gPlayer/gPlayer.vue'
 import { usePlayerStore, useUsersStore } from '@/stores/'
+import { CustomWindow } from '@/types/options'
 
 const { t } = useTranslation()
 const usersStore = useUsersStore()
@@ -175,6 +176,19 @@ const throttle = <T extends any[]>(
 
 const handleThrottledScroll = throttle(handleScroll, 250)
 
+const customWindow: CustomWindow = window
+
+const installApp = async (): Promise<void> => {
+  const promptEvent = (window as CustomWindow).deferredPrompt
+
+  if (!promptEvent) {
+    return
+  }
+  promptEvent.prompt()
+  const result = await promptEvent.userChoice
+  ;(window as CustomWindow).deferredPrompt = null
+}
+
 onMounted(() => {
   usersStore.setMenuTheme(
     !!JSON.parse(localStorage.getItem('darkMode') as string)
@@ -302,6 +316,7 @@ onUnmounted(() => {
           flat
           text-color="''"
           unelevated
+          @click="installApp"
         >
           <DynamicIcon class="on-left" name="download" />
         </q-btn>

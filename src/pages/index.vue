@@ -1,5 +1,5 @@
 <template>
-  <div v-if="loadingStore.isLoading" class="q-page q-page__home">
+  <div v-if="!loadingStore.isLoading" class="q-page q-page__home">
     <div class="row">
       <div class="col-12 col-md-12">
         <g-music-gallery-list
@@ -210,10 +210,10 @@ const clearFilters = () => {
 }
 
 onMounted(async () => {
+  loadingStore.setLoading()
   await getReleases()
   await getPopularArtist()
   await getCharts()
-
-  loadingStore.setLoading(true)
+  loadingStore.hideLoading()
 })
 </script>

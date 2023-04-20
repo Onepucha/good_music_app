@@ -4,3 +4,7 @@ export interface Options {
   description?: string
   category?: string
 }
+
+export interface CustomWindow extends Window {
+  deferredPrompt?: Event | null | any
+}
