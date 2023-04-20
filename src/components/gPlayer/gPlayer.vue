@@ -15,6 +15,7 @@ const picThemeCache = {} as any
 import gTrack from './gTrack.vue'
 import gList from './gList.vue'
 import gController from './gController.vue'
+import gControllerMini from './gControllerMini.vue'
 import gCast from './gCast.vue'
 import gLrc from './gLrc.vue'
 import gSongPlay from './gSongPlay.vue'
@@ -47,6 +48,7 @@ defineComponent({
     gTrack,
     gList,
     gController,
+    gControllerMini,
     gCast,
     gLrc,
     gSongPlay,
@@ -876,28 +878,75 @@ defineExpose({ data, play, pause, toggle })
       'g-player-fixed': fixed,
     }"
   >
-    <div class="g-player-body" @click.prevent="showSongPlay">
-      <g-track
-        :current-music="currentMusic"
-        :enable-drag="isFloatMode"
-        :theme="currentTheme"
-        @dragbegin="onDragBegin"
-        @dragging="onDragAround"
-        @set-liked="setLiked"
-      />
-
-      <div v-show="!mini" class="g-player-info">
-        <slot
-          name="display"
+    <template v-if="!$q.platform.is.mobile">
+      <div class="g-player-body" @click.prevent="showSongPlay">
+        <g-track
           :current-music="currentMusic"
-          :play-stat="data.playStat"
-        >
-          <g-lrc
-            v-if="showLrc"
+          :enable-drag="isFloatMode"
+          :theme="currentTheme"
+          @dragbegin="onDragBegin"
+          @dragging="onDragAround"
+          @set-liked="setLiked"
+        />
+
+        <div v-show="!mini" class="g-player-info">
+          <slot
+            name="display"
             :current-music="currentMusic"
             :play-stat="data.playStat"
+          >
+            <g-lrc
+              v-if="showLrc"
+              :current-music="currentMusic"
+              :play-stat="data.playStat"
+            />
+          </slot>
+          <g-controller
+            :stat="data.playStat"
+            :theme="currentTheme"
+            :has-controls="data.internalList.length > 0"
+            :playing="playerStore.playing"
+            :music-list="musicList"
+            @toggleplay="toggle"
+            @dragbegin="onProgressDragBegin"
+            @dragend="onProgressDragEnd"
+            @dragging="onProgressDragging"
+            @track-prev="onPrevSong"
+            @track-rewind-prev="onRewindPrev"
+            @track-next="onNextSong"
+            @track-rewind-next="onRewindNext"
           />
-        </slot>
+        </div>
+        <g-cast
+          v-if="$q.platform.is.desktop"
+          :volume="audioVolume"
+          :theme="currentTheme"
+          :muted="isAudioMuted"
+          :repeat="repeatMode"
+          :has-menu="data.internalList.length > 0"
+          @togglemute="toggleMute"
+          @setvolume="setAudioVolume"
+          @toggleshuffle="shouldShuffle = !shouldShuffle"
+          @nextmode="setNextMode"
+          @togglelist="data.showList = !data.showList"
+        />
+      </div>
+      <audio ref="audio"></audio>
+      <g-list
+        :show="data.showList"
+        :current-music="currentMusic"
+        :music-list="musicList"
+        :play-index="playIndex"
+        :listmaxheight="listMaxHeight"
+        :theme="currentTheme"
+        :fixed="fixed"
+        @selectsong="onSelectSong"
+      />
+      <g-song-play
+        :current-music="currentMusic"
+        :show="data.showSongPlay"
+        @hide-song-play="data.showSongPlay = !data.showSongPlay"
+      >
         <g-controller
           :stat="data.playStat"
           :theme="currentTheme"
@@ -913,53 +962,28 @@ defineExpose({ data, play, pause, toggle })
           @track-next="onNextSong"
           @track-rewind-next="onRewindNext"
         />
+      </g-song-play>
+    </template>
+
+    <template v-else>
+      <div class="g-player-body">
+        <g-track
+          :current-music="currentMusic"
+          :enable-drag="isFloatMode"
+          :theme="currentTheme"
+          @dragbegin="onDragBegin"
+          @dragging="onDragAround"
+          @set-liked="setLiked"
+        />
+
+        <g-controller-mini
+          :has-controls="data.internalList.length > 0"
+          :playing="playerStore.playing"
+          @toggleplay="toggle"
+          @track-next="onNextSong"
+        />
       </div>
-      <g-cast
-        v-if="$q.platform.is.desktop"
-        :volume="audioVolume"
-        :theme="currentTheme"
-        :muted="isAudioMuted"
-        :repeat="repeatMode"
-        :has-menu="data.internalList.length > 0"
-        @togglemute="toggleMute"
-        @setvolume="setAudioVolume"
-        @toggleshuffle="shouldShuffle = !shouldShuffle"
-        @nextmode="setNextMode"
-        @togglelist="data.showList = !data.showList"
-      />
-    </div>
-    <audio ref="audio"></audio>
-    <g-list
-      :show="data.showList"
-      :current-music="currentMusic"
-      :music-list="musicList"
-      :play-index="playIndex"
-      :listmaxheight="listMaxHeight"
-      :theme="currentTheme"
-      :fixed="fixed"
-      @selectsong="onSelectSong"
-    />
-    <g-song-play
-      :current-music="currentMusic"
-      :show="data.showSongPlay"
-      @hide-song-play="data.showSongPlay = !data.showSongPlay"
-    >
-      <g-controller
-        :stat="data.playStat"
-        :theme="currentTheme"
-        :has-controls="data.internalList.length > 0"
-        :playing="playerStore.playing"
-        :music-list="musicList"
-        @toggleplay="toggle"
-        @dragbegin="onProgressDragBegin"
-        @dragend="onProgressDragEnd"
-        @dragging="onProgressDragging"
-        @track-prev="onPrevSong"
-        @track-rewind-prev="onRewindPrev"
-        @track-next="onNextSong"
-        @track-rewind-next="onRewindNext"
-      />
-    </g-song-play>
+    </template>
   </div>
 </template>
 
@@ -998,7 +1022,8 @@ defineExpose({ data, play, pause, toggle })
     user-select: none;
 
     @media #{$mobile} {
-      padding: 24px 24px 36px;
+      gap: 16px;
+      padding: 23px 23px 35px;
       border: 1px solid $greyscale100;
       border-radius: 32px 32px 0 0;
     }

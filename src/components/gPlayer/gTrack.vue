@@ -86,6 +86,10 @@ const setLiked = () => {
   align-items: center;
   min-width: 300px;
 
+  @media #{$mobile} {
+    min-width: 235px;
+  }
+
   &__entity-cover {
     width: 56px;
     height: 56px;
@@ -113,7 +117,7 @@ const setLiked = () => {
       color: $greyscale900;
 
       @media #{$mobile} {
-        max-width: 190px;
+        max-width: 170px;
         display: inline-block;
         overflow: hidden;
         text-overflow: ellipsis;

@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { defineComponent, computed } from 'vue'
+import { computed, defineComponent } from 'vue'
 import DynamicIcon from '@/components/DynamicIcon.vue'
 
 defineComponent({
@@ -7,6 +7,7 @@ defineComponent({
     DynamicIcon,
   },
 })
+
 interface Props {
   playing: boolean
 }
@@ -14,12 +15,6 @@ interface Props {
 const props = withDefaults(defineProps<Props>(), {
   playing: false,
 })
-
-// const playing = ref<boolean>(false)
-
-// const togglePlay = () => {
-//   props.playing = !props.playing
-// }
 
 const iconPlayOrPause = computed<string>(() =>
   props.playing ? 'pause' : 'play'

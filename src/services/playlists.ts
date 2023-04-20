@@ -46,6 +46,12 @@ class Playlists {
       songs,
     })
   }
+
+  editPlaylist(id: string, query: any) {
+    return api.post(`/playlist/edit/${id}`, {
+      params: query,
+    })
+  }
 }
 
 export default new Playlists()

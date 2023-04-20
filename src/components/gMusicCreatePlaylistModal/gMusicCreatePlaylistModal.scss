@@ -1,4 +1,4 @@
-.g-popup-playlist {
+.g-music-create-playlist-modal {
   .q-card {
     width: 100%;
     box-shadow: none;
@@ -63,7 +63,7 @@
 }
 
 body.body--dark {
-  .g-popup-playlist {
+  .g-music-create-playlist-modal {
     &__body {
       h5 {
         &::before {
