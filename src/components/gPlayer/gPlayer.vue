@@ -154,6 +154,8 @@ const data: Data = reactive({
 })
 
 let audio = ref<any>(document.createElement('audio'))
+const showModalSongPlay = ref(false)
+const maximizedToggle = ref(true)
 
 const emit = defineEmits([
   'update:music',
@@ -704,9 +706,7 @@ const setSelfAdaptingTheme = () => {
 }
 
 const showSongPlay = () => {
-  if ($q.platform.is.mobile) {
-    data.showSongPlay = !data.showSongPlay
-  }
+  showModalSongPlay.value = true
 }
 
 const setLiked = async (
@@ -879,7 +879,7 @@ defineExpose({ data, play, pause, toggle })
     }"
   >
     <template v-if="!$q.platform.is.mobile">
-      <div class="g-player-body" @click.prevent="showSongPlay">
+      <div class="g-player-body">
         <g-track
           :current-music="currentMusic"
           :enable-drag="isFloatMode"
@@ -942,10 +942,37 @@ defineExpose({ data, play, pause, toggle })
         :fixed="fixed"
         @selectsong="onSelectSong"
       />
+    </template>
+
+    <template v-else>
+      <div class="g-player-body">
+        <g-track
+          :current-music="currentMusic"
+          :enable-drag="isFloatMode"
+          :theme="currentTheme"
+          @dragbegin="onDragBegin"
+          @dragging="onDragAround"
+          @set-liked="setLiked"
+          @click.prevent="showSongPlay"
+        />
+
+        <g-controller-mini
+          :has-controls="data.internalList.length > 0"
+          :playing="playerStore.playing"
+          @toggleplay="toggle"
+          @track-next="onNextSong"
+        />
+      </div>
+    </template>
+    <q-dialog
+      v-model="showModalSongPlay"
+      :maximized="maximizedToggle"
+      transition-show="slide-up"
+      transition-hide="slide-down"
+    >
       <g-song-play
         :current-music="currentMusic"
-        :show="data.showSongPlay"
-        @hide-song-play="data.showSongPlay = !data.showSongPlay"
+        @hide-song-play="showModalSongPlay = false"
       >
         <g-controller
           :stat="data.playStat"
@@ -963,27 +990,7 @@ defineExpose({ data, play, pause, toggle })
           @track-rewind-next="onRewindNext"
         />
       </g-song-play>
-    </template>
-
-    <template v-else>
-      <div class="g-player-body">
-        <g-track
-          :current-music="currentMusic"
-          :enable-drag="isFloatMode"
-          :theme="currentTheme"
-          @dragbegin="onDragBegin"
-          @dragging="onDragAround"
-          @set-liked="setLiked"
-        />
-
-        <g-controller-mini
-          :has-controls="data.internalList.length > 0"
-          :playing="playerStore.playing"
-          @toggleplay="toggle"
-          @track-next="onNextSong"
-        />
-      </div>
-    </template>
+    </q-dialog>
   </div>
 </template>
 
