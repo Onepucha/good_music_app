@@ -12,11 +12,9 @@ defineComponent({
 
 interface Props {
   currentMusic?: Song | undefined
-  show: boolean
 }
 
 const props = withDefaults(defineProps<Props>(), {
-  show: false,
   currentMusic: undefined,
 })
 
@@ -38,63 +36,61 @@ const allGenres = computed<string>(() => {
 </script>
 
 <template>
-  <transition enter-active-class="fadeInDown" leave-active-class="fadeInDown">
-    <div v-show="show" class="g-song-play">
-      <div class="g-song-play__wrapper">
-        <div class="g-song-play__header">
-          <g-back icon="back" @click.prevent="emit('hide-song-play')" />
+  <div class="g-song-play">
+    <div class="g-song-play__wrapper">
+      <div class="g-song-play__header">
+        <g-back icon="back" @click.prevent="emit('hide-song-play')" />
 
-          <div class="q-page__header-actions">
-            <div class="q-page__header-dropdown">
-              <i class="g-icon g-icon-dropdown-menu">
-                <span></span>
-              </i>
-            </div>
-          </div>
-        </div>
-        <div class="g-song-play__body">
-          <div class="g-song-play__info">
-            <q-avatar
-              class="g-song-play__info-picture"
-              :class="{
-                'g-song-info__picture-default': !props.currentMusic?.pic,
-              }"
-            >
-              <template v-if="props.currentMusic?.pic">
-                <img
-                  :alt="props.currentMusic.title"
-                  :src="props.currentMusic?.pic"
-                />
-              </template>
-            </q-avatar>
-
-            <h3 class="g-song-play__info-title">
-              {{ props.currentMusic?.title || 'Unknown' }}
-            </h3>
-
-            <div class="g-song-play__info-artist-name">
-              <span>{{ props.currentMusic?.artist || 'Untitled' }}</span>
-
-              <span v-if="allGenres.length">, {{ allGenres }} </span>
-            </div>
-
-            <div v-if="infoLength" class="g-song-play__info-info">
-              <span
-                v-for="(item, index) in props.currentMusic?.info"
-                :key="index"
-              >
-                {{ item }}
-              </span>
-            </div>
-          </div>
-
-          <div class="g-song-play__player">
-            <slot />
+        <div class="q-page__header-actions">
+          <div class="q-page__header-dropdown">
+            <i class="g-icon g-icon-dropdown-menu">
+              <span></span>
+            </i>
           </div>
         </div>
       </div>
+      <div class="g-song-play__body">
+        <div class="g-song-play__info">
+          <q-avatar
+            class="g-song-play__info-picture"
+            :class="{
+              'g-song-info__picture-default': !props.currentMusic?.pic,
+            }"
+          >
+            <template v-if="props.currentMusic?.pic">
+              <img
+                :alt="props.currentMusic.title"
+                :src="props.currentMusic?.pic"
+              />
+            </template>
+          </q-avatar>
+
+          <h3 class="g-song-play__info-title">
+            {{ props.currentMusic?.title || 'Unknown' }}
+          </h3>
+
+          <div class="g-song-play__info-artist-name">
+            <span>{{ props.currentMusic?.artist || 'Untitled' }}</span>
+
+            <span v-if="allGenres.length">, {{ allGenres }} </span>
+          </div>
+
+          <div v-if="infoLength" class="g-song-play__info-info">
+            <span
+              v-for="(item, index) in props.currentMusic?.info"
+              :key="index"
+            >
+              {{ item }}
+            </span>
+          </div>
+        </div>
+
+        <div class="g-song-play__player">
+          <slot />
+        </div>
+      </div>
     </div>
-  </transition>
+  </div>
 </template>
 
 <style lang="scss">
@@ -112,7 +108,7 @@ const allGenres = computed<string>(() => {
   &__wrapper {
     position: relative;
     overflow-y: auto;
-    padding: 24px;
+    padding: 16px 24px 24px 24px;
   }
 
   &__header {
@@ -123,15 +119,15 @@ const allGenres = computed<string>(() => {
     padding: 8px 0;
     min-height: 48px;
 
-    @media #{$mobile} {
-      @supports (padding-top: constant(safe-area-inset-top)) {
-        padding: constant(safe-area-inset-top) 24px 16px 24px;
-      }
-
-      @supports (padding: max(0px)) {
-        padding: max(24px, env(safe-area-inset-top)) 24px 16px 24px;
-      }
-    }
+    //@media #{$mobile} {
+    //  @supports (padding-top: constant(safe-area-inset-top)) {
+    //    padding: constant(safe-area-inset-top) 24px 16px 24px;
+    //  }
+    //
+    //  @supports (padding: max(0px)) {
+    //    padding: max(24px, env(safe-area-inset-top)) 24px 16px 24px;
+    //  }
+    //}
 
     &-title {
       display: flex;
@@ -158,7 +154,7 @@ const allGenres = computed<string>(() => {
 
   &__body {
     position: relative;
-    margin: 24px 0 0;
+    margin: 16px 0 0;
   }
 
   &__info {
@@ -172,7 +168,7 @@ const allGenres = computed<string>(() => {
       height: 100%;
       border-radius: 24px;
       max-width: 360px;
-      min-height: 360px;
+      min-height: 327px;
 
       &-default {
         background: linear-gradient(
@@ -255,6 +251,23 @@ const allGenres = computed<string>(() => {
           gap: 33px;
           justify-content: center;
           margin: 16px 0 0;
+
+          .g-icon {
+            width: 28px;
+            height: 28px;
+          }
+
+          .g-play-btn {
+            width: 67px;
+            height: 67px;
+            margin: 6px;
+
+            .g-icon-play,
+            .g-icon-pause {
+              width: 32px;
+              height: 32px;
+            }
+          }
         }
 
         .g-player-track-control-bar {
