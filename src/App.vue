@@ -1,13 +1,10 @@
 <script lang="ts" setup>
 import { defineComponent } from 'vue'
 import { useQuasar } from 'quasar'
-import MainLoader from '@/components/MainLoader.vue'
 
 defineComponent({
   name: 'App',
-  components: {
-    MainLoader,
-  },
+  components: {},
 })
 
 const $q = useQuasar()
@@ -21,5 +18,4 @@ if (JSON.parse(localStorage.getItem('darkMode') as string)) {
 
 <template>
   <router-view />
-  <main-loader />
 </template>
