@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, reactive, onUnmounted, CSSProperties } from 'vue'
+import { computed, CSSProperties, onUnmounted, reactive } from 'vue'
 
 const emit = defineEmits(['dragbegin', 'dragging', 'dragend'])
 
@@ -77,6 +77,9 @@ onUnmounted(() => {
 <template>
   <router-link
     class="g-player-pic"
+    :class="{
+      'g-player-pic-default': !currentPicStyleObj?.backgroundImage,
+    }"
     :style="currentPicStyleObj"
     to="/"
     @mousedown="onDragBegin"
@@ -99,18 +102,21 @@ onUnmounted(() => {
   width: $g-player-height;
   box-shadow: 0 10px 15px -3px rgb(0 0 0 / 10%), 0 4px 6px -2px rgb(0 0 0 / 5%);
   border-radius: 8px;
-  background: linear-gradient(
-    141.82deg,
-    #42d0e1 0%,
-    #f2e58d 32.64%,
-    #fec856 50.01%,
-    #f77e0c 78.11%,
-    #f0de51 101.07%
-  );
-  animation: rotate-hue 6s alternate infinite;
   background-size: cover;
   transition: $animate-delay;
   cursor: pointer;
+
+  &-default {
+    background: linear-gradient(
+      141.82deg,
+      #42d0e1 0%,
+      #f2e58d 32.64%,
+      #fec856 50.01%,
+      #f77e0c 78.11%,
+      #f0de51 101.07%
+    );
+    animation: rotate-hue 6s alternate infinite;
+  }
 
   @media #{$mobile} {
     width: 48px;
