@@ -53,7 +53,6 @@ const scrollTargetRef = ref<any>(document.createElement('div'))
 const dialog = ref<boolean>(false)
 
 const getLikedSongs = async (index: number, done: () => void) => {
-  loadingStore.setLoading(false)
   try {
     data.page++
     const response: any = await Songs.getLiked({
@@ -67,11 +66,9 @@ const getLikedSongs = async (index: number, done: () => void) => {
 
     done()
     data.songs = data.songs.concat(response.data.songs)
-    loadingStore.setLoading(true)
   } catch (error: unknown) {
     console.error(error)
     scrollTargetRef.value.stop()
-    loadingStore.setLoading(true)
   }
 }
 

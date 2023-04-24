@@ -177,8 +177,6 @@ const throttle = <T extends any[]>(
 
 const handleThrottledScroll = throttle(handleScroll, 250)
 
-const customWindow: CustomWindow = window
-
 const installApp = async (): Promise<void> => {
   const promptEvent = (window as CustomWindow).deferredPrompt
 

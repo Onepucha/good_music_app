@@ -15,6 +15,7 @@ import DynamicIcon from '@/components/DynamicIcon.vue'
 import RouterViewTransition from '@/components/RouterViewTransition.vue'
 import gCardPremium from '@/components/gCardPremium/gCardPremium.vue'
 import gPlayer from '@/components/gPlayer/gPlayer.vue'
+import { CustomWindow } from '@/types/options'
 
 const { t } = useTranslation()
 
@@ -130,6 +131,17 @@ const data: Data = reactive({
 
 let player = ref<any>(null)
 
+const installApp = async (): Promise<void> => {
+  const promptEvent = (window as CustomWindow).deferredPrompt
+
+  if (!promptEvent) {
+    return
+  }
+  promptEvent.prompt()
+  const result = await promptEvent.userChoice
+  ;(window as CustomWindow).deferredPrompt = null
+}
+
 onMounted(() => {
   usersStore.setMenuTheme(
     !!JSON.parse(localStorage.getItem('darkMode') as string)
@@ -200,6 +212,7 @@ const avatarOrFullName = computed<string>(() =>
         flat
         text-color="''"
         unelevated
+        @click="installApp"
       >
         <DynamicIcon class="on-left" name="download" />
       </q-btn>

@@ -248,10 +248,6 @@ const allGenres = computed<string>(() => {
         flex-direction: column-reverse;
 
         .g-player-track-control-buttons {
-          gap: 33px;
-          justify-content: center;
-          margin: 16px 0 0;
-
           .g-icon {
             width: 28px;
             height: 28px;
