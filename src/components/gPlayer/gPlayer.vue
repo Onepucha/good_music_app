@@ -16,6 +16,7 @@ import gTrack from './gTrack.vue'
 import gList from './gList.vue'
 import gController from './gController.vue'
 import gControllerMini from './gControllerMini.vue'
+import gControllerBottom from './gControllerBottom.vue'
 import gCast from './gCast.vue'
 import gLrc from './gLrc.vue'
 import gSongPlay from './gSongPlay.vue'
@@ -37,6 +38,7 @@ import { Song } from '@/types/artist'
 import { usePlayerStore } from '@/stores/'
 import { useQuasar } from 'quasar'
 import Songs from '@/services/songs'
+import GControllerBottom from '@/components/gPlayer/gControllerBottom.vue'
 
 const $q = useQuasar()
 // mutex playing instance
@@ -49,6 +51,7 @@ defineComponent({
     gList,
     gController,
     gControllerMini,
+    gControllerBottom,
     gCast,
     gLrc,
     gSongPlay,
@@ -989,6 +992,8 @@ defineExpose({ data, play, pause, toggle })
           @track-next="onNextSong"
           @track-rewind-next="onRewindNext"
         />
+
+        <g-controller-bottom />
       </g-song-play>
     </q-dialog>
   </div>

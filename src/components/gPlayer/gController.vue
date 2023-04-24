@@ -162,7 +162,9 @@ const secondToTime = (second: number) => {
 
       @media #{$mobile} {
         gap: 16px;
-        justify-content: flex-end;
+        justify-content: space-between;
+        padding: 0 24px;
+        margin: 16px 0 0;
       }
     }
 

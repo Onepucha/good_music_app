@@ -49,7 +49,7 @@ const getInfoPlaylist = async () => {
     let id: string | string[] = route.params.id
     const response: any = await PlaylistsApi.getInfo({ id })
 
-    data.playlist = response.data.playlists
+    data.playlist = response.data.playlist
   } catch (error: unknown) {
     console.error(error)
   }
