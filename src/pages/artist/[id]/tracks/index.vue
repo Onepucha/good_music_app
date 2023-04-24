@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { defineComponent, nextTick, onMounted, reactive, ref } from 'vue'
-import { Artist, Song } from '@/types/artist'
+import { Album, Artist, Song } from '@/types/artist'
 
 import gBack from '@/components/gBack/gBack.vue'
 import gLoader from '@/components/gLoader/gLoader.vue'
@@ -152,12 +152,12 @@ const onAudioPause = () => {
   playerStore.player.pause()
 }
 
-const viewArtist = (url: string) => {
-  router.push(`/artist/${url}`)
+const viewArtist = (artist: Artist) => {
+  router.push(`/artist/${artist?._id}`)
 }
 
-const goToAlbum = (url: string) => {
-  router.push(`/album/${url}`)
+const goToAlbum = (album: Album) => {
+  router.push(`/album/${album?._id}`)
 }
 
 const addPlayList = (song: Song) => {

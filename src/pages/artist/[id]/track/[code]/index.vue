@@ -1,5 +1,12 @@
 <script lang="ts" setup>
-import { defineComponent, nextTick, onMounted, reactive, ref } from 'vue'
+import {
+  computed,
+  defineComponent,
+  nextTick,
+  onMounted,
+  reactive,
+  ref,
+} from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { Artist, Song } from '@/types/artist'
 
@@ -9,7 +16,7 @@ import gMusicSongList from '@/components/gMusicSong/gMusicSongList.vue'
 import { useTranslation } from '@/composables/lang'
 import Songs from '@/services/songs'
 import { downloadSong } from '@/utils/utils'
-import { useArtistsStore, usePlayerStore } from '@/stores'
+import { usePlayerStore } from '@/stores'
 
 const { t } = useTranslation()
 
@@ -29,14 +36,16 @@ const isLoading = ref<boolean>(true)
 
 interface Data {
   song: Song | undefined
-  artist: Artist | undefined
   artistSong: Array<Song>
 }
 
 const data: Data = reactive({
   song: undefined,
-  artist: undefined,
   artistSong: [],
+})
+
+const findArtist = computed<any>(() => {
+  return data.song?.artists?.at(0)
 })
 
 const getSong = async () => {
@@ -57,20 +66,6 @@ const getArtistSongs = async () => {
     const response: any = await Songs.getAll({ count: 3, id: id })
 
     data.artistSong = response.data.songs
-  } catch (error: unknown) {
-    console.error(error)
-    isLoading.value = false
-  }
-}
-
-const getArtistCode = async () => {
-  const artistStore = useArtistsStore()
-
-  try {
-    let id: string | string[] = route.params.id
-    const response: any = await artistStore.getArtistCode(id)
-
-    data.artist = response.data.artist
   } catch (error: unknown) {
     console.error(error)
     isLoading.value = false
@@ -148,7 +143,7 @@ const onAudioPlay = (item: { song: Song; index: number }) => {
     {
       _id: item.song?._id,
       title: item.song?.name,
-      artist: data?.artist?.name,
+      artist: findArtist.value?.name,
       src: item.song?.url,
       pic: '',
       is_liked: item.song?.is_liked,
@@ -185,13 +180,9 @@ const dontPlayThis = (song: Song) => {
 }
 
 onMounted(async () => {
-  await getArtistCode()
   await getSong()
   await getArtistSongs()
 
-  if (data.artist) {
-    playerStore.setArtistName(data.artist)
-  }
   isLoading.value = false
 })
 </script>
@@ -208,7 +199,7 @@ onMounted(async () => {
     <template v-if="!isLoading">
       <g-song-info
         :song="data.song"
-        :artist="playerStore.artist"
+        :artist="findArtist"
         @set-liked="setLiked"
         @add-playlist="addPlayList"
         @download="downloadSong"
@@ -220,8 +211,8 @@ onMounted(async () => {
 
       <g-music-song-list
         :list="data.artistSong"
-        :artist="playerStore.artist"
-        :artist-id="playerStore.artist?._id"
+        :artist="findArtist"
+        :artist-id="findArtist?._id"
         :sub-title="t('pages.artists.gMusicSongListTrack.subTitle')"
         :title="t('pages.artists.gMusicSongListTrack.title')"
         @toggleplay="onAudioToggle"

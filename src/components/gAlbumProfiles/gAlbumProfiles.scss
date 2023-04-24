@@ -5,7 +5,8 @@
   max-width: 380px;
   margin: 24px auto 0;
 
-  & + .g-music-album-list {
+  & + .g-music-album-list,
+  & + .g-music-song-list {
     margin: 24px 0 0;
   }
 

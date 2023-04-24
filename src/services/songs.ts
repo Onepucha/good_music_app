@@ -29,6 +29,14 @@ class Songs {
       is_add_to_liked,
     })
   }
+
+  getPlaylistSongs(id: string | string[]): Promise<Song> {
+    return api.get('/song/playlist', {
+      params: {
+        id,
+      },
+    })
+  }
 }
 
 export default new Songs()

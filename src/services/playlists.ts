@@ -49,8 +49,12 @@ class Playlists {
 
   editPlaylist(id: string, query: any) {
     return api.post(`/playlist/edit/${id}`, {
-      params: query,
+      ...query,
     })
+  }
+
+  removePlaylist(id: string) {
+    return api.delete(`/playlist/${id}`)
   }
 }
 
