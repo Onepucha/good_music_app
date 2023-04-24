@@ -177,14 +177,14 @@ const throttle = <T extends any[]>(
 
 const handleThrottledScroll = throttle(handleScroll, 250)
 
-const installApp = async (): Promise<void> => {
-  const promptEvent = (window as CustomWindow).deferredPrompt
+const promptEvent = ref<any>((window as CustomWindow).deferredPrompt)
 
-  if (!promptEvent) {
+const installApp = async (): Promise<void> => {
+  if (!promptEvent.value) {
     return
   }
-  promptEvent.prompt()
-  const result = await promptEvent.userChoice
+  promptEvent.value.prompt()
+  const result = await promptEvent.value.userChoice
   ;(window as CustomWindow).deferredPrompt = null
 }
 
@@ -309,6 +309,7 @@ onUnmounted(() => {
         <g-card-premium class="q-drawer__card" />
 
         <q-btn
+          v-if="promptEvent"
           :label="t('layouts.buttonInstallApp')"
           :ripple="false"
           class="q-drawer__install-app icon-left"

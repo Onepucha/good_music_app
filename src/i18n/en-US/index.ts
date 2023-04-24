@@ -100,6 +100,13 @@ export default {
       playlists: {
         label: 'Sort by',
         recently: 'Recently Added',
+        popup: {
+          title: 'Delete playlist',
+          description:
+            'The contents of the playlist will be deleted permanently, without the possibility of recovery.',
+          buttonCancel: 'Cancel',
+          buttonConfirm: 'Confirm',
+        },
       },
       downloads: {
         label: 'Sort by',
@@ -385,6 +392,7 @@ export default {
     songs: 'songs',
     successClipboard: 'Copied to clipboard',
     errorClipboard: 'Error copying to clipboard',
+    removePlaylist: 'Remove Playlist',
   },
   gMusicSongListNotFound: {
     title: 'Not Found',

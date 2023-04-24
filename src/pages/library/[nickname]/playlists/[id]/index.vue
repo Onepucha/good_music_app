@@ -10,7 +10,7 @@ import gMusicSongList from '@/components/gMusicSong/gMusicSongList.vue'
 import { useTranslation } from '@/composables/lang'
 import Songs from '@/services/songs'
 import { downloadSong } from '@/utils/utils'
-import { usePlayerStore } from '@/stores'
+import { useAuthStore, usePlayerStore } from '@/stores'
 import PlaylistsApi from '@/services/playlists'
 
 const { t } = useTranslation()
@@ -27,8 +27,12 @@ defineComponent({
 const route = useRoute()
 const router = useRouter()
 const playerStore = usePlayerStore()
+const authStore = useAuthStore()
 
 const isLoading = ref<boolean>(true)
+const dialog = ref<boolean>(false)
+const qDialogPopup = ref<any>(null)
+const position = ref<any>('bottom')
 
 interface Data {
   playlist?: Playlists | undefined
@@ -50,6 +54,19 @@ const getInfoPlaylist = async () => {
     const response: any = await PlaylistsApi.getInfo({ id })
 
     data.playlist = response.data.playlist
+  } catch (error: unknown) {
+    console.error(error)
+  }
+}
+
+const getPlaylistSongs = async () => {
+  try {
+    let id: string | string[] = route.params.id
+    const response: any = await Songs.getPlaylistSongs(id)
+
+    console.log(response.data.songs)
+
+    data.playlistsSong = response.data.songs
   } catch (error: unknown) {
     console.error(error)
   }
@@ -109,7 +126,7 @@ const onAudioPlay = (item: { song: Song; index: number }) => {
     {
       _id: item.song?._id,
       title: item.song?.name,
-      artist: data?.artist?.name,
+      artist: item.song?.artists?.at(0)?.name,
       src: item.song?.url,
       pic: '',
       is_liked: item.song?.is_liked,
@@ -160,6 +177,22 @@ const shufflePlay = () => {
   })
 }
 
+const removePlaylist = (playlist: Playlists) => {
+  dialog.value = true
+}
+
+const confirmRemovePlaylist = async (playlist: Playlists) => {
+  try {
+    if (data.playlist?._id) {
+      await PlaylistsApi.removePlaylist(data.playlist._id)
+    }
+
+    await router.replace(`/library/${authStore.user?.nickname}/playlists`)
+  } catch (error: unknown) {
+    console.error(error)
+  }
+}
+
 const viewArtist = (url: string) => {
   router.push(`/artist/${url}`)
 }
@@ -174,6 +207,7 @@ const dontPlayThis = (song: Song) => {
 
 onMounted(async () => {
   await getInfoPlaylist()
+  await getPlaylistSongs()
   isLoading.value = false
 })
 </script>
@@ -188,10 +222,12 @@ onMounted(async () => {
     <template v-if="!isLoading">
       <g-playlist-header
         :playlist="data.playlist"
+        :song="data.playlistsSong.at(0)"
         @set-liked="setLiked"
         @download="downloadSong"
         @toggleplay="onAudioToggle"
         @shuffle="shufflePlay"
+        @remove-playlist="removePlaylist"
       />
 
       <g-music-song-list
@@ -205,6 +241,42 @@ onMounted(async () => {
         @view-artist="viewArtist"
         @dont-play-this="dontPlayThis"
       />
+
+      <q-dialog
+        ref="qDialogPopup"
+        v-model="dialog"
+        :position="position"
+        class="g-popup-profile"
+      >
+        <q-card>
+          <q-card-section class="g-popup-profile__body text-center">
+            <h4>{{ t('pages.library.playlists.popup.title') }}</h4>
+            <h5>
+              {{ t('pages.library.playlists.popup.description') }}
+            </h5>
+            <div class="g-popup-profile__action">
+              <q-btn
+                v-close-popup
+                :label="t('pages.library.playlists.popup.buttonCancel')"
+                class="g-popup-profile__btn q-btn--light-primary q-btn-large"
+                rounded
+                text-color="''"
+                unelevated
+              />
+
+              <q-btn
+                :label="t('pages.library.playlists.popup.buttonConfirm')"
+                :loading="isLoading"
+                class="g-popup-profile__btn q-btn-large"
+                rounded
+                text-color="''"
+                unelevated
+                @click.prevent="confirmRemovePlaylist"
+              />
+            </div>
+          </q-card-section>
+        </q-card>
+      </q-dialog>
     </template>
   </div>
 </template>

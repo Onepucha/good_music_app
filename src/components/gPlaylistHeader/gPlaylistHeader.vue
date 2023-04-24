@@ -2,7 +2,12 @@
 import DynamicIcon from '@/components/DynamicIcon.vue'
 import { computed, defineComponent, reactive, ref } from 'vue'
 import { useTranslation } from '@/composables/lang'
-import { useAlertStore, usePlayerStore, useUsersStore } from '@/stores'
+import {
+  useAlertStore,
+  useAuthStore,
+  usePlayerStore,
+  useUsersStore,
+} from '@/stores'
 import { declensionOfWord } from '@/utils/utils'
 import { Playlists, Song } from '@/types/artist'
 import { copyToClipboard } from 'quasar'
@@ -10,6 +15,7 @@ import { useRoute } from 'vue-router'
 
 const route = useRoute()
 const { t } = useTranslation()
+const authStore = useAuthStore()
 const playerStore = usePlayerStore()
 const usersStore = useUsersStore()
 const alertStore = useAlertStore()
@@ -22,17 +28,16 @@ defineComponent({
 
 const props = defineProps<{
   playlist?: Playlists
+  song?: Song
 }>()
-
-interface Menu {
-  label: string
-  icon: string
-}
 
 interface Data {
   menuTheme: boolean
-  menu: Menu[]
 }
+
+const data: Data = reactive({
+  menuTheme: usersStore.menuTheme,
+})
 
 const emit = defineEmits([
   'set-liked',
@@ -40,41 +45,8 @@ const emit = defineEmits([
   'share',
   'shuffle',
   'toggleplay',
+  'remove-playlist',
 ])
-
-const data: Data = reactive({
-  menuTheme: usersStore.menuTheme,
-  menu: [
-    {
-      label: t('gMusicSong.like'),
-      icon: 'like',
-    },
-    {
-      label: t('gMusicSong.addToPlaylist'),
-      icon: 'add_playlist',
-    },
-    {
-      label: t('gMusicSong.dontPlayThis'),
-      icon: 'dont_play',
-    },
-    {
-      label: t('gMusicSong.download'),
-      icon: 'download_song',
-    },
-    {
-      label: t('gMusicSong.viewArtist'),
-      icon: 'artist',
-    },
-    {
-      label: t('gMusicSong.gotoAlbum'),
-      icon: 'play_album',
-    },
-    {
-      label: t('gMusicSong.share'),
-      icon: 'share',
-    },
-  ],
-})
 
 const isLoading = ref<boolean>(false)
 
@@ -113,6 +85,10 @@ const setShare = () => {
     .catch(() => {
       alertStore.error(t('gMusicGenericArtist.errorClipboard'))
     })
+}
+
+const removePlaylist = () => {
+  emit('remove-playlist', props.playlist)
 }
 </script>
 
@@ -183,17 +159,17 @@ const setShare = () => {
               >
                 <q-list>
                   <q-item
-                    v-for="(item, index) in data.menu"
-                    :key="index"
+                    v-if="authStore.user"
                     v-close-popup
                     clickable
+                    @click.prevent="removePlaylist"
                   >
                     <q-item-section avatar>
-                      <DynamicIcon :size="20" :name="item.icon" />
+                      <DynamicIcon :size="20" name="remove" />
                     </q-item-section>
 
                     <q-item-section>
-                      {{ item.label }}
+                      {{ t('gPlaylistHeader.removePlaylist') }}
                     </q-item-section>
                   </q-item>
                 </q-list>

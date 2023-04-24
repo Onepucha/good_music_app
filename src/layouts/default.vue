@@ -131,14 +131,14 @@ const data: Data = reactive({
 
 let player = ref<any>(null)
 
-const installApp = async (): Promise<void> => {
-  const promptEvent = (window as CustomWindow).deferredPrompt
+const promptEvent = ref<any>((window as CustomWindow).deferredPrompt)
 
-  if (!promptEvent) {
+const installApp = async (): Promise<void> => {
+  if (!promptEvent.value) {
     return
   }
-  promptEvent.prompt()
-  const result = await promptEvent.userChoice
+  promptEvent.value.prompt()
+  const result = await promptEvent.value.userChoice
   ;(window as CustomWindow).deferredPrompt = null
 }
 
@@ -206,6 +206,7 @@ const avatarOrFullName = computed<string>(() =>
       <g-card-premium class="q-drawer__card" />
 
       <q-btn
+        v-if="promptEvent"
         :label="t('layouts.buttonInstallApp')"
         :ripple="false"
         class="q-drawer__install-app icon-left"

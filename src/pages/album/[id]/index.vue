@@ -1,5 +1,12 @@
 <script lang="ts" setup>
-import { defineComponent, nextTick, onMounted, reactive, ref } from 'vue'
+import {
+  computed,
+  defineComponent,
+  nextTick,
+  onMounted,
+  reactive,
+  ref,
+} from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { Album, Artist, Song } from '@/types/artist'
 
@@ -41,6 +48,10 @@ const data: Data = reactive({
   album: {} as Album,
   albumSong: [],
   isLoading: false,
+})
+
+const findArtist = computed<any>(() => {
+  return data.album?.artists?.at(0)
 })
 
 const getAlbumCode = async () => {
@@ -101,7 +112,7 @@ const onAudioPlay = (item: { song: Song; index: number }) => {
     {
       _id: item.song?._id,
       title: item.song?.name,
-      artist: data?.album?.name,
+      artist: findArtist.value?.name,
       src: item.song?.url,
       pic: '',
       is_liked: item.song?.is_liked,
@@ -139,10 +150,6 @@ const goToAlbum = (url: string) => {
 
 onMounted(async () => {
   await getAlbumCode()
-
-  if (data.artist) {
-    playerStore.setArtistName(data.artist)
-  }
   isLoading.value = false
 })
 </script>
@@ -172,8 +179,8 @@ onMounted(async () => {
 
       <g-music-song-list
         :list="data.albumSong"
-        :artist="data.album?.artists?.at(0)"
-        :artist-id="data.album?._id"
+        :artist="findArtist"
+        :artist-id="findArtist?._id"
         :sub-title="t('pages.artists.gMusicSongList.subTitle')"
         :title="t('pages.artists.gMusicSongList.title')"
         @toggleplay="onAudioToggle"
