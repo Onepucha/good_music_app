@@ -1,5 +1,12 @@
 <script lang="ts" setup>
-import { defineComponent, nextTick, onMounted, reactive, ref } from 'vue'
+import {
+  computed,
+  defineComponent,
+  nextTick,
+  onMounted,
+  reactive,
+  ref,
+} from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { Artist, Playlists, Song } from '@/types/artist'
 
@@ -46,6 +53,10 @@ const data: Data = reactive({
   song: undefined,
   artist: undefined,
   playlistsSong: [],
+})
+
+const findArtist = computed<any>(() => {
+  return data.song?.artists?.at(0)
 })
 
 const getInfoPlaylist = async () => {
@@ -232,8 +243,8 @@ onMounted(async () => {
 
       <g-music-song-list
         :list="data.playlistsSong"
-        :artist="playerStore.artist"
-        :artist-id="playerStore.artist?._id"
+        :artist="findArtist"
+        :artist-id="findArtist?._id"
         @toggleplay="onAudioToggle"
         @download="downloadSong"
         @go-to-album="goToAlbum"
