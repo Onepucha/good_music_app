@@ -14,13 +14,14 @@ import { Album, AlbumArtist, AlbumSong, Playlists, Song } from '@/types/artist'
 import { useTranslation } from '@/composables/lang'
 import { useRoute, useRouter } from 'vue-router'
 import { downloadSong } from '@/utils/utils'
-import { usePlayerStore } from '@/stores'
+import { useAlertStore, usePlayerStore } from '@/stores'
 import PlaylistsApi from '@/services/playlists'
 
 const route = useRoute()
 const router = useRouter()
 const { t } = useTranslation()
 const playerStore = usePlayerStore()
+const alertStore = useAlertStore()
 
 defineComponent({
   components: {
@@ -145,8 +146,23 @@ const viewArtist = (url: string) => {
   router.push(`/artist/${url}`)
 }
 
-const removeLibrary = (album: Album) => {
-  console.log(album)
+const removeLibrary = async (album: Album) => {
+  try {
+    await Albums.setFollow([album._id], false)
+
+    const indexToDelete = data.albums.findIndex(
+      (item) => item._id === album._id
+    )
+
+    if (indexToDelete !== -1) {
+      data.albums.splice(indexToDelete, 1)
+    }
+
+    alertStore.success(t('success'))
+  } catch (error: unknown) {
+    console.error(error)
+    alertStore.error(t('error'))
+  }
 }
 </script>
 
