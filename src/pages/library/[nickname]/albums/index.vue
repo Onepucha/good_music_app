@@ -5,15 +5,17 @@ import gBack from '@/components/gBack/gBack.vue'
 import gMusicAlbum from '@/components/gMusicAlbum/gMusicAlbum.vue'
 import gMusicFiltered from '@/components/gMusicFiltered/gMusicFiltered.vue'
 import gMusicSongListNotFound from '@/components/gMusicSong/gMusicSongListNotFound.vue'
+import gMusicAddPlaylistModal from '@/components/gMusicAddPlaylistModal/gMusicAddPlaylistModal.vue'
 import gLoader from '@/components/gLoader/gLoader.vue'
 import DynamicIcon from '@/components/DynamicIcon.vue'
 import Albums from '@/services/albums'
-import { Album, AlbumArtist, Song } from '@/types/artist'
+import { Album, AlbumArtist, AlbumSong, Playlists, Song } from '@/types/artist'
 
 import { useTranslation } from '@/composables/lang'
 import { useRoute, useRouter } from 'vue-router'
 import { downloadSong } from '@/utils/utils'
 import { usePlayerStore } from '@/stores'
+import PlaylistsApi from '@/services/playlists'
 
 const route = useRoute()
 const router = useRouter()
@@ -26,6 +28,7 @@ defineComponent({
     gMusicAlbum,
     gMusicFiltered,
     gMusicSongListNotFound,
+    gMusicAddPlaylistModal,
     gLoader,
     DynamicIcon,
   },
@@ -36,6 +39,7 @@ interface Data {
   page: number
   albumCount: number
   isLoading: boolean
+  songPlaylist: Array<AlbumSong> | AlbumSong | undefined
 }
 
 const data: Data = reactive({
@@ -43,9 +47,11 @@ const data: Data = reactive({
   page: 0,
   albumCount: 24,
   isLoading: false,
+  songPlaylist: undefined,
 })
 
 const scrollTargetRef = ref<any>(document.createElement('div'))
+const dialog = ref<boolean>(false)
 
 const getLikedAlbums = async (index: number, done: () => void) => {
   try {
@@ -105,8 +111,34 @@ const shufflePlay = (songs: Array<Song>, artist: AlbumArtist) => {
   })
 }
 
-const addPlayList = (song: Song) => {
-  console.log(song)
+const addPlayList = (tracks: Album) => {
+  console.log(tracks)
+  dialog.value = true
+  data.songPlaylist = tracks?.songs as Array<AlbumSong>
+}
+const addPlaylistSong = async (playlist: Playlists) => {
+  await editPlaylist(playlist)
+}
+
+const editPlaylist = async (playlist: Playlists) => {
+  try {
+    let payload = {
+      public: playlist.public,
+      name: playlist.name,
+      songs: data.songPlaylist,
+      is_add_to_liked: true,
+    }
+
+    await PlaylistsApi.editPlaylist(playlist._id, payload)
+    dialog.value = false
+  } catch (error: unknown) {
+    dialog.value = false
+    console.error(error)
+  }
+}
+
+const closeModal = (bool: boolean) => {
+  dialog.value = bool
 }
 
 const viewArtist = (url: string) => {
@@ -160,5 +192,12 @@ const removeLibrary = (album: Album) => {
         </div>
       </template>
     </q-infinite-scroll>
+
+    <g-music-add-playlist-modal
+      v-model="dialog"
+      :song="data.songPlaylist"
+      @add-playlist-song="addPlaylistSong"
+      @close-modal="closeModal"
+    />
   </div>
 </template>

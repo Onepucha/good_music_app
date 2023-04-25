@@ -8,15 +8,17 @@ import {
   ref,
 } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { Album, Artist, Song } from '@/types/artist'
+import { Album, Artist, Playlists, Song } from '@/types/artist'
 
 import gBack from '@/components/gBack/gBack.vue'
 import gAlbumProfiles from '@/components/gAlbumProfiles/gAlbumProfiles.vue'
 import gMusicSongList from '@/components/gMusicSong/gMusicSongList.vue'
+import gMusicAddPlaylistModal from '@/components/gMusicAddPlaylistModal/gMusicAddPlaylistModal.vue'
 import { useTranslation } from '@/composables/lang'
 import { useAlertStore, useAuthStore, usePlayerStore } from '@/stores'
 import { downloadSong } from '@/utils/utils'
 import Albums from '@/services/albums'
+import PlaylistsApi from '@/services/playlists'
 
 const { t } = useTranslation()
 const authStore = useAuthStore()
@@ -28,6 +30,7 @@ defineComponent({
     gBack,
     gAlbumProfiles,
     gMusicSongList,
+    gMusicAddPlaylistModal,
   },
 })
 
@@ -40,6 +43,7 @@ interface Data {
   artist: Artist | undefined
   album: Album
   albumSong: Array<Song>
+  songPlaylist: Song | undefined
   isLoading: boolean
 }
 
@@ -47,8 +51,11 @@ const data: Data = reactive({
   artist: {} as Artist,
   album: {} as Album,
   albumSong: [],
+  songPlaylist: undefined,
   isLoading: false,
 })
+
+const dialog = ref<boolean>(false)
 
 const findArtist = computed<any>(() => {
   return data.album?.artists?.at(0)
@@ -133,7 +140,32 @@ const onAudioPause = () => {
 }
 
 const addPlayList = (song: Song) => {
-  console.log(song)
+  dialog.value = true
+  data.songPlaylist = song
+}
+const addPlaylistSong = async (playlist: Playlists) => {
+  await editPlaylist(playlist)
+}
+
+const editPlaylist = async (playlist: Playlists) => {
+  try {
+    let payload = {
+      public: playlist.public,
+      name: playlist.name,
+      songs: [data.songPlaylist?._id],
+      is_add_to_liked: true,
+    }
+
+    await PlaylistsApi.editPlaylist(playlist._id, payload)
+    dialog.value = false
+  } catch (error: unknown) {
+    dialog.value = false
+    console.error(error)
+  }
+}
+
+const closeModal = (bool: boolean) => {
+  dialog.value = bool
 }
 
 const dontPlayThis = (song: Song) => {
@@ -189,6 +221,13 @@ onMounted(async () => {
         @add-playlist="addPlayList"
         @download="downloadSong"
         @dont-play-this="dontPlayThis"
+      />
+
+      <g-music-add-playlist-modal
+        v-model="dialog"
+        :song="data.songPlaylist"
+        @add-playlist-song="addPlaylistSong"
+        @close-modal="closeModal"
       />
     </template>
   </div>

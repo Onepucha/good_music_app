@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { defineComponent, reactive, ref } from 'vue'
+import { computed, defineComponent, reactive, ref } from 'vue'
 import { useTranslation } from '@/composables/lang'
 import { useAuthStore } from '@/stores'
 import PlaylistsApi from '@/services/playlists'
@@ -44,6 +44,12 @@ const position = ref<any>('bottom')
 const isLoading = ref<boolean>(false)
 const scrollTargetRef = ref<any>(document.createElement('div'))
 
+const hasAddTrack = computed<boolean>(() => {
+  let trackId: any = props.song?._id
+
+  return data.playlists.some((track) => track.songs.includes(trackId as string))
+})
+
 const getLikedYourPlaylists = async (index: number, done: () => void) => {
   try {
     data.page++
@@ -81,7 +87,11 @@ const addPlaylist = (playlist: Playlists) => {
       <q-card-section class="g-music-add-playlist-modal__body text-center">
         <h4>{{ t('gMusicAddPlaylistModal.popup.title') }}</h4>
 
-        <q-list ref="scrollTargetRef" class="scroll" style="max-height: 250px">
+        <q-list
+          ref="scrollTargetRef"
+          class="scroll"
+          style="max-height: 250px; overflow: auto"
+        >
           <q-infinite-scroll
             ref="scrollTargetRef"
             :offset="250"
@@ -92,6 +102,7 @@ const addPlaylist = (playlist: Playlists) => {
               v-for="(playlist, index) in data.playlists"
               :key="index"
               :item="playlist"
+              :has-add-track="hasAddTrack"
               has-add-playlist
               @add-playlist="addPlaylist"
             />
