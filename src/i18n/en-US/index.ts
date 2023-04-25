@@ -40,6 +40,12 @@ export default {
         subTitle: 'See All',
       },
     },
+    album: {
+      gMusicSongList: {
+        title: 'Songs',
+        subTitle: 'See All',
+      },
+    },
     albums: {
       titleHead: 'Good music - Albums',
       contentHead: 'Good music - Albums',
