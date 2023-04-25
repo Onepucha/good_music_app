@@ -75,8 +75,6 @@ const getPlaylistSongs = async () => {
     let id: string | string[] = route.params.id
     const response: any = await Songs.getPlaylistSongs(id)
 
-    console.log(response.data.songs)
-
     data.playlistsSong = response.data.songs
   } catch (error: unknown) {
     console.error(error)

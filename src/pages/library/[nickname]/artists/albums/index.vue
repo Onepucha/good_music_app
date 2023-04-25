@@ -7,11 +7,13 @@ import gLoader from '@/components/gLoader/gLoader.vue'
 import gMusicFiltered from '@/components/gMusicFiltered/gMusicFiltered.vue'
 import gMusicAlbumsItem from '@/components/gMusicAlbumsItem/gMusicAlbumsItem.vue'
 import gMusicSongListNotFound from '@/components/gMusicSong/gMusicSongListNotFound.vue'
+import gMusicAddPlaylistModal from '@/components/gMusicAddPlaylistModal/gMusicAddPlaylistModal.vue'
 import { useTranslation } from '@/composables/lang'
 import { downloadSong } from '@/utils/utils'
-import { Album, Song } from '@/types/artist'
+import { Album, AlbumSong, Playlists } from '@/types/artist'
 import { useRoute, useRouter } from 'vue-router'
 import Albums from '@/services/albums'
+import PlaylistsApi from '@/services/playlists'
 
 const route = useRoute()
 const router = useRouter()
@@ -25,6 +27,7 @@ defineComponent({
     gMusicFiltered,
     gMusicAlbumsItem,
     gMusicSongListNotFound,
+    gMusicAddPlaylistModal,
   },
 })
 
@@ -36,6 +39,7 @@ interface Data {
   name: string
   description: string
   playlistOptions: any
+  songPlaylist: Array<AlbumSong> | AlbumSong | undefined
 }
 
 const data: Data = reactive({
@@ -48,15 +52,43 @@ const data: Data = reactive({
   albums: [],
   page: 0,
   albumsCount: 24,
+  songPlaylist: undefined,
   isLoading: false,
 })
+
+const dialog = ref<boolean>(false)
 
 const onRecently = () => {
   console.log('Recently')
 }
 
-const addPlayList = (song: Song) => {
-  console.log(song)
+const addPlayList = (tracks: Album) => {
+  dialog.value = true
+  data.songPlaylist = tracks?.songs as Array<AlbumSong>
+}
+const addPlaylistSong = async (playlist: Playlists) => {
+  await editPlaylist(playlist)
+}
+
+const editPlaylist = async (playlist: Playlists) => {
+  try {
+    let payload = {
+      public: playlist.public,
+      name: playlist.name,
+      songs: data.songPlaylist,
+      is_add_to_liked: true,
+    }
+
+    await PlaylistsApi.editPlaylist(playlist._id, payload)
+    dialog.value = false
+  } catch (error: unknown) {
+    dialog.value = false
+    console.error(error)
+  }
+}
+
+const closeModal = (bool: boolean) => {
+  dialog.value = bool
 }
 
 const removeLibrary = (album: Album) => {
@@ -157,6 +189,13 @@ const getLikedAlbums = async (index: number, done: () => void) => {
             </div>
           </template>
         </q-infinite-scroll>
+
+        <g-music-add-playlist-modal
+          v-model="dialog"
+          :song="data.songPlaylist"
+          @add-playlist-song="addPlaylistSong"
+          @close-modal="closeModal"
+        />
       </div>
     </div>
   </div>

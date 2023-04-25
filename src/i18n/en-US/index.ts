@@ -403,6 +403,7 @@ export default {
     songs: 'songs',
     successClipboard: 'Copied to clipboard',
     errorClipboard: 'Error copying to clipboard',
+    errorAddSong: 'This track has already been added to this playlist',
   },
   gMusicSingersItem: {
     song: 'song',
