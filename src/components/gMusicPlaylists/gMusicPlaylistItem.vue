@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, defineComponent, reactive } from 'vue'
 import { useAlertStore, useAuthStore, useUsersStore } from '@/stores'
-import { Playlists } from '@/types/artist'
+import { Playlists, Song } from '@/types/artist'
 import DynamicIcon from '@/components/DynamicIcon.vue'
 import { useTranslation } from '@/composables/lang'
 import { useRouter } from 'vue-router'
@@ -26,8 +26,8 @@ interface Data {
 
 const props = defineProps<{
   item: Playlists
+  song?: Song | undefined
   hasAddPlaylist?: boolean
-  hasAddTrack?: boolean
 }>()
 
 const data: Data = reactive({
@@ -40,8 +40,16 @@ const songsLength = computed<boolean>(() => {
   return props.item?.songs ? props.item?.songs?.length > 0 : false
 })
 
+const hasAddTrack = computed<boolean>(() => {
+  let trackId: any = props.song?._id
+
+  console.log(props.item)
+
+  return props.item.songs.some((track) => track.includes(trackId as string))
+})
+
 const emitEvent = () => {
-  if (props.hasAddTrack) {
+  if (hasAddTrack.value) {
     alertStore.error(t('gMusicPlaylistItem.errorAddSong'))
     return
   } else if (props.hasAddPlaylist || props.item?.icon === 'plus') {
@@ -77,7 +85,7 @@ const removePlaylist = () => {
           :size="32"
         />
 
-        <DynamicIcon v-if="props.hasAddTrack" name="add_playlist" :size="32" />
+        <DynamicIcon v-if="hasAddTrack" name="add_playlist" :size="32" />
       </div>
 
       <div class="g-music-playlist-item__content-text">

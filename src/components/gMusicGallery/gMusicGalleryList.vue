@@ -2,10 +2,12 @@
 import { defineComponent } from 'vue'
 
 import gMusicGalleryItem from '@/components/gMusicGallery/gMusicGalleryItem.vue'
+import gMusicSongListNotFound from '@/components/gMusicSong/gMusicSongListNotFound.vue'
 
 defineComponent({
   components: {
     gMusicGalleryItem,
+    gMusicSongListNotFound,
   },
 })
 
@@ -45,6 +47,7 @@ const props = withDefaults(defineProps<Props>(), {
       </div>
 
       <div
+        v-if="list.length"
         :class="{ 'g-music-gallery-list__body-overflow': overflow }"
         class="g-music-gallery-list__body"
       >
@@ -56,6 +59,7 @@ const props = withDefaults(defineProps<Props>(), {
           :type="props.type"
         />
       </div>
+      <g-music-song-list-not-found v-else />
     </div>
   </div>
 </template>

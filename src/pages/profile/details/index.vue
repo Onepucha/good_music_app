@@ -1,11 +1,12 @@
 <script lang="ts" setup>
-import { defineComponent, reactive } from 'vue'
+import { defineComponent, onMounted, reactive } from 'vue'
 
 import DynamicIcon from '@/components/DynamicIcon.vue'
 import gBack from '@/components/gBack/gBack.vue'
 import gMusicGalleryList from '@/components/gMusicGallery/gMusicGalleryList.vue'
 import { useTranslation } from '@/composables/lang'
-import { useAuthStore, useReleasesStore } from '@/stores'
+import { useAuthStore, useLoadingStore } from '@/stores'
+import PlaylistsApi from '@/services/playlists'
 
 const { t } = useTranslation()
 
@@ -18,6 +19,7 @@ defineComponent({
 })
 
 const authStore = useAuthStore()
+const loadingStore = useLoadingStore()
 
 interface Data {
   avatar: string
@@ -34,18 +36,22 @@ const data: Data = reactive({
 })
 
 const getPlaylists = async () => {
-  const releasesStore = useReleasesStore()
-
   try {
-    data.isLoading = true
-    data.playlists = await releasesStore.getReleases()
-    data.isLoading = false
-  } catch (error) {
-    data.isLoading = false
+    const response: any = await PlaylistsApi.getLikedYour({
+      count: 6,
+    })
+
+    data.playlists = response.data.playlists
+  } catch (error: unknown) {
+    console.error(error)
   }
 }
 
-getPlaylists()
+onMounted(async () => {
+  loadingStore.setLoading()
+  await getPlaylists()
+  loadingStore.hideLoading()
+})
 </script>
 
 <template>
@@ -115,7 +121,7 @@ getPlaylists()
                   t('pages.profile.details.galleryListPlaylists.subTitle')
                 "
                 :title="t('pages.profile.details.galleryListPlaylists.title')"
-                :type="'releases'"
+                :type="`/library/${authStore.user?.nickname}/playlists`"
               />
             </div>
           </div>
