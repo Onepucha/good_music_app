@@ -51,7 +51,6 @@ const data: Data = reactive({
 
 const scrollTargetRef = ref<any>(document.createElement('div'))
 const dialog = ref<boolean>(false)
-const dialogCreateModal = ref<boolean>(false)
 
 const getLikedSongs = async (index: number, done: () => void) => {
   try {
@@ -131,14 +130,6 @@ const editPlaylist = async (playlist: Playlists) => {
   } catch (error: unknown) {
     dialog.value = false
     console.error(error)
-  }
-}
-
-const closeModal = (bool: boolean, showCreateModal: boolean) => {
-  dialog.value = bool
-
-  if (showCreateModal) {
-    dialogCreateModal.value = true
   }
 }
 

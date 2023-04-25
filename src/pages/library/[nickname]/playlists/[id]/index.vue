@@ -14,6 +14,7 @@ import DynamicIcon from '@/components/DynamicIcon.vue'
 import gBack from '@/components/gBack/gBack.vue'
 import gPlaylistHeader from '@/components/gPlaylistHeader/gPlaylistHeader.vue'
 import gMusicSongList from '@/components/gMusicSong/gMusicSongList.vue'
+import gMusicPlaylistModal from '@/components/gMusicPlaylistModal/gMusicPlaylistModal.vue'
 import { useTranslation } from '@/composables/lang'
 import Songs from '@/services/songs'
 import { downloadSong } from '@/utils/utils'
@@ -28,6 +29,7 @@ defineComponent({
     gBack,
     gPlaylistHeader,
     gMusicSongList,
+    gMusicPlaylistModal,
   },
 })
 
@@ -38,6 +40,7 @@ const authStore = useAuthStore()
 
 const isLoading = ref<boolean>(true)
 const dialog = ref<boolean>(false)
+const dialogAddModal = ref<boolean>(false)
 const qDialogPopup = ref<any>(null)
 const position = ref<any>('bottom')
 
@@ -46,6 +49,7 @@ interface Data {
   song: Song | undefined
   artist: Artist | undefined
   playlistsSong: Array<Song>
+  songPlaylist: Song | undefined
 }
 
 const data: Data = reactive({
@@ -53,6 +57,7 @@ const data: Data = reactive({
   song: undefined,
   artist: undefined,
   playlistsSong: [],
+  songPlaylist: undefined,
 })
 
 const findArtist = computed<any>(() => {
@@ -214,6 +219,32 @@ const dontPlayThis = (song: Song) => {
   console.log(song)
 }
 
+const addPlayList = (song: Song) => {
+  dialogAddModal.value = true
+  data.songPlaylist = song
+}
+
+const addPlaylistSong = async (playlist: Playlists) => {
+  await editPlaylist(playlist)
+}
+
+const editPlaylist = async (playlist: Playlists) => {
+  try {
+    let payload = {
+      public: playlist.public,
+      name: playlist.name,
+      songs: [data.songPlaylist?._id],
+      is_add_to_liked: true,
+    }
+
+    await PlaylistsApi.editPlaylist(playlist._id, payload)
+    dialogAddModal.value = false
+  } catch (error: unknown) {
+    dialogAddModal.value = false
+    console.error(error)
+  }
+}
+
 onMounted(async () => {
   await getInfoPlaylist()
   await getPlaylistSongs()
@@ -248,10 +279,20 @@ onMounted(async () => {
         @go-to-album="goToAlbum"
         @set-liked="setLiked"
         @view-artist="viewArtist"
+        @add-playlist="addPlayList"
         @dont-play-this="dontPlayThis"
       />
 
+      <g-music-playlist-modal
+        v-if="dialogAddModal"
+        :dialog="dialogAddModal"
+        :song="data.songPlaylist"
+        @add-playlist-song="addPlaylistSong"
+        @close-modal-create="dialogAddModal = false"
+      />
+
       <q-dialog
+        v-if="dialog"
         ref="qDialogPopup"
         v-model="dialog"
         :position="position"

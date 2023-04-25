@@ -43,9 +43,10 @@ const songsLength = computed<boolean>(() => {
 const hasAddTrack = computed<boolean>(() => {
   let trackId: any = props.song?._id
 
-  console.log(props.item)
-
-  return props.item.songs.some((track) => track.includes(trackId as string))
+  if (props.item?.songs) {
+    return props.item?.songs.some((track) => track.includes(trackId as string))
+  }
+  return false
 })
 
 const emitEvent = () => {
