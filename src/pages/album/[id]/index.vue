@@ -18,6 +18,7 @@ import { useTranslation } from '@/composables/lang'
 import { useAlertStore, useAuthStore, usePlayerStore } from '@/stores'
 import { downloadSong } from '@/utils/utils'
 import Albums from '@/services/albums'
+import Songs from '@/services/songs'
 import PlaylistsApi from '@/services/playlists'
 
 const { t } = useTranslation()
@@ -66,7 +67,16 @@ const getAlbumCode = async () => {
     let id: string | string[] = route.params.id
     const response: any = await Albums.getInfo({ id })
     data.album = response.data.album
-    data.albumSong = response.data.album.songs
+  } catch (error: unknown) {
+    isLoading.value = false
+  }
+}
+
+const getAlbumSongs = async () => {
+  try {
+    let id: string | string[] = route.params.id
+    const response: any = await Songs.getAlbumSongs({ count: 3, id: id })
+    data.albumSong = response.data.songs
   } catch (error: unknown) {
     isLoading.value = false
   }
@@ -182,6 +192,7 @@ const goToAlbum = (url: string) => {
 
 onMounted(async () => {
   await getAlbumCode()
+  await getAlbumSongs()
   isLoading.value = false
 })
 </script>

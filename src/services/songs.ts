@@ -17,6 +17,12 @@ class Songs {
     })
   }
 
+  getAlbumSongs(query: any): Promise<AxiosResponse> {
+    return api.get('/song/album', {
+      params: query,
+    })
+  }
+
   getLiked(query: any): Promise<AxiosResponse> {
     return api.get('/song/liked', {
       params: query,

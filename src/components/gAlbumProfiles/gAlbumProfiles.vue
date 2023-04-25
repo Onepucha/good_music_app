@@ -53,7 +53,9 @@ const data: Data = reactive({
 })
 
 const infoLength = computed<boolean>(() => {
-  return props.album?.info ? props.album?.info?.length > 0 : false
+  return props.album?.description_ru
+    ? props.album?.description_ru.length > 0
+    : false
 })
 
 const onAudioToggle = () => {
@@ -200,7 +202,7 @@ const setLiked = () => {
     </div>
 
     <div v-if="infoLength" class="g-album-profiles__info-cell">
-      <Readmore :slice="20" :long-text="props.album.info" />
+      <Readmore :slice="200" :long-text="props.album?.description_ru" />
     </div>
   </div>
 </template>

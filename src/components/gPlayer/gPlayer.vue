@@ -516,6 +516,8 @@ const onPrevSong = () => {
 const onNextSong = () => {
   let currentMusic: Song
 
+  console.log(nextItem)
+
   currentMusic = {
     _id: nextItem.value?._id,
     title: nextItem.value?.name,

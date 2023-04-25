@@ -1,8 +1,8 @@
 .g-album-profiles {
   display: flex;
+  align-items: center;
   flex-direction: column;
   width: 100%;
-  max-width: 380px;
   margin: 24px auto 0;
 
   & + .g-music-album-list,
@@ -14,6 +14,7 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+    max-width: 380px;
   }
 
   &__picture {
@@ -87,6 +88,7 @@
     align-items: center;
     justify-content: space-between;
     width: 100%;
+    max-width: 380px;
     padding: 0 0 24px;
     margin: 20px 0 0;
 
@@ -117,6 +119,7 @@
   }
 
   &__info-cell {
+    width: 100%;
     margin: 20px 0 0;
   }
 }

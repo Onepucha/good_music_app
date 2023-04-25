@@ -102,10 +102,10 @@ const addPlaylist = (playlist: Playlists) => {
               v-for="(playlist, index) in data.playlists"
               :key="index"
               :item="playlist"
-              :has-add-track="hasAddTrack"
               has-add-playlist
               @add-playlist="addPlaylist"
             />
+            <!--            :has-add-track="hasAddTrack"-->
 
             <template #loading>
               <div class="row justify-center q-my-md">
