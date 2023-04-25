@@ -28,6 +28,7 @@ defineComponent({
 
 interface Data {
   playlists: Array<Playlists>
+  playlist: Playlists | undefined
   page: number
   playlistsCount: number
   name: string
@@ -38,11 +39,15 @@ const data: Data = reactive({
   name: '',
   description: '',
   playlists: [],
+  playlist: undefined,
   page: 0,
   playlistsCount: 24,
 })
 
 const dialog = ref<boolean>(false)
+const dialogRemove = ref<boolean>(false)
+const qDialogPopup = ref<any>(null)
+const position = ref<any>('bottom')
 
 const addPlaylistItem = ref({
   _id: 1,
@@ -76,7 +81,15 @@ const getPlaylists = async (index: number, done: () => void) => {
     }
 
     done()
-    data.playlists = data.playlists.concat(response.data.playlists)
+
+    response.data.playlists.forEach((itemToAdd: Playlists) => {
+      const index = data.playlists.findIndex(
+        (item) => item._id === itemToAdd._id
+      )
+      if (index === -1) {
+        data.playlists.push(itemToAdd)
+      }
+    })
   } catch (error: unknown) {
     console.error(error)
     scrollTargetRef.value.stop()
@@ -93,6 +106,31 @@ const closeModal = async (bool: boolean) => {
   await getPlaylists(0, () => {
     return true
   })
+}
+
+const removePlaylist = (playlist: Playlists) => {
+  data.playlist = playlist
+  dialogRemove.value = true
+}
+
+const confirmRemovePlaylist = async (playlist: Playlists) => {
+  try {
+    if (data.playlist?._id) {
+      await PlaylistsApi.removePlaylist(data.playlist._id)
+
+      const indexToDelete = data.playlists.findIndex(
+        (item) => item._id === data.playlist?._id
+      )
+
+      if (indexToDelete !== -1) {
+        data.playlists.splice(indexToDelete, 1)
+      }
+
+      dialogRemove.value = false
+    }
+  } catch (error: unknown) {
+    console.error(error)
+  }
 }
 </script>
 
@@ -140,6 +178,7 @@ const closeModal = async (bool: boolean) => {
             :key="index"
             :item="playlist"
             @add-playlist="openAddPlaylist"
+            @remove-playlist="removePlaylist"
           />
 
           <template #loading>
@@ -152,4 +191,39 @@ const closeModal = async (bool: boolean) => {
     </div>
   </div>
   <g-music-create-playlist-modal v-model="dialog" @close-modal="closeModal" />
+
+  <q-dialog
+    ref="qDialogPopup"
+    v-model="dialogRemove"
+    :position="position"
+    class="g-popup-profile"
+  >
+    <q-card>
+      <q-card-section class="g-popup-profile__body text-center">
+        <h4>{{ t('pages.library.playlists.popup.title') }}</h4>
+        <h5>
+          {{ t('pages.library.playlists.popup.description') }}
+        </h5>
+        <div class="g-popup-profile__action">
+          <q-btn
+            v-close-popup
+            :label="t('pages.library.playlists.popup.buttonCancel')"
+            class="g-popup-profile__btn q-btn--light-primary q-btn-large"
+            rounded
+            text-color="''"
+            unelevated
+          />
+
+          <q-btn
+            :label="t('pages.library.playlists.popup.buttonConfirm')"
+            class="g-popup-profile__btn q-btn-large"
+            rounded
+            text-color="''"
+            unelevated
+            @click.prevent="confirmRemovePlaylist"
+          />
+        </div>
+      </q-card-section>
+    </q-card>
+  </q-dialog>
 </template>

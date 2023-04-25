@@ -14,6 +14,8 @@ export interface Artist {
 }
 
 export interface Album {
+  description_en: string
+  description_ru: string
   _id: string
   __v?: string
   imageUrl?: string

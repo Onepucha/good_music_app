@@ -34,7 +34,7 @@ const data: Data = reactive({
   menuTheme: usersStore.menuTheme,
 })
 
-const emit = defineEmits(['add-playlist'])
+const emit = defineEmits(['add-playlist', 'remove-playlist'])
 
 const songsLength = computed<boolean>(() => {
   return props.item?.songs ? props.item?.songs?.length > 0 : false
@@ -51,6 +51,10 @@ const emitEvent = () => {
       `/library/${authStore.user?.nickname}/playlists/${props.item._id}`
     )
   }
+}
+
+const removePlaylist = () => {
+  emit('remove-playlist', props.item)
 }
 </script>
 
@@ -104,14 +108,18 @@ const emitEvent = () => {
           anchor="bottom right"
         >
           <q-list>
-            <q-item v-close-popup clickable>
+            <q-item
+              v-if="authStore.user"
+              v-close-popup
+              clickable
+              @click.prevent="removePlaylist"
+            >
               <q-item-section avatar>
-                <!--                <DynamicIcon :size="20" name="dont_play" />-->
+                <DynamicIcon :size="20" name="remove" />
               </q-item-section>
 
               <q-item-section>
-                123
-                <!--                {{ t('gAlbumProfiles.dontPlayThis') }}-->
+                {{ t('gPlaylistHeader.removePlaylist') }}
               </q-item-section>
             </q-item>
           </q-list>
