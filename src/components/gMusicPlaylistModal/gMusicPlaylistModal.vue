@@ -53,6 +53,8 @@ const closeModal = (bool: boolean, showCreateModal: boolean) => {
 }
 
 const closeModalCreate = () => {
+  dialogAddModal.value = false
+  dialogCreateModal.value = false
   emit('close-modal-create', false)
 }
 </script>
@@ -62,15 +64,18 @@ const closeModalCreate = () => {
     <g-music-add-playlist-modal
       v-if="dialogAddModal"
       v-model="dialogAddModal"
+      :dialog="dialogAddModal"
       :song="props.song"
       @add-playlist-song="addPlaylistSong"
       @close-modal="closeModal"
+      @close-modal-create="closeModalCreate"
       @update:model-value="closeModalCreate"
     />
 
     <g-music-create-playlist-modal
       v-if="dialogCreateModal"
       v-model="dialogCreateModal"
+      :dialog="dialogCreateModal"
       @close-modal="closeModalCreate"
       @update:model-value="closeModalCreate"
     />
