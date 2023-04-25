@@ -4,7 +4,7 @@ import { defineComponent, nextTick, reactive, ref } from 'vue'
 import gBack from '@/components/gBack/gBack.vue'
 import gMusicSongList from '@/components/gMusicSong/gMusicSongList.vue'
 import gMusicFiltered from '@/components/gMusicFiltered/gMusicFiltered.vue'
-import gMusicAddPlaylistModal from '@/components/gMusicAddPlaylistModal/gMusicAddPlaylistModal.vue'
+import gMusicPlaylistModal from '@/components/gMusicPlaylistModal/gMusicPlaylistModal.vue'
 import gLoader from '@/components/gLoader/gLoader.vue'
 import DynamicIcon from '@/components/DynamicIcon.vue'
 import Songs from '@/services/songs'
@@ -27,7 +27,7 @@ defineComponent({
     gBack,
     gMusicSongList,
     gMusicFiltered,
-    gMusicAddPlaylistModal,
+    gMusicPlaylistModal,
     gLoader,
     DynamicIcon,
   },
@@ -51,6 +51,7 @@ const data: Data = reactive({
 
 const scrollTargetRef = ref<any>(document.createElement('div'))
 const dialog = ref<boolean>(false)
+const dialogCreateModal = ref<boolean>(false)
 
 const getLikedSongs = async (index: number, done: () => void) => {
   try {
@@ -133,8 +134,12 @@ const editPlaylist = async (playlist: Playlists) => {
   }
 }
 
-const closeModal = (bool: boolean) => {
+const closeModal = (bool: boolean, showCreateModal: boolean) => {
   dialog.value = bool
+
+  if (showCreateModal) {
+    dialogCreateModal.value = true
+  }
 }
 
 const dontPlayThis = (song: Song) => {
@@ -240,10 +245,11 @@ const goToAlbum = (url: string) => {
       </template>
     </q-infinite-scroll>
   </div>
-  <g-music-add-playlist-modal
-    v-model="dialog"
+  <g-music-playlist-modal
+    v-if="dialog"
+    :dialog="dialog"
     :song="data.songPlaylist"
     @add-playlist-song="addPlaylistSong"
-    @close-modal="closeModal"
+    @close-modal-create="dialog = false"
   />
 </template>

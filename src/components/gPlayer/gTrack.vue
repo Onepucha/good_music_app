@@ -102,6 +102,7 @@ const setLiked = () => {
 
   &__info {
     position: relative;
+    display: inline-block;
     margin: 0 0 0 12px;
     white-space: nowrap;
 
@@ -115,6 +116,9 @@ const setLiked = () => {
       line-height: $lh-20;
       letter-spacing: 0.2px;
       color: $greyscale900;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 192px;
 
       @media #{$mobile} {
         max-width: 170px;
@@ -136,7 +140,7 @@ const setLiked = () => {
   }
 
   &__action {
-    margin: 0 0 0 16px;
+    margin: 0 0 0 auto;
 
     &-like {
       cursor: pointer;

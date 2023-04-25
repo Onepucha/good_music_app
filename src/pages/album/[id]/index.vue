@@ -13,7 +13,7 @@ import { Album, Artist, Playlists, Song } from '@/types/artist'
 import gBack from '@/components/gBack/gBack.vue'
 import gAlbumProfiles from '@/components/gAlbumProfiles/gAlbumProfiles.vue'
 import gMusicSongList from '@/components/gMusicSong/gMusicSongList.vue'
-import gMusicAddPlaylistModal from '@/components/gMusicAddPlaylistModal/gMusicAddPlaylistModal.vue'
+import gMusicPlaylistModal from '@/components/gMusicPlaylistModal/gMusicPlaylistModal.vue'
 import { useTranslation } from '@/composables/lang'
 import { useAlertStore, useAuthStore, usePlayerStore } from '@/stores'
 import { downloadSong } from '@/utils/utils'
@@ -31,7 +31,7 @@ defineComponent({
     gBack,
     gAlbumProfiles,
     gMusicSongList,
-    gMusicAddPlaylistModal,
+    gMusicPlaylistModal,
   },
 })
 
@@ -57,6 +57,7 @@ const data: Data = reactive({
 })
 
 const dialog = ref<boolean>(false)
+const dialogCreateModal = ref<boolean>(false)
 
 const findArtist = computed<any>(() => {
   return data.album?.artists?.at(0)
@@ -174,8 +175,12 @@ const editPlaylist = async (playlist: Playlists) => {
   }
 }
 
-const closeModal = (bool: boolean) => {
+const closeModal = (bool: boolean, showCreateModal: boolean) => {
   dialog.value = bool
+
+  if (showCreateModal) {
+    dialogCreateModal.value = true
+  }
 }
 
 const dontPlayThis = (song: Song) => {
@@ -234,11 +239,12 @@ onMounted(async () => {
         @dont-play-this="dontPlayThis"
       />
 
-      <g-music-add-playlist-modal
-        v-model="dialog"
+      <g-music-playlist-modal
+        v-if="dialog"
+        :dialog="dialog"
         :song="data.songPlaylist"
         @add-playlist-song="addPlaylistSong"
-        @close-modal="closeModal"
+        @close-modal-create="dialog = false"
       />
     </template>
   </div>
