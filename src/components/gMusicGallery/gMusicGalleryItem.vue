@@ -81,7 +81,7 @@ const play = () => {
 }
 
 const goTo = () => {
-  router.push(`/${props.type}/${props.item._id}`)
+  router.push(`${props.type}/${props.item._id}`)
 }
 </script>
 

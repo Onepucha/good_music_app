@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, defineComponent, onMounted, reactive, ref } from 'vue'
+import { defineComponent, onMounted, reactive, ref } from 'vue'
 import { useTranslation } from '@/composables/lang'
 import { useAuthStore } from '@/stores'
 import PlaylistsApi from '@/services/playlists'
@@ -50,12 +50,6 @@ const qDialogPopupTwo = ref<any>(null)
 const position = ref<any>('bottom')
 const isLoading = ref<boolean>(false)
 const scrollTargetRef = ref<any>(document.createElement('div'))
-
-const hasAddTrack = computed<boolean>(() => {
-  let trackId: any = props.song?._id
-
-  return data.playlists.some((track) => track.songs.includes(trackId as string))
-})
 
 const getLikedYourPlaylists = async () => {
   try {
@@ -137,6 +131,7 @@ onMounted(async () => {
               v-for="(playlist, index) in data.playlists"
               :key="index"
               :item="playlist"
+              :song="props.song"
               has-add-playlist
               @add-playlist="addPlaylist"
               @remove-playlist="removePlaylist"
