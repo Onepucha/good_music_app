@@ -5,7 +5,7 @@ import gBack from '@/components/gBack/gBack.vue'
 import gMusicAlbum from '@/components/gMusicAlbum/gMusicAlbum.vue'
 import gMusicFiltered from '@/components/gMusicFiltered/gMusicFiltered.vue'
 import gMusicSongListNotFound from '@/components/gMusicSong/gMusicSongListNotFound.vue'
-import gMusicAddPlaylistModal from '@/components/gMusicAddPlaylistModal/gMusicAddPlaylistModal.vue'
+import gMusicPlaylistModal from '@/components/gMusicPlaylistModal/gMusicPlaylistModal.vue'
 import gLoader from '@/components/gLoader/gLoader.vue'
 import DynamicIcon from '@/components/DynamicIcon.vue'
 import Albums from '@/services/albums'
@@ -29,7 +29,7 @@ defineComponent({
     gMusicAlbum,
     gMusicFiltered,
     gMusicSongListNotFound,
-    gMusicAddPlaylistModal,
+    gMusicPlaylistModal,
     gLoader,
     DynamicIcon,
   },
@@ -53,6 +53,7 @@ const data: Data = reactive({
 
 const scrollTargetRef = ref<any>(document.createElement('div'))
 const dialog = ref<boolean>(false)
+const dialogCreateModal = ref<boolean>(false)
 
 const getLikedAlbums = async (index: number, done: () => void) => {
   try {
@@ -113,7 +114,6 @@ const shufflePlay = (songs: Array<Song>, artist: AlbumArtist) => {
 }
 
 const addPlayList = (tracks: Album) => {
-  console.log(tracks)
   dialog.value = true
   data.songPlaylist = tracks?.songs as Array<AlbumSong>
 }
@@ -138,8 +138,12 @@ const editPlaylist = async (playlist: Playlists) => {
   }
 }
 
-const closeModal = (bool: boolean) => {
+const closeModal = (bool: boolean, showCreateModal: boolean) => {
   dialog.value = bool
+
+  if (showCreateModal) {
+    dialogCreateModal.value = true
+  }
 }
 
 const viewArtist = (url: string) => {
@@ -209,11 +213,12 @@ const removeLibrary = async (album: Album) => {
       </template>
     </q-infinite-scroll>
 
-    <g-music-add-playlist-modal
-      v-model="dialog"
+    <g-music-playlist-modal
+      v-if="dialog"
+      :dialog="dialog"
       :song="data.songPlaylist"
       @add-playlist-song="addPlaylistSong"
-      @close-modal="closeModal"
+      @close-modal-create="dialog = false"
     />
   </div>
 </template>

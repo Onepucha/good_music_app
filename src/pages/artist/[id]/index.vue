@@ -6,7 +6,7 @@ import { Artist, Playlists, Song } from '@/types/artist'
 import gBack from '@/components/gBack/gBack.vue'
 import gMusicGenericArtist from '@/components/gMusicGenericArtist/gMusicGenericArtist.vue'
 import gMusicSongList from '@/components/gMusicSong/gMusicSongList.vue'
-import gMusicAddPlaylistModal from '@/components/gMusicAddPlaylistModal/gMusicAddPlaylistModal.vue'
+import gMusicPlaylistModal from '@/components/gMusicPlaylistModal/gMusicPlaylistModal.vue'
 import { useTranslation } from '@/composables/lang'
 import {
   useAlertStore,
@@ -27,7 +27,7 @@ defineComponent({
     gBack,
     gMusicGenericArtist,
     gMusicSongList,
-    gMusicAddPlaylistModal,
+    gMusicPlaylistModal,
   },
 })
 
@@ -254,11 +254,12 @@ onMounted(async () => {
         @dont-play-this="dontPlayThis"
       />
 
-      <g-music-add-playlist-modal
-        v-model="dialog"
+      <g-music-playlist-modal
+        v-if="dialog"
+        :dialog="dialog"
         :song="data.songPlaylist"
         @add-playlist-song="addPlaylistSong"
-        @close-modal="closeModal"
+        @close-modal-create="dialog = false"
       />
     </template>
   </div>

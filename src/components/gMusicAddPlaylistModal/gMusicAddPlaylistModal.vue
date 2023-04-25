@@ -1,17 +1,15 @@
 <script setup lang="ts">
-import { computed, defineComponent, reactive, ref } from 'vue'
+import { computed, defineComponent, onMounted, reactive, ref } from 'vue'
 import { useTranslation } from '@/composables/lang'
 import { useAuthStore } from '@/stores'
 import PlaylistsApi from '@/services/playlists'
 import { Playlists, Song } from '@/types/artist'
 
 import gMusicPlaylistItem from '@/components/gMusicPlaylists/gMusicPlaylistItem.vue'
-import gLoader from '@/components/gLoader/gLoader.vue'
 
 defineComponent({
   components: {
     gMusicPlaylistItem,
-    gLoader,
   },
 })
 
@@ -50,7 +48,7 @@ const hasAddTrack = computed<boolean>(() => {
   return data.playlists.some((track) => track.songs.includes(trackId as string))
 })
 
-const getLikedYourPlaylists = async (index: number, done: () => void) => {
+const getLikedYourPlaylists = async () => {
   try {
     data.page++
     const response: any = await PlaylistsApi.getLikedYour({
@@ -59,21 +57,23 @@ const getLikedYourPlaylists = async (index: number, done: () => void) => {
     })
 
     if (response.data.playlists.length === 0) {
-      scrollTargetRef.value.stop()
+      emit('close-modal', false, true)
     }
 
-    done()
     data.playlists = data.playlists.concat(response.data.playlists)
   } catch (error: unknown) {
     console.error(error)
     emit('close-modal', false)
-    scrollTargetRef.value.stop()
   }
 }
 
 const addPlaylist = (playlist: Playlists) => {
   emit('add-playlist-song', playlist)
 }
+
+onMounted(async () => {
+  await getLikedYourPlaylists()
+})
 </script>
 
 <template>
@@ -92,27 +92,14 @@ const addPlaylist = (playlist: Playlists) => {
           class="scroll"
           style="max-height: 250px; overflow: auto"
         >
-          <q-infinite-scroll
-            ref="scrollTargetRef"
-            :offset="250"
-            :scroll-target="scrollTargetRef"
-            @load="getLikedYourPlaylists"
-          >
-            <g-music-playlist-item
-              v-for="(playlist, index) in data.playlists"
-              :key="index"
-              :item="playlist"
-              has-add-playlist
-              @add-playlist="addPlaylist"
-            />
-            <!--            :has-add-track="hasAddTrack"-->
-
-            <template #loading>
-              <div class="row justify-center q-my-md">
-                <g-loader />
-              </div>
-            </template>
-          </q-infinite-scroll>
+          <g-music-playlist-item
+            v-for="(playlist, index) in data.playlists"
+            :key="index"
+            :item="playlist"
+            has-add-playlist
+            @add-playlist="addPlaylist"
+          />
+          <!--            :has-add-track="hasAddTrack"-->
         </q-list>
       </q-card-section>
     </q-card>
