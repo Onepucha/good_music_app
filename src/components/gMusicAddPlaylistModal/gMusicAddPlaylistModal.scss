@@ -6,6 +6,11 @@
 
     .q-card__section {
       padding: 35px 24px 48px;
+
+      .q-list {
+        max-height: 250px;
+        min-height: 100px;
+      }
     }
   }
 
