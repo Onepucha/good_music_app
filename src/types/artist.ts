@@ -113,6 +113,9 @@ export interface Playlists {
   url: string
   code: string
   public: true
-  songs: Array<string>
+  songs: Array<Song>
+  albums?: Array<Genre>
+  genres?: Array<AlbumGenre>
   is_liked?: boolean
+  info?: string[] | string | undefined
 }

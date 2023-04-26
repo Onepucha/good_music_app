@@ -2,6 +2,9 @@
 import { defineComponent, onMounted } from 'vue'
 import { useQuasar } from 'quasar'
 import { CustomWindow } from '@/types/options'
+import { useLoadingStore } from '@/stores'
+
+const loadingStore = useLoadingStore()
 
 defineComponent({
   name: 'App',
@@ -31,5 +34,5 @@ onMounted(() => {
 </script>
 
 <template>
-  <router-view />
+  <router-view v-if="!loadingStore.isLoading" />
 </template>

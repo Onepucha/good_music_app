@@ -1,5 +1,8 @@
 <script setup lang="ts">
 import { computed, CSSProperties, onUnmounted, reactive } from 'vue'
+import { usePlayerStore } from '@/stores'
+
+const playerStore = usePlayerStore()
 
 const emit = defineEmits(['dragbegin', 'dragging', 'dragend'])
 
@@ -81,7 +84,7 @@ onUnmounted(() => {
       'g-player-pic-default': !currentPicStyleObj?.backgroundImage,
     }"
     :style="currentPicStyleObj"
-    to="/"
+    :to="`/artist/${playerStore.artistId}/track/${currentMusic._id}`"
     @mousedown="onDragBegin"
   ></router-link>
 </template>

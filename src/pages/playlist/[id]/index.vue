@@ -3,9 +3,8 @@ import { defineComponent, nextTick, onMounted, reactive, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { Playlists, Song } from '@/types/artist'
 
-import DynamicIcon from '@/components/DynamicIcon.vue'
 import gBack from '@/components/gBack/gBack.vue'
-import gPlaylistHeader from '@/components/gPlaylistHeader/gPlaylistHeader.vue'
+import gMusicPlaylistsDetails from '@/components/gMusicPlaylists/gMusicPlaylistsDetails.vue'
 import gMusicSongList from '@/components/gMusicSong/gMusicSongList.vue'
 import gMusicPlaylistModal from '@/components/gMusicPlaylistModal/gMusicPlaylistModal.vue'
 import { useTranslation } from '@/composables/lang'
@@ -18,9 +17,8 @@ const { t } = useTranslation()
 
 defineComponent({
   components: {
-    DynamicIcon,
     gBack,
-    gPlaylistHeader,
+    gMusicPlaylistsDetails,
     gMusicSongList,
     gMusicPlaylistModal,
   },
@@ -28,8 +26,8 @@ defineComponent({
 
 const route = useRoute()
 const router = useRouter()
-const playerStore = usePlayerStore()
 const authStore = useAuthStore()
+const playerStore = usePlayerStore()
 const loadingStore = useLoadingStore()
 
 const isLoading = ref<boolean>(true)
@@ -40,14 +38,12 @@ const position = ref<any>('bottom')
 
 interface Data {
   playlist?: Playlists | undefined
-  song: Song | undefined
   playlistsSong: Array<Song>
   songPlaylist: Song | undefined
 }
 
 const data: Data = reactive({
   playlist: undefined,
-  song: undefined,
   playlistsSong: [],
   songPlaylist: undefined,
 })
@@ -71,6 +67,7 @@ const getPlaylistSongs = async () => {
     data.playlistsSong = response.data.songs
   } catch (error: unknown) {
     console.error(error)
+    isLoading.value = false
   }
 }
 
@@ -142,37 +139,6 @@ const onAudioPause = () => {
   playerStore.player.pause()
 }
 
-const shufflePlay = () => {
-  // Создаем копию массива песен
-  const shuffledSongs = data.playlistsSong.slice()
-
-  // Перемешиваем массив песен
-  for (let i = shuffledSongs.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1))
-    ;[shuffledSongs[i], shuffledSongs[j]] = [shuffledSongs[j], shuffledSongs[i]]
-  }
-
-  playerStore.setMusicList(shuffledSongs)
-
-  playerStore.setMusic(
-    {
-      _id: shuffledSongs?.at(0)?._id,
-      title: shuffledSongs.at(0)?.name,
-      artist: shuffledSongs?.at(0)?.artists?.at(0)?.name,
-      src: shuffledSongs.at(0)?.url,
-      pic: '',
-      is_liked: shuffledSongs.at(0)?.is_liked,
-      genres: shuffledSongs.at(0)?.genres,
-    } as Song,
-    0
-  )
-  playerStore.setPlaying(true)
-
-  nextTick(() => {
-    playerStore.player.play()
-  })
-}
-
 const removePlaylist = (playlist: Playlists) => {
   dialog.value = true
 }
@@ -239,28 +205,36 @@ onMounted(async () => {
   <div class="q-page">
     <div class="q-page__header">
       <g-back icon="back" @click.prevent="$router.go(-1)" />
-      <DynamicIcon name="search" :size="28" />
+      <i class="g-icon g-icon-dropdown-menu">
+        <span></span>
+      </i>
     </div>
 
-    <g-playlist-header
+    <g-music-playlists-details
       :playlist="data.playlist"
       :song="data.playlistsSong.at(0)"
       @set-liked="setLiked"
       @download="downloadSong"
+      @add-playlist="addPlayList"
+      @dont-play-this="dontPlayThis"
+      @view-artist="viewArtist"
+      @go-to-album="goToAlbum"
       @toggleplay="onAudioToggle"
-      @shuffle="shufflePlay"
-      @remove-playlist="removePlaylist"
     />
 
     <g-music-song-list
       :list="data.playlistsSong"
+      :sub-title="t('pages.playlists.gMusicSongListTrack.subTitle')"
+      :title="t('pages.playlists.gMusicSongListTrack.title')"
+      :artist-id="data.playlistsSong?.at(0)?.artists?.at(0)?._id"
       @toggleplay="onAudioToggle"
       @download="downloadSong"
       @go-to-album="goToAlbum"
       @set-liked="setLiked"
       @view-artist="viewArtist"
-      @add-playlist="addPlayList"
       @dont-play-this="dontPlayThis"
+      @add-playlist="addPlayList"
+      @remove-playlist="removePlaylist"
     />
 
     <g-music-playlist-modal

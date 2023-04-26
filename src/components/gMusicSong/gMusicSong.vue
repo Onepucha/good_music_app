@@ -65,7 +65,7 @@ const onAudioToggle = () => {
 }
 
 const setLiked = () => {
-  emit('set-liked', false, {
+  emit('set-liked', true, {
     ids: [props.song?._id],
     is_add_to_liked: !props.song?.is_liked,
   })

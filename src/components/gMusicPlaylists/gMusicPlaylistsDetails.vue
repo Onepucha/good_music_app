@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, defineComponent, reactive } from 'vue'
-import { Artist, Song } from '@/types/artist'
+import { Playlists, Song } from '@/types/artist'
 
 import DynamicIcon from '@/components/DynamicIcon.vue'
 import { useTranslation } from '@/composables/lang'
@@ -40,8 +40,8 @@ interface Data {
 }
 
 const props = defineProps<{
-  playlist?: Song | undefined
-  artist: Artist
+  playlist?: Playlists | undefined
+  song?: Song
 }>()
 
 const data: Data = reactive({
@@ -50,16 +50,6 @@ const data: Data = reactive({
 
 const infoLength = computed<boolean>(() => {
   return props.playlist?.info ? props.playlist?.info?.length > 0 : false
-})
-
-const allGenres = computed<string>(() => {
-  let genres = props.playlist?.genres || []
-
-  return genres
-    .map((genre) => {
-      return genre.name
-    })
-    .join(', ')
 })
 
 const setShare = () => {
@@ -79,8 +69,12 @@ const setLiked = () => {
   })
 }
 
-const onAudioToggle = () => {
-  emit('toggleplay', { song: props.playlist, index: playerStore.getMusicIndex })
+const addPlayList = () => {
+  emit('add-playlist', props.song)
+}
+
+const onAudioToggle = (song: Song, index: number | string) => {
+  emit('toggleplay', { song, index })
 }
 
 const downloadSong = () => {
@@ -113,12 +107,10 @@ const dontPlayThis = () => {
       </h3>
 
       <div
-        v-if="props.artist?.name"
+        v-if="authStore.user"
         class="g-music-playlists-details__playlist-name"
       >
-        <span>{{ props.artist?.name || 'Untitled' }}</span>
-
-        <span v-if="allGenres.length">, {{ allGenres }} </span>
+        <span>{{ authStore.user?.nickname || 'Untitled' }}</span>
       </div>
 
       <div v-if="infoLength" class="g-music-playlists-details__info">
@@ -136,6 +128,13 @@ const dontPlayThis = () => {
           name="heart"
           :class="{ active: !!props.playlist?.is_liked }"
           @click.prevent="setLiked"
+        />
+
+        <DynamicIcon
+          v-if="authStore.user"
+          :size="24"
+          name="add_playlist"
+          @click.prevent="addPlayList"
         />
 
         <i class="g-icon g-icon-dots" @click.prevent.stop="">
@@ -184,7 +183,7 @@ const dontPlayThis = () => {
           rounded
           text-color="''"
           unelevated
-          @click.prevent="onAudioToggle"
+          @click.prevent="onAudioToggle(props.song, playerStore.getMusicIndex)"
         >
           <DynamicIcon
             v-if="playerStore.playing"
