@@ -93,7 +93,7 @@ const routes: RouteRecordRaw[] = [
   {
     path: '/forgot-password',
     name: 'Forgot password',
-    component: () => import('layouts/default.vue'),
+    component: () => import('layouts/simple.vue'),
     children: [
       {
         path: '',
@@ -133,13 +133,13 @@ const routes: RouteRecordRaw[] = [
       {
         path: '/profile/notification',
         name: 'Notification',
-        component: () => import('pages/notification/index.vue'),
+        component: () => import('pages/profile/notification/index.vue'),
         meta: { requiresAuth: true },
       },
       {
         path: '/profile/language',
         name: 'Language',
-        component: () => import('pages/language/index.vue'),
+        component: () => import('pages/profile/language/index.vue'),
         meta: { requiresAuth: true },
       },
       {
@@ -151,9 +151,21 @@ const routes: RouteRecordRaw[] = [
     ],
   },
   {
+    path: '/playlist',
+    name: 'Playlist item',
+    component: () => import('layouts/default.vue'),
+    children: [
+      {
+        name: 'Playlist item',
+        path: ':id',
+        component: () => import('pages/playlist/[id]/index.vue'),
+      },
+    ],
+  },
+  {
     path: '/reset-password',
     name: 'Reset password',
-    component: () => import('layouts/default.vue'),
+    component: () => import('layouts/simple.vue'),
     children: [
       {
         path: '',
