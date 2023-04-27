@@ -82,7 +82,6 @@ if (JSON.parse(localStorage.getItem('darkMode') as string)) {
 const customWindow: CustomWindow = window
 
 onMounted(() => {
-  console.log(route)
   playerStore.player = player.value
   playerStore.setMusicList(data.list)
   playerStore.setMusic(

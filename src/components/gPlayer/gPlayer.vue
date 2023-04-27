@@ -707,6 +707,15 @@ const setUpPlaylist = () => {
   })
 }
 
+const setActionPlayAndPause = () => {
+  navigator.mediaSession.setActionHandler('play', () => {
+    play()
+  })
+  navigator.mediaSession.setActionHandler('pause', () => {
+    pause()
+  })
+}
+
 type ColorArray = [number, number, number]
 
 type ColorType = 'array' | 'hex'
