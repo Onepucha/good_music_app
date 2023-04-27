@@ -833,7 +833,6 @@ watch(currentMusic, (music: any) => {
 // Audio / Media Session Sample
 const updateMetadata = () => {
   if ('mediaSession' in navigator) {
-    console.log(currentMusic.value)
     navigator.mediaSession.metadata = new MediaMetadata({
       title: currentMusic.value.title,
       artist: currentMusic.value.artist,
