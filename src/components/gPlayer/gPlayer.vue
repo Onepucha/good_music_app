@@ -872,6 +872,7 @@ const updateMetadata = () => {
 
 const updatePositionState = () => {
   if ('setPositionState' in navigator.mediaSession) {
+    console.log(audio.value.duration)
     navigator.mediaSession.setPositionState({
       duration: audio.value.duration,
       playbackRate: audio.value.playbackRate,
