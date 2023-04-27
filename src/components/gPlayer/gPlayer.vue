@@ -695,7 +695,10 @@ const initAudio = () => {
     audio.value.src = currentMusic.value.src
   }
 
+  updateMetadata()
   setUpPlaylist()
+  setActionPlayAndPause()
+  setActionSeekBackwardAndForward()
 }
 
 const setUpPlaylist = () => {
@@ -713,6 +716,15 @@ const setActionPlayAndPause = () => {
   })
   navigator.mediaSession.setActionHandler('pause', () => {
     pause()
+  })
+}
+
+const setActionSeekBackwardAndForward = () => {
+  navigator.mediaSession.setActionHandler('seekbackward', () => {
+    onRewindPrev()
+  })
+  navigator.mediaSession.setActionHandler('seekforward', () => {
+    onRewindNext()
   })
 }
 
@@ -855,15 +867,11 @@ const updateMetadata = () => {
         { src: currentMusic.value.pic, sizes: '512x512', type: 'image/png' },
       ],
     })
-
-    // Media is loaded, set the duration.
-    updatePositionState()
   }
 }
 
 const updatePositionState = () => {
   if ('setPositionState' in navigator.mediaSession) {
-    console.log('Updating position state...')
     navigator.mediaSession.setPositionState({
       duration: audio.value.duration,
       playbackRate: audio.value.playbackRate,
