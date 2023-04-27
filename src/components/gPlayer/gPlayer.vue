@@ -698,7 +698,6 @@ const initAudio = () => {
   updateMetadata()
   setUpPlaylist()
   setActionPlayAndPause()
-  setActionSeekBackwardAndForward()
 }
 
 const setUpPlaylist = () => {
@@ -716,15 +715,6 @@ const setActionPlayAndPause = () => {
   })
   navigator.mediaSession.setActionHandler('pause', () => {
     pause()
-  })
-}
-
-const setActionSeekBackwardAndForward = () => {
-  navigator.mediaSession.setActionHandler('seekbackward', () => {
-    onRewindPrev()
-  })
-  navigator.mediaSession.setActionHandler('seekforward', () => {
-    onRewindNext()
   })
 }
 
