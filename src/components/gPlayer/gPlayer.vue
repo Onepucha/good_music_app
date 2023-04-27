@@ -1077,12 +1077,6 @@ defineExpose({ data, play, pause, toggle })
     right: 0;
     bottom: 0;
     left: 0;
-
-    &.g-player__home {
-      @media #{$mobile} {
-        bottom: 88px;
-      }
-    }
   }
 
   .g-player-lrc-content {

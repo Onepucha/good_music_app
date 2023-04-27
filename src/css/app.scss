@@ -36,6 +36,28 @@ body,
   }
 }
 
+.q-layout {
+  &-home {
+    & ~ .g-player {
+      &.g-player-fixed {
+        @media #{$mobile} {
+          bottom: 88px;
+        }
+      }
+    }
+
+    &.is-hidden-drawer {
+      & ~ .g-player {
+        &.g-player-fixed {
+          @media #{$mobile} {
+            bottom: 0;
+          }
+        }
+      }
+    }
+  }
+}
+
 .q-page-container {
   height: 100%;
 
@@ -58,7 +80,9 @@ body,
     padding: 18px 30px 124px;
 
     &.g-login,
-    &.g-register {
+    &.g-register,
+    &.g-forgot-password,
+    &.g-reset-password {
       flex-direction: row;
       padding: 0;
 
@@ -67,16 +91,12 @@ body,
 
         @supports (padding-top: constant(safe-area-inset-top)) {
           padding-top: max(84px, calc(constant(safe-area-inset-top) + 44px));
-          padding-bottom:
-            max(
-              144px,
-              calc(constant(safe-area-inset-top) + 44px)
-            );
+          padding-bottom: max(48px, calc(constant(safe-area-inset-top) + 44px));
         }
 
         @supports (padding-top: env(safe-area-inset-top)) {
           padding-top: max(84px, calc(env(safe-area-inset-top) + 44px));
-          padding-bottom: max(144px, calc(env(safe-area-inset-top) + 44px));
+          padding-bottom: max(48px, calc(env(safe-area-inset-top) + 44px));
         }
       }
     }

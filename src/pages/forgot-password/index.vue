@@ -69,11 +69,13 @@ const sendCode = async () => {
 <template>
   <div class="q-page g-forgot-password">
     <form class="g-forgot-password__form" @submit.prevent="sendCode">
-      <g-back
-        :label="t('pages.forgot-password.buttonBackForgotPassword')"
-        href="/login"
-        icon="back"
-      />
+      <div class="q-page__header">
+        <g-back
+          :label="t('pages.forgot-password.buttonBackForgotPassword')"
+          href="/"
+          icon="back"
+        />
+      </div>
 
       <div class="g-forgot-password__picture">
         <img

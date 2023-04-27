@@ -1,11 +1,13 @@
 <script lang="ts" setup>
-import { defineComponent, onMounted, reactive, ref } from 'vue'
+import { computed, defineComponent, onMounted, reactive, ref } from 'vue'
 import { useQuasar } from 'quasar'
 import gPlayer from '@/components/gPlayer/gPlayer.vue'
 import { CustomWindow } from '@/types/options'
 import { Song } from '@/types/artist'
 import { useAuthStore, useLoadingStore, usePlayerStore } from '@/stores'
+import { useRoute } from 'vue-router'
 
+const route = useRoute()
 const authStore = useAuthStore()
 const playerStore = usePlayerStore()
 const loadingStore = useLoadingStore()
@@ -62,6 +64,15 @@ const data: Data = reactive({
   ],
 })
 
+const hidePlayerPage = computed<boolean>(() => {
+  return (
+    route.name === 'Login' ||
+    route.name === 'Register' ||
+    route.name === 'Forgot password' ||
+    route.name === 'Reset password'
+  )
+})
+
 if (JSON.parse(localStorage.getItem('darkMode') as string)) {
   $q.dark.set(true)
 } else {
@@ -71,6 +82,7 @@ if (JSON.parse(localStorage.getItem('darkMode') as string)) {
 const customWindow: CustomWindow = window
 
 onMounted(() => {
+  console.log(route)
   playerStore.player = player.value
   playerStore.setMusicList(data.list)
   playerStore.setMusic(
@@ -99,6 +111,7 @@ onMounted(() => {
   <router-view v-if="!loadingStore.isLoading" />
 
   <g-player
+    v-if="!hidePlayerPage"
     ref="player"
     shuffle
     repeat="list"

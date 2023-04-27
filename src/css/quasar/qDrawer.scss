@@ -7,14 +7,6 @@
     transform: translateY(100%);
     transition: opacity 0.3s ease-out, transform 0.3s ease-out;
 
-    & ~ .g-player {
-      &.g-player-fixed {
-        &.g-player__home {
-          bottom: 0;
-        }
-      }
-    }
-
     &.is-visible {
       opacity: 1;
       transform: translateY(0%);

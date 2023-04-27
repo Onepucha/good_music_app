@@ -129,6 +129,7 @@ const avatarOrFullName = computed<string>(() =>
 <template>
   <q-layout :view="classesLayout()">
     <q-drawer
+      v-if="!data.isMobile"
       v-model="leftDrawerOpen"
       :width="240"
       behavior="desktop"

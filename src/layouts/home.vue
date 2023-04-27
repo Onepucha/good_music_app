@@ -166,7 +166,11 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <q-layout :view="classesLayout()">
+  <q-layout
+    :view="classesLayout()"
+    class="q-layout-home"
+    :class="{ 'is-hidden-drawer': isHidden }"
+  >
     <q-header class="q-header" reveal>
       <q-toolbar class="q-header__toolbar">
         <div

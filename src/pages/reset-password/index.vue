@@ -104,13 +104,15 @@ const openModalCongratulations = () => {
 </script>
 
 <template>
-  <div class="g-forgot-password">
+  <div class="q-page g-forgot-password">
     <form class="g-forgot-password__form" @submit.prevent="changePassword">
-      <g-back
-        icon="back"
-        :label="t('pages.reset-password.buttonBackResetPassword')"
-        href="/login"
-      />
+      <div class="q-page__header">
+        <g-back
+          icon="back"
+          :label="t('pages.reset-password.buttonBackResetPassword')"
+          href="/login"
+        />
+      </div>
 
       <div
         class="g-forgot-password__picture g-forgot-password__picture-new-password"
