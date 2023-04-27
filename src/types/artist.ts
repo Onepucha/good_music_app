@@ -69,7 +69,7 @@ export interface Song {
   issueYear?: string
   position?: string
   name?: string
-  code: string
+  code?: string
   info?: string
   albums?: Array<Genre>
   genres?: Array<Genre>
@@ -77,7 +77,7 @@ export interface Song {
   description?: Array<string>
   artists?: Array<Artist> | undefined
   is_verified?: boolean
-  url: RequestInfo | URL
+  url?: RequestInfo | URL
   release_data?: string
   label?: string
   title?: string

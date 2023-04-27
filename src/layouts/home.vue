@@ -14,13 +14,11 @@ import { useQuasar } from 'quasar'
 import DynamicIcon from '@/components/DynamicIcon.vue'
 import RouterViewTransition from '@/components/RouterViewTransition.vue'
 import gCardPremium from '@/components/gCardPremium/gCardPremium.vue'
-import gPlayer from '@/components/gPlayer/gPlayer.vue'
-import { usePlayerStore, useUsersStore } from '@/stores/'
+import { useUsersStore } from '@/stores/'
 import { CustomWindow } from '@/types/options'
 
 const { t } = useTranslation()
 const usersStore = useUsersStore()
-const playerStore = usePlayerStore()
 
 const authStore = useAuthStore()
 const authUser = computed<any>(() => authStore.user)
@@ -33,7 +31,6 @@ defineComponent({
   components: {
     DynamicIcon,
     gCardPremium,
-    gPlayer,
   },
 })
 
@@ -84,52 +81,11 @@ const $q = useQuasar()
 
 interface Data {
   isMobile: boolean
-  volume: number
-  muted: boolean
-  music: Music
-  list: string[] | any
-}
-
-interface Music {
-  title: string
-  artist: string
-  src: string
-  pic: string
 }
 
 const data: Data = reactive({
   isMobile: false,
-  volume: 1,
-  muted: false,
-  music: {
-    title: 'Blinding Lights',
-    artist: 'The Weeknd',
-    src: '/audio/The_Weeknd_Blinding_Lights.mp3',
-    pic: '/audio/avatars/The_Weeknd.jpeg',
-  },
-  list: [
-    {
-      title: 'Blinding Lights',
-      artist: 'The Weeknd',
-      src: '/audio/The_Weeknd_Blinding_Lights.mp3',
-      pic: '/audio/avatars/The_Weeknd.jpeg',
-    },
-    {
-      title: '7 rings',
-      artist: 'Ariana Grande',
-      src: '/audio/Ariana_Grande_7_rings.mp3',
-      pic: '/audio/avatars/Ariana_Grande.jpeg',
-    },
-    {
-      title: 'WITHOUT YOU',
-      artist: 'The Kid LAROI.',
-      src: '/audio/The_Kid_LAROI_WITHOUT_YOU.mp3',
-      pic: '/audio/avatars/The_Kid_LAROI.jpeg',
-    },
-  ],
 })
-
-let player = ref<any>(null)
 
 const classesLayout = () => {
   usersStore.systemInformation = { ...$q.platform, ...$q.screen }
@@ -191,7 +147,6 @@ onMounted(() => {
   usersStore.setMenuTheme(
     !!JSON.parse(localStorage.getItem('darkMode') as string)
   )
-  playerStore.player = player.value
 
   window.addEventListener('resize', classesLayout)
   window.addEventListener('DOMContentLoaded', classesLayout)
@@ -210,7 +165,11 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <q-layout :view="classesLayout()">
+  <q-layout
+    :view="classesLayout()"
+    class="q-layout-home"
+    :class="{ 'is-hidden-drawer': isHidden }"
+  >
     <q-header class="q-header" reveal>
       <q-toolbar class="q-header__toolbar">
         <div
@@ -325,17 +284,5 @@ onUnmounted(() => {
     <q-page-container>
       <RouterViewTransition></RouterViewTransition>
     </q-page-container>
-
-    <g-player
-      ref="player"
-      class="g-player__home"
-      shuffle
-      repeat="list"
-      :muted="data.muted"
-      :volume="data.volume"
-      :music="data.list[0]"
-      :list="data.list"
-      fixed
-    />
   </q-layout>
 </template>

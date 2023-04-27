@@ -314,6 +314,12 @@ const repeatMode = computed<string>({
   },
 })
 
+const currentIndex = computed(() => {
+  return data.internalList.findIndex(
+    (item) => item._id === currentMusic.value._id
+  )
+})
+
 const previousItem = computed(() => {
   const currentIndex = data.internalList.findIndex(
     (item) => item._id === currentMusic.value._id
@@ -368,7 +374,11 @@ const play = () => {
     }
   }
   // handle .play() Promise
-  const audioPlayPromise = audio.value.play()
+  const audioPlayPromise = audio.value
+    .play()
+    .then(() => updateMetadata())
+    .catch((error: unknown) => console.error(error))
+
   if (audioPlayPromise) {
     return (data.audioPlayPromise = new Promise((resolve, reject) => {
       // rejectPlayPromise is to force reject audioPlayPromise if it's still pending when pause() is called
@@ -384,6 +394,10 @@ const play = () => {
 }
 
 const pause = () => {
+  navigator.mediaSession.setActionHandler('pause', () => {
+    audio.value.pause()
+  })
+
   data.audioPlayPromise
     .then(() => {
       audio.value.pause()
@@ -501,11 +515,12 @@ const onPrevSong = () => {
   let currentMusic: Song
 
   currentMusic = {
-    _id: previousItem.value._id,
-    title: previousItem.value.name,
-    artist: previousItem.value?.artists?.at(0)?.name,
-    src: previousItem.value.url,
-    is_liked: previousItem.value.is_liked,
+    _id: previousItem.value?._id,
+    title: previousItem.value?.name || nextItem.value?.title,
+    artist: previousItem.value?.artists?.at(0)?.name || nextItem.value?.artist,
+    pic: previousItem.value?.pic || '',
+    src: previousItem.value?.url || previousItem.value?.src,
+    is_liked: previousItem.value?.is_liked,
   } as Song
 
   data.internalMusic = currentMusic
@@ -516,14 +531,13 @@ const onPrevSong = () => {
 const onNextSong = () => {
   let currentMusic: Song
 
-  console.log(nextItem)
-
   currentMusic = {
     _id: nextItem.value?._id,
-    title: nextItem.value?.name,
-    artist: nextItem.value?.artists?.at(0)?.name,
-    src: nextItem.value?.url,
-    is_liked: nextItem.value.is_liked,
+    title: nextItem.value?.name || nextItem.value?.title,
+    artist: nextItem.value?.artists?.at(0)?.name || nextItem.value?.artist,
+    pic: previousItem.value?.pic || '',
+    src: nextItem.value?.url || previousItem.value?.src,
+    is_liked: nextItem.value?.is_liked,
   } as Song
 
   data.internalMusic = currentMusic
@@ -549,10 +563,16 @@ const onSelectSong = (song: any) => {
 }
 
 const onAudioPlay = () => {
+  if ('mediaSession' in navigator) {
+    navigator.mediaSession.playbackState = 'playing'
+  }
   playerStore.setPlaying(true)
 }
 
 const onAudioPause = () => {
+  if ('mediaSession' in navigator) {
+    navigator.mediaSession.playbackState = 'paused'
+  }
   playerStore.setPlaying(false)
 }
 
@@ -674,6 +694,17 @@ const initAudio = () => {
   if (currentMusic.value) {
     audio.value.src = currentMusic.value.src
   }
+
+  setUpPlaylist()
+}
+
+const setUpPlaylist = () => {
+  navigator.mediaSession.setActionHandler('previoustrack', () => {
+    onPrevSong()
+  })
+  navigator.mediaSession.setActionHandler('nexttrack', () => {
+    onNextSong()
+  })
 }
 
 type ColorArray = [number, number, number]
@@ -798,6 +829,40 @@ watch(currentMusic, (music: any) => {
     audio.value.src = src
   }
 })
+
+// Audio / Media Session Sample
+const updateMetadata = () => {
+  if ('mediaSession' in navigator) {
+    console.log(currentMusic.value)
+    navigator.mediaSession.metadata = new MediaMetadata({
+      title: currentMusic.value.title,
+      artist: currentMusic.value.artist,
+      album: currentMusic.value?.album,
+      artwork: [
+        { src: currentMusic.value.pic, sizes: '96x96', type: 'image/png' },
+        { src: currentMusic.value.pic, sizes: '128x128', type: 'image/png' },
+        { src: currentMusic.value.pic, sizes: '192x192', type: 'image/png' },
+        { src: currentMusic.value.pic, sizes: '256x256', type: 'image/png' },
+        { src: currentMusic.value.pic, sizes: '384x384', type: 'image/png' },
+        { src: currentMusic.value.pic, sizes: '512x512', type: 'image/png' },
+      ],
+    })
+
+    // Media is loaded, set the duration.
+    updatePositionState()
+  }
+}
+
+const updatePositionState = () => {
+  if ('setPositionState' in navigator.mediaSession) {
+    console.log('Updating position state...')
+    navigator.mediaSession.setPositionState({
+      duration: audio.value.duration,
+      playbackRate: audio.value.playbackRate,
+      position: audio.value.currentTime,
+    })
+  }
+}
 
 watch(shouldShowNativeControls, (val: any) => {
   audio.value.controls = val
@@ -1012,12 +1077,6 @@ defineExpose({ data, play, pause, toggle })
     right: 0;
     bottom: 0;
     left: 0;
-
-    &.g-player__home {
-      @media #{$mobile} {
-        bottom: 88px;
-      }
-    }
   }
 
   .g-player-lrc-content {

@@ -24,7 +24,7 @@ const routes: RouteRecordRaw[] = [
   {
     path: '/login',
     name: 'Login',
-    component: () => import('layouts/simple.vue'),
+    component: () => import('layouts/default.vue'),
     children: [
       { path: '', name: 'Login', component: () => import('pages/login.vue') },
     ],
@@ -32,7 +32,7 @@ const routes: RouteRecordRaw[] = [
   {
     path: '/register',
     name: 'Register',
-    component: () => import('layouts/simple.vue'),
+    component: () => import('layouts/default.vue'),
     children: [
       {
         path: '',
@@ -93,7 +93,7 @@ const routes: RouteRecordRaw[] = [
   {
     path: '/forgot-password',
     name: 'Forgot password',
-    component: () => import('layouts/simple.vue'),
+    component: () => import('layouts/default.vue'),
     children: [
       {
         path: '',
@@ -165,7 +165,7 @@ const routes: RouteRecordRaw[] = [
   {
     path: '/reset-password',
     name: 'Reset password',
-    component: () => import('layouts/simple.vue'),
+    component: () => import('layouts/default.vue'),
     children: [
       {
         path: '',
