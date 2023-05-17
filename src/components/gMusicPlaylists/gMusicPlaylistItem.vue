@@ -28,6 +28,7 @@ const props = defineProps<{
   item: Playlists
   song?: Song | undefined
   hasAddPlaylist?: boolean
+  href?: string
 }>()
 
 const data: Data = reactive({
@@ -55,6 +56,8 @@ const emitEvent = () => {
     return
   } else if (props.hasAddPlaylist || props.item?.icon === 'plus') {
     emit('add-playlist', props.item)
+  } else if (props.item?.href) {
+    router.push(props.item.href)
   } else {
     router.push(
       `/library/${authStore.user?.nickname}/playlists/${props.item._id}`

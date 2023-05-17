@@ -97,11 +97,11 @@ const dontPlayThis = () => {
         :size="'200px'"
         class="g-music-generic-artist__picture"
         :class="{
-          'g-music-generic-artist__picture-default': !props.artist?.imageUrl,
+          'g-music-generic-artist__picture-default': !props.artist?.cover_src,
         }"
       >
-        <template v-if="props.artist?.imageUrl">
-          <img :alt="props.artist?.name" :src="props.artist?.imageUrl" />
+        <template v-if="props.artist?.cover_src">
+          <img :alt="props.artist?.name" :src="props.artist?.cover_src" />
         </template>
       </q-avatar>
 

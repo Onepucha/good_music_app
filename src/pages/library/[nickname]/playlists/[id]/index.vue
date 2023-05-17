@@ -11,7 +11,12 @@ import gMusicPlaylistModal from '@/components/gMusicPlaylistModal/gMusicPlaylist
 import { useTranslation } from '@/composables/lang'
 import Songs from '@/services/songs'
 import { downloadSong } from '@/utils/utils'
-import { useAuthStore, useLoadingStore, usePlayerStore } from '@/stores'
+import {
+  useAlertStore,
+  useAuthStore,
+  useLoadingStore,
+  usePlayerStore,
+} from '@/stores'
 import PlaylistsApi from '@/services/playlists'
 
 const { t } = useTranslation()
@@ -31,6 +36,7 @@ const router = useRouter()
 const playerStore = usePlayerStore()
 const authStore = useAuthStore()
 const loadingStore = useLoadingStore()
+const alertStore = useAlertStore()
 
 const isLoading = ref<boolean>(true)
 const dialog = ref<boolean>(false)
@@ -115,26 +121,32 @@ const onAudioToggle = (item: { song: Song; index: number }) => {
   }
 }
 
-const onAudioPlay = (item: { song: Song; index: number }) => {
-  playerStore.setMusicList(data.playlistsSong || [])
+const onAudioPlay = async (item: { song: Song; index: number }) => {
+  try {
+    const songUrl = await Songs.playSong(item.song._id)
 
-  playerStore.setMusic(
-    {
-      _id: item.song?._id,
-      title: item.song?.name,
-      artist: item.song?.artists?.at(0)?.name,
-      src: item.song?.url,
-      pic: '',
-      is_liked: item.song?.is_liked,
-      genres: item.song?.genres,
-    } as Song,
-    item.index as number
-  )
-  playerStore.setPlaying(true)
+    playerStore.setMusicList(data.playlistsSong || [])
 
-  nextTick(() => {
-    playerStore.player.play()
-  })
+    playerStore.setMusic(
+      {
+        _id: item.song?._id,
+        title: item.song?.name,
+        artist: item.song?.artists?.at(0)?.name,
+        src: songUrl.data?.url,
+        pic: '',
+        is_liked: item.song?.is_liked,
+        genres: item.song?.genres,
+      } as Song,
+      item.index as number
+    )
+    playerStore.setPlaying(true)
+
+    nextTick(() => {
+      playerStore.player.play()
+    })
+  } catch (error: any) {
+    alertStore.error(error)
+  }
 }
 
 const onAudioPause = () => {

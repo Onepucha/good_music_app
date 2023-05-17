@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, defineComponent, reactive } from 'vue'
+import { computed, defineComponent, onBeforeMount, reactive } from 'vue'
 import { Artist, Song } from '@/types/artist'
 
 import DynamicIcon from '@/components/DynamicIcon.vue'
@@ -39,6 +39,7 @@ const emit = defineEmits([
 
 interface Data {
   menuTheme: boolean
+  durationSong: string | undefined
 }
 
 const props = defineProps<{
@@ -48,10 +49,15 @@ const props = defineProps<{
 
 const data: Data = reactive({
   menuTheme: usersStore.menuTheme,
+  durationSong: undefined,
 })
 
 const infoLength = computed<boolean>(() => {
   return props.song?.info ? props.song?.info?.length > 0 : false
+})
+
+const duration = computed<boolean>(() => {
+  return typeof data.durationSong !== 'undefined'
 })
 
 const allGenres = computed<string>(() => {
@@ -104,6 +110,17 @@ const addPlayList = () => {
 const dontPlayThis = () => {
   emit('dont-play-this', props.song)
 }
+
+onBeforeMount(() => {
+  const audioFile = new Audio(props.song?.url)
+  audioFile.addEventListener('loadedmetadata', () => {
+    const date = new Date(audioFile.duration * 1000)
+    const minutes = date.getMinutes().toString().padStart(2, '0')
+    const seconds = date.getSeconds().toString().padStart(2, '0')
+
+    data.durationSong = `${minutes}:${seconds} mins`
+  })
+})
 </script>
 
 <template>
@@ -113,11 +130,11 @@ const dontPlayThis = () => {
         :size="'200px'"
         class="g-song-info__picture"
         :class="{
-          'g-song-info__picture-default': !props.song?.imageUrl,
+          'g-song-info__picture-default': !props.song?.cover_src,
         }"
       >
-        <template v-if="props.song?.imageUrl">
-          <img :alt="props.song.name" :src="props.song?.imageUrl" />
+        <template v-if="props.song?.cover_src">
+          <img :alt="props.song.name" :src="props.song?.cover_src" />
         </template>
       </q-avatar>
 
@@ -131,9 +148,11 @@ const dontPlayThis = () => {
         <span v-if="allGenres.length">, {{ allGenres }} </span>
       </div>
 
-      <div v-if="infoLength" class="g-song-info__info">
-        <span v-for="(item, index) in props.song?.info" :key="index">
-          {{ item }}
+      <div class="g-song-info__info">
+        <span>Songs</span>
+        <span v-if="duration">{{ data.durationSong }}</span>
+        <span v-else>
+          <q-skeleton animation="fade" style="width: 100px" />
         </span>
       </div>
     </div>

@@ -38,18 +38,18 @@ const toggleRememberMe = () => {
         />
 
         <q-list class="g-security__nav">
-          <q-item>
-            <q-item-section>
-              {{ t('pages.security.rememberMe') }}
-            </q-item-section>
+          <!--          <q-item>-->
+          <!--            <q-item-section>-->
+          <!--              {{ t('pages.security.rememberMe') }}-->
+          <!--            </q-item-section>-->
 
-            <q-item-section side>
-              <q-toggle
-                v-model="data.rememberMe"
-                @click.prevent="toggleRememberMe"
-              />
-            </q-item-section>
-          </q-item>
+          <!--            <q-item-section side>-->
+          <!--              <q-toggle-->
+          <!--                v-model="data.rememberMe"-->
+          <!--                @click.prevent="toggleRememberMe"-->
+          <!--              />-->
+          <!--            </q-item-section>-->
+          <!--          </q-item>-->
 
           <q-item clickable>
             <q-item-section>

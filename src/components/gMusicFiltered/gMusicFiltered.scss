@@ -60,27 +60,29 @@
     align-items: center;
     justify-content: space-between;
 
-    .q-btn-shuffle {
-      .g-icon {
-        path {
-          fill: $white;
-        }
-      }
-
-      @include hover-supported {
-        .g-icon {
-          path {
-            fill: $primary;
-          }
-        }
-      }
-    }
-
-    .q-btn-play {
-      @include hover-supported {
+    .q-btn {
+      &-shuffle {
         .g-icon {
           path {
             fill: $white;
+          }
+        }
+
+        @include hover-supported {
+          .g-icon {
+            path {
+              fill: $primary;
+            }
+          }
+        }
+      }
+
+      &-play {
+        @include hover-supported {
+          .g-icon {
+            path {
+              fill: $white;
+            }
           }
         }
       }

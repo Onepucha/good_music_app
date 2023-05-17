@@ -1,0 +1,37 @@
+.g-music-comments {
+  margin: 24px 0 0;
+
+  .q-list {
+    display: flex;
+    flex-direction: column;
+    margin: 24px 0 0;
+
+    .q-list {
+      margin: 0 0 0 52px;
+    }
+
+    .q-item {
+      margin: 20px 0 0;
+
+      &__section {
+        justify-content: flex-start;
+      }
+    }
+  }
+
+  &__reply {
+    &-actions {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      margin: 24px 0 0;
+    }
+  }
+
+  &__actions {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin: 24px 0 0;
+  }
+}

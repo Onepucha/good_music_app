@@ -14,6 +14,7 @@ import gBack from '@/components/gBack/gBack.vue'
 import gAlbumProfiles from '@/components/gAlbumProfiles/gAlbumProfiles.vue'
 import gMusicSongList from '@/components/gMusicSong/gMusicSongList.vue'
 import gMusicPlaylistModal from '@/components/gMusicPlaylistModal/gMusicPlaylistModal.vue'
+import gMusicComments from '@/components/gMusicComments/gMusicComments.vue'
 import { useTranslation } from '@/composables/lang'
 import { useAlertStore, useAuthStore, usePlayerStore } from '@/stores'
 import { downloadSong } from '@/utils/utils'
@@ -32,6 +33,7 @@ defineComponent({
     gAlbumProfiles,
     gMusicSongList,
     gMusicPlaylistModal,
+    gMusicComments,
   },
 })
 
@@ -123,26 +125,32 @@ const onAudioToggle = (item: { song: Song; index: number }) => {
   }
 }
 
-const onAudioPlay = (item: { song: Song; index: number }) => {
-  playerStore.setMusicList(data.albumSong || [])
+const onAudioPlay = async (item: { song: Song; index: number }) => {
+  try {
+    const songUrl = await Songs.playSong(item.song._id)
 
-  playerStore.setMusic(
-    {
-      _id: item.song?._id,
-      title: item.song?.name,
-      artist: findArtist.value?.name,
-      src: item.song?.url,
-      pic: '',
-      is_liked: item.song?.is_liked,
-      genres: item.song?.genres,
-    } as Song,
-    item.index as number
-  )
-  playerStore.setPlaying(true)
+    playerStore.setMusicList(data.albumSong || [])
 
-  nextTick(() => {
-    playerStore.player.play()
-  })
+    playerStore.setMusic(
+      {
+        _id: item.song?._id,
+        title: item.song?.name,
+        artist: findArtist.value?.name,
+        src: songUrl.data?.url,
+        pic: '',
+        is_liked: item.song?.is_liked,
+        genres: item.song?.genres,
+      } as Song,
+      item.index as number
+    )
+    playerStore.setPlaying(true)
+
+    nextTick(() => {
+      playerStore.player.play()
+    })
+  } catch (error: any) {
+    alertStore.error(error)
+  }
 }
 
 const onAudioPause = () => {
@@ -198,6 +206,7 @@ const goToAlbum = (url: string) => {
 onMounted(async () => {
   await getAlbumCode()
   await getAlbumSongs()
+
   isLoading.value = false
 })
 </script>
@@ -246,6 +255,8 @@ onMounted(async () => {
         @add-playlist-song="addPlaylistSong"
         @close-modal-create="dialog = false"
       />
+
+      <g-music-comments />
     </template>
   </div>
 </template>

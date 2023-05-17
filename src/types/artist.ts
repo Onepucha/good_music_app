@@ -1,7 +1,8 @@
 export interface Artist {
   _id: string
   __v?: string
-  imageUrl?: string
+  cover_src?: string
+  album_code?: string
   name?: string
   info?: string | undefined
   monthlyListeners?: string
@@ -18,7 +19,8 @@ export interface Album {
   description_ru: string
   _id: string
   __v?: string
-  imageUrl?: string
+  cover_src?: string
+  album_code?: string
   name?: string
   album?: string
   info?: string | undefined
@@ -63,9 +65,12 @@ export interface AlbumGenre {
 }
 
 export interface Song {
+  includes(arg0: string): unknown
+
   _id: string
   __v?: string
-  imageUrl?: string
+  cover_src?: string
+  album_code?: string
   issueYear?: string
   position?: string
   name?: string
@@ -77,7 +82,7 @@ export interface Song {
   description?: Array<string>
   artists?: Array<Artist> | undefined
   is_verified?: boolean
-  url?: RequestInfo | URL
+  url?: string
   release_data?: string
   label?: string
   title?: string
@@ -100,7 +105,8 @@ export interface Chart {
   name: string
   description: string
   code: string
-  imageUrl?: string
+  cover_src?: string
+  album_code?: string
   info?: string[] | string | undefined
 }
 
@@ -109,8 +115,10 @@ export interface Playlists {
   __v?: string
   name: string
   icon?: string
-  imageUrl?: string
+  cover_src?: string
+  album_code?: string
   url: string
+  href: string
   code: string
   public: true
   songs: Array<Song>

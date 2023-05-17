@@ -234,10 +234,9 @@ const routes: RouteRecordRaw[] = [
         component: () => import('pages/library/[nickname]/artists/index.vue'),
       },
       {
-        path: ':nickname/artists/singers',
+        path: ':nickname/artists',
         name: 'Artists Singers',
-        component: () =>
-          import('pages/library/[nickname]/artists/singers/index.vue'),
+        component: () => import('pages/library/[nickname]/artists/index.vue'),
       },
       {
         path: ':nickname/artists/albums',

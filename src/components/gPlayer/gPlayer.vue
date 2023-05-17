@@ -35,7 +35,7 @@ import {
 import ColorThief from 'color-thief-ts'
 import Hls from 'hls.js'
 import { Song } from '@/types/artist'
-import { usePlayerStore } from '@/stores/'
+import { useAlertStore, usePlayerStore } from '@/stores/'
 import { useQuasar } from 'quasar'
 import Songs from '@/services/songs'
 import GControllerBottom from '@/components/gPlayer/gControllerBottom.vue'
@@ -44,6 +44,7 @@ const $q = useQuasar()
 // mutex playing instance
 let activeMutex: { pause: () => void } | null | undefined = null
 const playerStore = usePlayerStore()
+const alertStore = useAlertStore()
 
 defineComponent({
   components: {
@@ -377,7 +378,10 @@ const play = () => {
   const audioPlayPromise = audio.value
     .play()
     .then(() => updateMetadata())
-    .catch((error: unknown) => console.error(error))
+    .catch((error: any) => {
+      console.error(error)
+      alertStore.error(error.message)
+    })
 
   if (audioPlayPromise) {
     return (data.audioPlayPromise = new Promise((resolve, reject) => {

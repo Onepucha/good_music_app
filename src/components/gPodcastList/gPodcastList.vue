@@ -4,6 +4,7 @@ import gPlayBtn from '@/components/gPlayBtn/gPlayBtn.vue'
 import { defineComponent, reactive } from 'vue'
 import { useTranslation } from '@/composables/lang'
 import { useUsersStore } from '@/stores'
+
 const { t } = useTranslation()
 const usersStore = useUsersStore()
 
@@ -16,7 +17,7 @@ defineComponent({
 
 interface Podcast {
   id: string | number
-  imageUrl: string
+  cover_src: string
   title: string
   name: string
   author: string
@@ -80,12 +81,14 @@ const emit = defineEmits(['like', 'add-playlist', 'download', 'toggleplay'])
     <div class="g-podcast-list__aside">
       <div
         class="g-podcast-list__aside-picture"
-        :class="{ 'g-podcast-list__aside-picture-default': !podcast?.imageUrl }"
+        :class="{
+          'g-podcast-list__aside-picture-default': !podcast?.cover_src,
+        }"
       >
         <img
-          v-if="podcast?.imageUrl"
+          v-if="podcast?.cover_src"
           :alt="podcast.name"
-          :src="podcast?.imageUrl"
+          :src="podcast?.cover_src"
         />
       </div>
     </div>

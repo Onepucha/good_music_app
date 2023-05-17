@@ -43,6 +43,14 @@ class Songs {
       },
     })
   }
+
+  playSong(id: string) {
+    return api.get('/song/url', {
+      params: {
+        id,
+      },
+    })
+  }
 }
 
 export default new Songs()

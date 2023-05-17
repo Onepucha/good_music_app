@@ -13,7 +13,7 @@ defineComponent({
 
 interface Item {
   _id: number | string
-  imageUrl?: string
+  cover_src?: string
   name: string
   code: string
   info?: string
@@ -97,7 +97,7 @@ const goTo = () => {
     <div
       class="g-music-gallery-item__picture"
       :class="{
-        'g-music-gallery-item__picture-default': !props.item?.imageUrl,
+        'g-music-gallery-item__picture-default': !props.item?.cover_src,
       }"
       @mouseleave="focus = false"
       @mouseover="focus = true"
@@ -107,9 +107,9 @@ const goTo = () => {
       </div>
 
       <img
-        v-if="props.item?.imageUrl"
+        v-if="props.item?.cover_src"
         :alt="props.item.name"
-        :src="props.item?.imageUrl"
+        :src="props.item?.cover_src"
         class="g-music-gallery-item__picture"
         loading="lazy"
       />
