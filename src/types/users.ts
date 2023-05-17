@@ -40,6 +40,10 @@ export interface changePassword {
   token: string
 }
 
+export interface emailVerify {
+  token: string
+}
+
 export interface SaveProfileInput {
   avatar: string
   fullname: string

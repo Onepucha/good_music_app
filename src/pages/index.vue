@@ -43,15 +43,21 @@ import gMusicSearchModal from '@/components/gMusicSearchModal/gMusicSearchModal.
 import GMusicSearchModal from '@/components/gMusicSearchModal/gMusicSearchModal.vue'
 
 import {
+  useAlertStore,
   useArtistsStore,
   useChartsStore,
   useLoadingStore,
   useReleasesStore,
+  useUsersStore,
 } from 'src/stores'
 import { useTranslation } from 'src/composables/lang'
+import { useRoute } from 'vue-router'
 
 const { t } = useTranslation()
+const route = useRoute()
+const usersStore = useUsersStore()
 const loadingStore = useLoadingStore()
+const alertStore = useAlertStore()
 
 defineComponent({
   components: {
@@ -121,8 +127,30 @@ const getCharts = async () => {
 
 const showModal = ref(false)
 
+const emailVerify = async () => {
+  try {
+    data.isLoading = true
+
+    const urlSearchParams = new URLSearchParams(window.location.search)
+    const params = Object.fromEntries(urlSearchParams.entries())
+
+    if (
+      route.query.token === params.token &&
+      typeof params.token !== 'undefined'
+    ) {
+      await usersStore.emailVerify(route.query.token)
+    }
+  } catch (error: unknown) {
+    console.error(error)
+    if (error instanceof Error) {
+      alertStore.error(error.message)
+    }
+  }
+}
+
 onMounted(async () => {
   loadingStore.setLoading()
+  await emailVerify()
   await getReleases()
   await getPopularArtist()
   await getCharts()
