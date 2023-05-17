@@ -131,3 +131,15 @@ export function declensionOfWord(
   const index = number !== 1 ? 1 : 0
   return endings[index]
 }
+
+function padTo2Digits(num: number): string {
+  return num.toString().padStart(2, '0')
+}
+
+export function parseDate(date: Date) {
+  return [
+    padTo2Digits(date.getDate()),
+    padTo2Digits(date.getMonth() + 1),
+    date.getFullYear(),
+  ].join('-')
+}

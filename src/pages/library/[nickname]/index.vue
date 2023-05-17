@@ -2,7 +2,6 @@
 import { useTranslation } from '@/composables/lang'
 import { defineComponent, reactive, ref } from 'vue'
 import { useAuthStore } from '@/stores'
-import { Song } from '@/types/artist'
 
 import DynamicIcon from '@/components/DynamicIcon.vue'
 
@@ -18,10 +17,6 @@ defineComponent({
 interface Data {
   volume: number
   muted: boolean
-  music: Song
-  list: Array<Song>
-  options: any
-  song: Song
 }
 
 const data: Data = reactive({
@@ -111,9 +106,7 @@ const payment = ref<string>('')
               </q-item-section>
             </q-item>
 
-            <q-item
-              :to="`/library/${authStore.user?.nickname}/artists/singers`"
-            >
+            <q-item :to="`/library/${authStore.user?.nickname}/artists`">
               <q-item-section avatar>
                 <DynamicIcon :size="28" name="artists" />
               </q-item-section>

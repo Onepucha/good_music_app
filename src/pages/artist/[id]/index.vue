@@ -21,6 +21,7 @@ import PlaylistsApi from '@/services/playlists'
 const { t } = useTranslation()
 const authStore = useAuthStore()
 const playerStore = usePlayerStore()
+const alertStore = useAlertStore()
 
 defineComponent({
   components: {
@@ -142,26 +143,32 @@ const onAudioToggle = (item: { song: Song; index: number }) => {
   }
 }
 
-const onAudioPlay = (item: { song: Song; index: number }) => {
-  playerStore.setMusicList(data.artistSong || [])
+const onAudioPlay = async (item: { song: Song; index: number }) => {
+  try {
+    const songUrl = await Songs.playSong(item.song._id)
 
-  playerStore.setMusic(
-    {
-      _id: item.song?._id,
-      title: item.song?.name,
-      artist: data?.artist?.name,
-      src: item.song?.url,
-      pic: '',
-      is_liked: item.song?.is_liked,
-      genres: item.song?.genres,
-    } as Song,
-    item.index as number
-  )
-  playerStore.setPlaying(true)
+    playerStore.setMusicList(data.artistSong || [])
 
-  nextTick(() => {
-    playerStore.player.play()
-  })
+    playerStore.setMusic(
+      {
+        _id: item.song?._id,
+        title: item.song?.name,
+        artist: data?.artist?.name,
+        src: songUrl.data?.url,
+        pic: '',
+        is_liked: item.song?.is_liked,
+        genres: item.song?.genres,
+      } as Song,
+      item.index as number
+    )
+    playerStore.setPlaying(true)
+
+    nextTick(() => {
+      playerStore.player.play()
+    })
+  } catch (error: any) {
+    alertStore.error(error)
+  }
 }
 
 const onAudioPause = () => {

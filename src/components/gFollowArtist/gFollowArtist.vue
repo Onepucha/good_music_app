@@ -37,12 +37,14 @@ const followBtnClass = computed<string>(() => {
     <div class="g-follow-artist__content">
       <div
         class="g-follow-artist__picture"
-        :class="{ 'g-follow-artist__picture-default': !props.artist?.imageUrl }"
+        :class="{
+          'g-follow-artist__picture-default': !props.artist?.cover_src,
+        }"
       >
         <img
-          v-if="props.artist?.imageUrl"
+          v-if="props.artist?.cover_src"
           :alt="props.artist.name"
-          :src="props.artist?.imageUrl"
+          :src="props.artist?.cover_src"
         />
       </div>
 

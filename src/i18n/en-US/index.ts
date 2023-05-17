@@ -442,4 +442,12 @@ export default {
       title: 'Add to Playlist',
     },
   },
+  gMusicComments: {
+    title: 'Comments',
+    yourComment: 'Your Comment',
+    buttonDeleteComment: 'Delete',
+    buttonReplyComment: 'Reply',
+    buttonAddReply: 'Add Reply',
+    buttonAddComment: 'Add Comment',
+  },
 }

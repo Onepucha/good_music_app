@@ -57,6 +57,7 @@ const addPlaylistItem = ref({
 
 const yourLikes = ref({
   _id: 2,
+  href: `/library/${authStore.user?.nickname}/songs`,
   icon: 'heart',
   name: 'Your Likes',
   songs: authStore.user?.songs,

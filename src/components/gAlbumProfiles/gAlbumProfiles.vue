@@ -53,8 +53,8 @@ const data: Data = reactive({
 })
 
 const infoLength = computed<boolean>(() => {
-  return props.album?.description_ru
-    ? props.album?.description_ru.length > 0
+  return props.album?.description_en
+    ? props.album?.description_en.length > 0
     : false
 })
 
@@ -103,11 +103,11 @@ const setLiked = () => {
         :size="'200px'"
         class="g-album-profiles__picture"
         :class="{
-          'g-album-profiles__picture-default': !props.album?.imageUrl,
+          'g-album-profiles__picture-default': !props.album?.cover_src,
         }"
       >
-        <template v-if="props.album?.imageUrl">
-          <img :alt="props.album.name" :src="props.album?.imageUrl" />
+        <template v-if="props.album?.cover_src">
+          <img :alt="props.album.name" :src="props.album?.cover_src" />
         </template>
       </q-avatar>
 
@@ -202,7 +202,7 @@ const setLiked = () => {
     </div>
 
     <div v-if="infoLength" class="g-album-profiles__info-cell">
-      <Readmore :slice="200" :long-text="props.album?.description_ru" />
+      <Readmore :slice="200" :long-text="props.album?.description_en" />
     </div>
   </div>
 </template>

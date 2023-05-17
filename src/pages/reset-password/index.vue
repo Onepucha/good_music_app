@@ -5,8 +5,7 @@ import { computed, defineComponent, onMounted, reactive, ref } from 'vue'
 import gBack from '@/components/gBack/gBack.vue'
 import gLoader from '@/components/gLoader/gLoader.vue'
 import gInput from '@/components/gInput/gInput.vue'
-import gCheckbox from '@/components/gCheckbox/gCheckbox.vue'
-
+// import gCheckbox from '@/components/gCheckbox/gCheckbox.vue'
 import BgNewPassword from '@/assets/images/bg_create_new_password.png'
 import Congratulations from '@/assets/images/congratulations.png'
 import { useVuelidate } from '@vuelidate/core'
@@ -22,7 +21,7 @@ defineComponent({
     gBack,
     gLoader,
     gInput,
-    gCheckbox,
+    // gCheckbox,
   },
 })
 
@@ -157,11 +156,11 @@ const openModalCongratulations = () => {
         />
       </div>
 
-      <div class="g-forgot-password__checkbox">
-        <g-checkbox v-model="data.rememberMe"
-          >{{ t('pages.reset-password.rememberMe') }}
-        </g-checkbox>
-      </div>
+      <!--      <div class="g-forgot-password__checkbox">-->
+      <!--        <g-checkbox v-model="data.rememberMe"-->
+      <!--          >{{ t('pages.reset-password.rememberMe') }}-->
+      <!--        </g-checkbox>-->
+      <!--      </div>-->
 
       <div class="g-forgot-password__action">
         <q-btn

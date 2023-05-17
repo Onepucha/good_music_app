@@ -100,13 +100,13 @@ const removePlaylist = () => {
           class="g-playlist-header__aside-picture"
           :class="{
             'g-playlist-header__aside-picture-default':
-              !props.playlist?.imageUrl,
+              !props.playlist?.cover_src,
           }"
         >
           <img
-            v-if="props.playlist?.imageUrl"
+            v-if="props.playlist?.cover_src"
             :alt="props.playlist.name"
-            :src="props.playlist?.imageUrl"
+            :src="props.playlist?.cover_src"
           />
         </div>
       </div>

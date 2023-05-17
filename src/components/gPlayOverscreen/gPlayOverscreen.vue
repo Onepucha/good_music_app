@@ -22,12 +22,14 @@ const emit = defineEmits(['toggleplay', 'track-next'])
     <div class="g-music-song__content">
       <div
         class="g-play-overscreen__picture"
-        :class="{ 'g-play-overscreen__picture-default': !props.item?.imageUrl }"
+        :class="{
+          'g-play-overscreen__picture-default': !props.item?.cover_src,
+        }"
       >
         <img
-          v-if="props.item?.imageUrl"
+          v-if="props.item?.cover_src"
           :alt="props.item.name"
-          :src="props.item?.imageUrl"
+          :src="props.item?.cover_src"
         />
       </div>
 

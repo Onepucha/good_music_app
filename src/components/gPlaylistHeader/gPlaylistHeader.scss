@@ -157,40 +157,25 @@
     gap: 12px;
 
     .q-btn {
-      min-width: 184px;
-
-      @media #{$mobile} {
-        width: 100%;
-        min-width: auto;
-      }
-
-      .on-left {
-        margin-right: 16px;
-      }
-
-      .g-icon {
-        &-shuffle {
+      &-shuffle {
+        .g-icon {
           path {
             fill: $white;
           }
         }
 
-        &-play_round {
-          path {
-            fill: $primary;
-          }
-        }
-      }
-
-      @include hover-supported {
-        .g-icon {
-          &-shuffle {
+        @include hover-supported {
+          .g-icon {
             path {
               fill: $primary;
             }
           }
+        }
+      }
 
-          &-play_round {
+      &-play {
+        @include hover-supported {
+          .g-icon {
             path {
               fill: $white;
             }

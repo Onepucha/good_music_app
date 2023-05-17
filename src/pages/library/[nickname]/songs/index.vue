@@ -14,12 +14,13 @@ import { Playlists, Song } from '@/types/artist'
 import { useTranslation } from '@/composables/lang'
 import { useRoute, useRouter } from 'vue-router'
 import { downloadSong } from '@/utils/utils'
-import { useLoadingStore, usePlayerStore } from '@/stores'
+import { useAlertStore, useLoadingStore, usePlayerStore } from '@/stores'
 
 const route = useRoute()
 const router = useRouter()
 const { t } = useTranslation()
 const playerStore = usePlayerStore()
+const alertStore = useAlertStore()
 const loadingStore = useLoadingStore()
 
 defineComponent({
@@ -160,26 +161,32 @@ const onAudioToggle = (item: { song: Song; index: number }) => {
   }
 }
 
-const onAudioPlay = (item: { song: Song; index: number }) => {
-  playerStore.setMusicList(data.songs)
+const onAudioPlay = async (item: { song: Song; index: number }) => {
+  try {
+    const songUrl = await Songs.playSong(item.song._id)
 
-  playerStore.setMusic(
-    {
-      _id: item.song?._id,
-      title: item.song?.name,
-      artist: item.song?.artists?.at(0)?.name,
-      src: item.song?.url,
-      pic: '',
-      is_liked: item.song?.is_liked,
-      genres: item.song?.genres,
-    } as Song,
-    item.index as number
-  )
-  playerStore.setPlaying(true)
+    playerStore.setMusicList(data.songs)
 
-  nextTick(() => {
-    playerStore.player.play()
-  })
+    playerStore.setMusic(
+      {
+        _id: item.song?._id,
+        title: item.song?.name,
+        artist: item.song?.artists?.at(0)?.name,
+        src: songUrl.data?.url,
+        pic: '',
+        is_liked: item.song?.is_liked,
+        genres: item.song?.genres,
+      } as Song,
+      item.index as number
+    )
+    playerStore.setPlaying(true)
+
+    nextTick(() => {
+      playerStore.player.play()
+    })
+  } catch (error: any) {
+    alertStore.error(error)
+  }
 }
 
 const onAudioPause = () => {

@@ -9,7 +9,7 @@ import gMusicPlaylistModal from '@/components/gMusicPlaylistModal/gMusicPlaylist
 import { useTranslation } from '@/composables/lang'
 import Songs from '@/services/songs'
 import { useRoute, useRouter } from 'vue-router'
-import { useArtistsStore, usePlayerStore } from '@/stores'
+import { useAlertStore, useArtistsStore, usePlayerStore } from '@/stores'
 import { downloadSong } from '@/utils/utils'
 import PlaylistsApi from '@/services/playlists'
 
@@ -27,6 +27,7 @@ defineComponent({
 const route = useRoute()
 const router = useRouter()
 const playerStore = usePlayerStore()
+const alertStore = useAlertStore()
 
 const isLoading = ref<boolean>(true)
 
@@ -132,26 +133,32 @@ const onAudioToggle = (item: { song: Song; index: number }) => {
   }
 }
 
-const onAudioPlay = (item: { song: Song; index: number }) => {
-  playerStore.setMusicList(state.artistSong || [])
+const onAudioPlay = async (item: { song: Song; index: number }) => {
+  try {
+    const songUrl = await Songs.playSong(item.song._id)
 
-  playerStore.setMusic(
-    {
-      _id: item.song?._id,
-      title: item.song?.name,
-      artist: data?.artist?.name,
-      src: item.song?.url,
-      pic: '',
-      is_liked: item.song?.is_liked,
-      genres: item.song?.genres,
-    } as Song,
-    item.index as number
-  )
-  playerStore.setPlaying(true)
+    playerStore.setMusicList(state.artistSong || [])
 
-  nextTick(() => {
-    playerStore.player.play()
-  })
+    playerStore.setMusic(
+      {
+        _id: item.song?._id,
+        title: item.song?.name,
+        artist: data?.artist?.name,
+        src: songUrl.data?.url,
+        pic: '',
+        is_liked: item.song?.is_liked,
+        genres: item.song?.genres,
+      } as Song,
+      item.index as number
+    )
+    playerStore.setPlaying(true)
+
+    nextTick(() => {
+      playerStore.player.play()
+    })
+  } catch (error: any) {
+    alertStore.error(error)
+  }
 }
 
 const onAudioPause = () => {

@@ -38,11 +38,11 @@ const nameAndInfoCharts = computed<Info>(() => {
       <div
         class="g-chart-info__picture"
         :class="{
-          'g-chart-info__picture-default': !props.chart?.imageUrl,
+          'g-chart-info__picture-default': !props.chart?.cover_src,
         }"
       >
-        <template v-if="props.chart?.imageUrl">
-          <img :alt="props.chart.name" :src="props.chart?.imageUrl" />
+        <template v-if="props.chart?.cover_src">
+          <img :alt="props.chart.name" :src="props.chart?.cover_src" />
         </template>
 
         <template v-if="!isEmpty(nameAndInfoCharts)">

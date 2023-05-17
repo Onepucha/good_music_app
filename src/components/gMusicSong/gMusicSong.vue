@@ -125,12 +125,12 @@ const findAlbumPath = computed<boolean>(() => {
     <div class="g-music-song__content">
       <div
         class="g-music-song__picture"
-        :class="{ 'g-music-song__picture-default': !props.song?.imageUrl }"
+        :class="{ 'g-music-song__picture-default': !props.song?.cover_src }"
       >
         <img
-          v-if="props.song?.imageUrl"
+          v-if="props.song?.cover_src"
           :alt="props.song.name"
-          :src="props.song?.imageUrl"
+          :src="props.song?.cover_src"
         />
       </div>
 
