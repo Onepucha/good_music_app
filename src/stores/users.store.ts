@@ -1,6 +1,12 @@
 import { ref } from 'vue'
 import { defineStore } from 'pinia'
-import { changePassword, sendCode, User, UserResponse } from 'src/types/users'
+import {
+  changePassword,
+  emailVerify,
+  sendCode,
+  User,
+  UserResponse,
+} from 'src/types/users'
 
 import { api } from '@/boot/axios'
 import { useRouter } from 'vue-router'
@@ -34,6 +40,12 @@ export const useUsersStore = defineStore('users', () => {
     })
   }
 
+  const emailVerify = async (token: string) => {
+    await api.post<emailVerify>('/user/verify-email', {
+      token,
+    })
+  }
+
   return {
     menuTheme,
     user,
@@ -42,5 +54,6 @@ export const useUsersStore = defineStore('users', () => {
     register,
     sendCode,
     changePassword,
+    emailVerify,
   }
 })

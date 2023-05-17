@@ -130,7 +130,7 @@ const onAudioPlay = async (item: { song: Song; index: number }) => {
         title: item.song?.name,
         artist: item.song?.artists?.at(0)?.name,
         src: songUrl.data?.url,
-        pic: '',
+        pic: item.song?.cover_src,
         is_liked: item.song?.is_liked,
         genres: item.song?.genres,
       } as Song,
@@ -141,8 +141,11 @@ const onAudioPlay = async (item: { song: Song; index: number }) => {
     nextTick(() => {
       playerStore.player.play()
     })
-  } catch (error: any) {
-    alertStore.error(error)
+  } catch (error: unknown) {
+    console.error(error)
+    if (error instanceof Error) {
+      alertStore.error(error.message)
+    }
   }
 }
 

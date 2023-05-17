@@ -133,7 +133,7 @@ const onAudioPlay = async (item: { song: Song; index: number }) => {
         title: item.song?.name,
         artist: item.song?.artists?.at(0)?.name,
         src: songUrl.data?.url,
-        pic: '',
+        pic: item.song?.cover_src,
         is_liked: item.song?.is_liked,
         genres: item.song?.genres,
       } as Song,
@@ -144,8 +144,11 @@ const onAudioPlay = async (item: { song: Song; index: number }) => {
     nextTick(() => {
       playerStore.player.play()
     })
-  } catch (error: any) {
-    alertStore.error(error)
+  } catch (error: unknown) {
+    console.error(error)
+    if (error instanceof Error) {
+      alertStore.error(error.message)
+    }
   }
 }
 
@@ -172,7 +175,7 @@ const shufflePlay = () => {
       title: shuffledSongs.at(0)?.name,
       artist: shuffledSongs?.at(0)?.artists?.at(0)?.name,
       src: shuffledSongs.at(0)?.url,
-      pic: '',
+      pic: shuffledSongs.at(0)?.cover_src,
       is_liked: shuffledSongs.at(0)?.is_liked,
       genres: shuffledSongs.at(0)?.genres,
     } as Song,
