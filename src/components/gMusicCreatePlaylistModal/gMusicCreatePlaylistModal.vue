@@ -39,7 +39,7 @@ const data: Data = reactive({
   isLoading: false,
 })
 
-const emit = defineEmits(['close-modal'])
+const emit = defineEmits(['close-modal', 'add-playlist-item'])
 
 const dialog = ref<boolean>(false)
 const qDialogPopup = ref<any>(null)
@@ -86,6 +86,7 @@ const createPlaylist = async () => {
     }
 
     await PlaylistsApi.setPlaylist(payload)
+    emit('add-playlist-item', payload)
     emit('close-modal', false)
   } catch (error: unknown) {
     emit('close-modal', false)

@@ -35,7 +35,10 @@ const data: Data = reactive({
   music: {
     _id: '1',
     title: 'Blinding Lights',
-    artist: 'The Weeknd',
+    artist: {
+      _id: '1',
+      name: 'The Weeknd',
+    },
     src: '/audio/The_Weeknd_Blinding_Lights.mp3',
     pic: '/audio/avatars/The_Weeknd.jpeg',
   },
@@ -43,21 +46,30 @@ const data: Data = reactive({
     {
       _id: '1',
       title: 'Blinding Lights',
-      artist: 'The Weeknd',
+      artist: {
+        _id: '1',
+        name: 'The Weeknd',
+      },
       src: '/audio/The_Weeknd_Blinding_Lights.mp3',
       pic: '/audio/avatars/The_Weeknd.jpeg',
     },
     {
       _id: '2',
       title: '7 rings',
-      artist: 'Ariana Grande',
+      artist: {
+        _id: '2',
+        name: 'Ariana Grande',
+      },
       src: '/audio/Ariana_Grande_7_rings.mp3',
       pic: '/audio/avatars/Ariana_Grande.jpeg',
     },
     {
       _id: '3',
       title: 'WITHOUT YOU',
-      artist: 'The Kid LAROI.',
+      artist: {
+        _id: '3',
+        name: 'The Kid LAROI.',
+      },
       src: '/audio/The_Kid_LAROI_WITHOUT_YOU.mp3',
       pic: '/audio/avatars/The_Kid_LAROI.jpeg',
     },

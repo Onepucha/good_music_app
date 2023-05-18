@@ -23,16 +23,19 @@ const props = defineProps<{
 
 interface Data {
   isLoading: boolean
+  playlist?: Playlists
 }
 
 const data: Data = reactive({
   isLoading: false,
+  playlist: undefined,
 })
 
 const emit = defineEmits([
   'add-playlist-song',
   'close-modal',
   'close-modal-create',
+  'add-playlist-item',
 ])
 
 const dialogAddModal = ref<boolean>(props.dialog)
@@ -44,6 +47,10 @@ const addPlaylistSong = (playlist: Playlists) => {
   emit('add-playlist-song', playlist)
 }
 
+const addPlaylistItem = (playlist: Playlists) => {
+  data.playlist = playlist
+}
+
 const closeModal = (bool: boolean, showCreateModal: boolean) => {
   dialogAddModal.value = bool
 
@@ -53,9 +60,8 @@ const closeModal = (bool: boolean, showCreateModal: boolean) => {
 }
 
 const closeModalCreate = () => {
-  dialogAddModal.value = false
   dialogCreateModal.value = false
-  emit('close-modal-create', false)
+  // emit('close-modal-create', false)
 }
 </script>
 
@@ -64,6 +70,7 @@ const closeModalCreate = () => {
     <g-music-add-playlist-modal
       v-if="dialogAddModal"
       v-model="dialogAddModal"
+      :playlist-add="data.playlist"
       :dialog="dialogAddModal"
       :song="props.song"
       @add-playlist-song="addPlaylistSong"
@@ -76,6 +83,7 @@ const closeModalCreate = () => {
       v-if="dialogCreateModal"
       v-model="dialogCreateModal"
       :dialog="dialogCreateModal"
+      @add-playlist-item="addPlaylistItem"
       @close-modal="closeModalCreate"
       @update:model-value="closeModalCreate"
     />

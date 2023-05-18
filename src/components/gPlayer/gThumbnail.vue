@@ -38,15 +38,12 @@ const data: Data = reactive({
 })
 
 const currentPicStyleObj = computed<CSSProperties>(() => {
-  console.log(props.currentMusic)
   if (!props.currentMusic?.pic) return {}
   return {
     backgroundImage: `url('${props.currentMusic?.pic}')`,
     backgroundColor: props.theme,
   }
 })
-
-console.log(currentPicStyleObj.value)
 
 const onDragBegin = (e: MouseEvent) => {
   if (props.enableDrag) {
@@ -87,7 +84,7 @@ onUnmounted(() => {
       'g-player-pic-default': !currentPicStyleObj?.backgroundImage,
     }"
     :style="currentPicStyleObj"
-    :to="`/artist/${playerStore.artistId}/track/${currentMusic._id}`"
+    :to="`/artist/${currentMusic.artist?._id}/track/${currentMusic._id}`"
     @mousedown="onDragBegin"
   ></router-link>
 </template>
