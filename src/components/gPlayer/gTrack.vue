@@ -57,11 +57,11 @@ const setLiked = () => {
 
     <div class="g-player-track__info">
       <div class="g-player-track__info-song-name">
-        {{ props.currentMusic.title || 'Untitled' }}
+        {{ currentMusic.title || 'Untitled' }}
       </div>
 
       <div v-if="$q.platform.is.desktop" class="g-player-track__info-artists">
-        {{ props.currentMusic.artist || 'Unknown' }}
+        {{ currentMusic.artist?.name || 'Unknown' }}
       </div>
     </div>
 
@@ -71,7 +71,7 @@ const setLiked = () => {
     >
       <div class="g-player-track__action-like">
         <DynamicIcon
-          :class="{ active: !!props.currentMusic?.is_liked }"
+          :class="{ active: !!currentMusic?.is_liked }"
           name="heart"
           @click.prevent="setLiked"
         />

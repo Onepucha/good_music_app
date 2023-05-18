@@ -48,7 +48,7 @@ const setLiked = (
 ) => {
   let idsSong = [] as Array<string>
   idsSong.push(object.ids)
-  emit('set-liked', isSingle, {
+  emit('set-liked', false, {
     ids: object.ids,
     is_add_to_liked: object.is_add_to_liked,
   })

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { defineComponent, onMounted, reactive, ref } from 'vue'
+import { defineComponent, nextTick, onMounted, reactive, ref, watch } from 'vue'
 import { useTranslation } from '@/composables/lang'
 import { useAuthStore } from '@/stores'
 import PlaylistsApi from '@/services/playlists'
@@ -25,6 +25,7 @@ const emit = defineEmits([
 const props = defineProps<{
   song?: Song | undefined
   dialog: boolean
+  playlistAdd?: Playlists | undefined
 }>()
 
 interface Data {
@@ -43,6 +44,16 @@ const data: Data = reactive({
   isLoading: false,
 })
 
+watch(
+  () => props.playlistAdd,
+  () => {
+    nextTick(async () => {
+      data.page = 0
+      await getLikedYourPlaylists()
+    })
+  }
+)
+
 const dialogAddModal = ref<boolean>(props.dialog)
 const dialogRemoveModal = ref<boolean>(false)
 const qDialogPopup = ref<any>(null)
@@ -51,6 +62,12 @@ const position = ref<any>('bottom')
 const isLoading = ref<boolean>(false)
 const scrollTargetRef = ref<any>(document.createElement('div'))
 
+const addPlaylistItem = ref({
+  _id: 1,
+  icon: 'plus',
+  name: 'Add New Playlist',
+})
+
 const getLikedYourPlaylists = async () => {
   try {
     data.page++
@@ -58,10 +75,6 @@ const getLikedYourPlaylists = async () => {
       count: data.playlistsCount,
       page: data.page,
     })
-
-    if (response.data.playlists.length === 0) {
-      emit('close-modal', false, true)
-    }
 
     data.playlists = data.playlists.concat(response.data.playlists)
   } catch (error: unknown) {
@@ -101,6 +114,10 @@ const confirmRemovePlaylist = async (playlist: Playlists) => {
   }
 }
 
+const openAddPlaylist = () => {
+  emit('close-modal', true, true)
+}
+
 const closeModalAdd = () => {
   dialogAddModal.value = false
   dialogRemoveModal.value = false
@@ -128,15 +145,19 @@ onMounted(async () => {
 
           <q-list ref="scrollTargetRef" class="scroll">
             <g-music-playlist-item
-              v-for="(playlist, index) in data.playlists"
+              :item="addPlaylistItem"
+              @add-playlist="openAddPlaylist"
+            />
+
+            <g-music-playlist-item
+              v-for="(item, index) in data.playlists"
               :key="index"
-              :item="playlist"
+              :item="item"
               :song="props.song"
               has-add-playlist
               @add-playlist="addPlaylist"
               @remove-playlist="removePlaylist"
             />
-            <!--            :has-add-track="hasAddTrack"-->
           </q-list>
         </q-card-section>
       </q-card>

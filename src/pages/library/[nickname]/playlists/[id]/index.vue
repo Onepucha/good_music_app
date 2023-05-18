@@ -38,7 +38,7 @@ const authStore = useAuthStore()
 const loadingStore = useLoadingStore()
 const alertStore = useAlertStore()
 
-const isLoading = ref<boolean>(true)
+const isLoading = ref<boolean>(false)
 const dialog = ref<boolean>(false)
 const dialogAddModal = ref<boolean>(false)
 const qDialogPopup = ref<any>(null)
@@ -131,7 +131,7 @@ const onAudioPlay = async (item: { song: Song; index: number }) => {
       {
         _id: item.song?._id,
         title: item.song?.name,
-        artist: item.song?.artists?.at(0)?.name,
+        artist: item.song?.artists?.at(0),
         src: songUrl.data?.url,
         pic: item.song?.cover_src,
         is_liked: item.song?.is_liked,
@@ -194,13 +194,17 @@ const removePlaylist = (playlist: Playlists) => {
 
 const confirmRemovePlaylist = async (playlist: Playlists) => {
   try {
+    isLoading.value = true
+
     if (data.playlist?._id) {
       await PlaylistsApi.removePlaylist(data.playlist._id)
     }
 
     await router.replace(`/library/${authStore.user?.nickname}/playlists`)
+    isLoading.value = false
   } catch (error: unknown) {
     console.error(error)
+    isLoading.value = false
   }
 }
 
