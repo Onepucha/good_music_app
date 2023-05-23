@@ -5,6 +5,7 @@ import DynamicIcon from '@/components/DynamicIcon.vue'
 import gBack from '@/components/gBack/gBack.vue'
 import gMusicSongListNotFound from '@/components/gMusicSong/gMusicSongListNotFound.vue'
 import { useTranslation } from '@/composables/lang'
+import { useAuthStore } from '@/stores'
 
 const { t } = useTranslation()
 
@@ -16,6 +17,8 @@ defineComponent({
   },
 })
 
+const authStore = useAuthStore()
+
 interface Data {
   downloads: Array<string>
 }
@@ -23,6 +26,10 @@ interface Data {
 const data: Data = reactive({
   downloads: [],
 })
+
+const openSearch = () => {
+  authStore.searchModal = true
+}
 </script>
 
 <template>
@@ -37,7 +44,7 @@ const data: Data = reactive({
           />
 
           <div class="q-page__header-actions">
-            <DynamicIcon name="search" :size="28" />
+            <DynamicIcon name="search" :size="28" @click.prevent="openSearch" />
 
             <div class="q-page__header-dropdown">
               <i class="g-icon g-icon-dropdown-menu">

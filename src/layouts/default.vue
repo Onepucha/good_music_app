@@ -25,7 +25,6 @@ const authUser = computed<any>(() => authStore.user)
 const isAuth = computed<boolean>(() => !!authStore.user)
 
 const leftDrawerOpen = ref<boolean>(false)
-const search = ref<string>('')
 
 defineComponent({
   components: {

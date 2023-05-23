@@ -1,6 +1,7 @@
 .g-icon {
   position: relative;
-  display: block;
+  display: inline-block;
+  vertical-align: middle;
 
   path {
     transition: $animate-delay;

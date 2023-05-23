@@ -6,6 +6,14 @@
     flex-direction: column;
   }
 
+  &__search {
+    cursor: pointer;
+
+    .q-search {
+      pointer-events: none;
+    }
+  }
+
   &__header {
     display: flex;
     align-items: center;
