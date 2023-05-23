@@ -2,6 +2,7 @@
 import { computed, defineComponent, onMounted, reactive, ref } from 'vue'
 import { useQuasar } from 'quasar'
 import gPlayer from '@/components/gPlayer/gPlayer.vue'
+import gMusicSearchModal from '@/components/gMusicSearchModal/gMusicSearchModal.vue'
 import { CustomWindow } from '@/types/options'
 import { Song } from '@/types/artist'
 import { useAuthStore, useLoadingStore, usePlayerStore } from '@/stores'
@@ -16,6 +17,7 @@ defineComponent({
   name: 'App',
   components: {
     gPlayer,
+    gMusicSearchModal,
   },
 })
 
@@ -132,4 +134,6 @@ onMounted(() => {
     :list="data.list"
     fixed
   />
+
+  <g-music-search-modal v-model="authStore.searchModal" />
 </template>

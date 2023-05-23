@@ -450,4 +450,16 @@ export default {
     buttonAddReply: 'Add Reply',
     buttonAddComment: 'Add Comment',
   },
+  gMusicSearch: {
+    searchLabel: 'Artists, Songs, Podcasts, & More',
+    titleNotFound: 'Not Found',
+    descriptionNotFound:
+      'Sorry, the keyword you entered cannot be found, please check again or search with another keyword.',
+    filters: {
+      songs: 'Songs',
+      artists: 'Artists',
+      albums: 'Albums',
+      playlists: 'Playlists',
+    },
+  },
 }

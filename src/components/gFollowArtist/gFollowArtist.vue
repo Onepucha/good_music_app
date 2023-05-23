@@ -14,6 +14,7 @@ const emit = defineEmits(['add-follow'])
 
 const props = defineProps<{
   artist: Artist
+  redirect?: boolean
 }>()
 
 const follow = ref<boolean>(false)
@@ -49,7 +50,10 @@ const followBtnClass = computed<string>(() => {
       </div>
 
       <div class="g-follow-artist__title">
-        <span>{{ props.artist.name }}</span>
+        <router-link v-if="props.redirect" :to="`/artist/${props.artist._id}`">
+          {{ props.artist.name }}
+        </router-link>
+        <span v-else>{{ props.artist.name }}</span>
 
         <DynamicIcon
           v-if="props.artist?.is_verified"

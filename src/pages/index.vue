@@ -25,10 +25,6 @@
           :type="'chart'"
           overflow
         />
-
-        <g-music-search-modal v-model="showModal" />
-
-        <q-btn label="Open Modal" @click="showModal = true" />
       </div>
     </div>
   </div>
@@ -39,8 +35,6 @@ import { defineComponent, onMounted, reactive, ref } from 'vue'
 import { Artist, Chart } from 'src/types/artist'
 
 import gMusicGalleryList from 'components/gMusicGallery/gMusicGalleryList.vue'
-import gMusicSearchModal from '@/components/gMusicSearchModal/gMusicSearchModal.vue'
-import GMusicSearchModal from '@/components/gMusicSearchModal/gMusicSearchModal.vue'
 
 import {
   useAlertStore,
@@ -62,7 +56,6 @@ const alertStore = useAlertStore()
 defineComponent({
   components: {
     gMusicGalleryList,
-    gMusicSearchModal,
   },
 })
 
@@ -124,8 +117,6 @@ const getCharts = async () => {
     console.error(error)
   }
 }
-
-const showModal = ref(false)
 
 const emailVerify = async () => {
   try {

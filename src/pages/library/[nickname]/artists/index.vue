@@ -12,10 +12,12 @@ import { downloadSong } from '@/utils/utils'
 import { Album, Artist, Song } from '@/types/artist'
 import { useRoute, useRouter } from 'vue-router'
 import Artists from '@/services/artists'
+import { useAuthStore } from '@/stores'
 
 const route = useRoute()
 const router = useRouter()
 const { t } = useTranslation()
+const authStore = useAuthStore()
 
 defineComponent({
   components: {
@@ -101,6 +103,10 @@ const getLikedSingers = async (index: number, done: () => void) => {
     scrollTargetRef.value.stop()
   }
 }
+
+const openSearch = () => {
+  authStore.searchModal = true
+}
 </script>
 
 <template>
@@ -115,7 +121,7 @@ const getLikedSingers = async (index: number, done: () => void) => {
           />
 
           <div class="q-page__header-actions">
-            <DynamicIcon name="search" :size="28" />
+            <DynamicIcon name="search" :size="28" @click.prevent="openSearch" />
 
             <div class="q-page__header-dropdown">
               <i class="g-icon g-icon-dropdown-menu">

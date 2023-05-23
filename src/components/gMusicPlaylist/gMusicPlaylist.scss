@@ -1,0 +1,60 @@
+.g-music-playlist {
+  position: relative;
+  display: flex;
+  gap: 12px;
+  flex-direction: column;
+  width: 100%;
+  max-width: 184px;
+
+  @media only screen and (max-width: 427px) {
+    width: calc(100% / 2 - 6px);
+  }
+
+  &__picture {
+    position: relative;
+    flex-basis: 184px;
+    height: 100%;
+    max-height: 184px;
+    border-radius: 16px;
+    overflow: hidden;
+
+    &-default {
+      background:
+        linear-gradient(
+          141.82deg,
+          #42d0e1 0%,
+          #f2e58d 32.64%,
+          #fec856 50.01%,
+          #f77e0c 78.11%,
+          #f0de51 101.07%
+        );
+      animation: rotate-hue 6s alternate infinite;
+    }
+
+    @keyframes rotate-hue {
+      to {
+        filter: hue-rotate(1turn);
+      }
+    }
+
+    img {
+      height: auto;
+      max-width: 100%;
+    }
+  }
+
+  &__title {
+    font-size: $size-18;
+    font-weight: 700;
+    line-height: $lh-25;
+    color: $greyscale900;
+  }
+}
+
+body.body--dark {
+  .g-music-playlist {
+    &__title {
+      color: $white;
+    }
+  }
+}

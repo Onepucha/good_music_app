@@ -133,6 +133,10 @@ const confirmRemovePlaylist = async (playlist: Playlists) => {
     console.error(error)
   }
 }
+
+const openSearch = () => {
+  authStore.searchModal = true
+}
 </script>
 
 <template>
@@ -147,7 +151,7 @@ const confirmRemovePlaylist = async (playlist: Playlists) => {
           />
 
           <div class="q-page__header-actions">
-            <DynamicIcon name="search" :size="28" />
+            <DynamicIcon name="search" :size="28" @click.prevent="openSearch" />
 
             <div class="q-page__header-dropdown">
               <i class="g-icon g-icon-dropdown-menu">

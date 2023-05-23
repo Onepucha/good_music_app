@@ -14,7 +14,7 @@ import { Album, AlbumArtist, AlbumSong, Playlists, Song } from '@/types/artist'
 import { useTranslation } from '@/composables/lang'
 import { useRoute, useRouter } from 'vue-router'
 import { downloadSong } from '@/utils/utils'
-import { useAlertStore, usePlayerStore } from '@/stores'
+import { useAlertStore, useAuthStore, usePlayerStore } from '@/stores'
 import PlaylistsApi from '@/services/playlists'
 
 const route = useRoute()
@@ -22,6 +22,7 @@ const router = useRouter()
 const { t } = useTranslation()
 const playerStore = usePlayerStore()
 const alertStore = useAlertStore()
+const authStore = useAuthStore()
 
 defineComponent({
   components: {
@@ -168,6 +169,10 @@ const removeLibrary = async (album: Album) => {
     alertStore.error(t('error'))
   }
 }
+
+const openSearch = () => {
+  authStore.searchModal = true
+}
 </script>
 
 <template>
@@ -178,7 +183,7 @@ const removeLibrary = async (album: Album) => {
         icon="back"
         @click.prevent="$router.go(-1)"
       />
-      <DynamicIcon :size="28" name="search" />
+      <DynamicIcon :size="28" name="search" @click.prevent="openSearch" />
     </div>
 
     <g-music-filtered

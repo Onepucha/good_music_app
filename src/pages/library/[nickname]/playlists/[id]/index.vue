@@ -246,6 +246,10 @@ const editPlaylist = async (playlist: Playlists) => {
   }
 }
 
+const openSearch = () => {
+  authStore.searchModal = true
+}
+
 onMounted(async () => {
   loadingStore.setLoading()
   await getInfoPlaylist()
@@ -258,7 +262,7 @@ onMounted(async () => {
   <div class="q-page">
     <div class="q-page__header">
       <g-back icon="back" @click.prevent="$router.go(-1)" />
-      <DynamicIcon name="search" :size="28" />
+      <DynamicIcon name="search" :size="28" @click.prevent="openSearch" />
     </div>
 
     <g-playlist-header

@@ -11,7 +11,7 @@
     position: relative;
     display: flex;
     flex-direction: column;
-    padding: 16px 30px 48px 30px;
+    padding: 16px 30px 48px;
     flex: 0 0 440px;
 
     @media #{$tablet} {
@@ -47,6 +47,9 @@
 
   &__artists {
     position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
     margin: 24px 0;
   }
 

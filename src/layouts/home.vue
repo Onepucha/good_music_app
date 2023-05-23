@@ -144,6 +144,10 @@ const installApp = async (): Promise<void> => {
   ;(window as CustomWindow).deferredPrompt = null
 }
 
+const openSearch = () => {
+  authStore.searchModal = true
+}
+
 onMounted(() => {
   usersStore.setMenuTheme(
     !!JSON.parse(localStorage.getItem('darkMode') as string)
@@ -206,7 +210,12 @@ onUnmounted(() => {
             class="q-header__search-input"
             dense
           />
-          <q-btn :ripple="false" class="q-header__search-btn" unelevated>
+          <q-btn
+            :ripple="false"
+            class="q-header__search-btn"
+            unelevated
+            @click.prevent="openSearch"
+          >
             <DynamicIcon :size="28" name="search" />
           </q-btn>
         </div>

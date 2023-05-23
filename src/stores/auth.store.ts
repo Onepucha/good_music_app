@@ -9,6 +9,7 @@ import { AxiosResponse } from 'axios'
 export const useAuthStore = defineStore('auth', () => {
   // initial state
   const user = ref<User | undefined>(undefined)
+  const searchModal = ref<boolean>(false)
 
   // actions
   const login = async (email: string, password: string) => {
@@ -80,6 +81,7 @@ export const useAuthStore = defineStore('auth', () => {
 
   return {
     user,
+    searchModal,
     login,
     userInfo,
     setProfile,

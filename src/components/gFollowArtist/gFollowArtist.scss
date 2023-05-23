@@ -5,10 +5,6 @@
   align-items: center;
   justify-content: space-between;
 
-  & + & {
-    margin: 16px 0 0;
-  }
-
   &__content {
     display: flex;
     gap: 16px;
@@ -18,19 +14,21 @@
 
   &__picture {
     width: 80px;
+    min-width: 80px;
     height: 80px;
     display: block;
     border-radius: 50%;
 
     &-default {
-      background: linear-gradient(
-        141.82deg,
-        #42d0e1 0%,
-        #f2e58d 32.64%,
-        #fec856 50.01%,
-        #f77e0c 78.11%,
-        #f0de51 101.07%
-      );
+      background:
+        linear-gradient(
+          141.82deg,
+          #42d0e1 0%,
+          #f2e58d 32.64%,
+          #fec856 50.01%,
+          #f77e0c 78.11%,
+          #f0de51 101.07%
+        );
       animation: rotate-hue 6s alternate infinite;
 
       @keyframes rotate-hue {
@@ -47,12 +45,22 @@
   }
 
   &__title {
-    display: flex;
-    gap: 4px;
+    display: inline-block;
     font-size: $size-18;
     font-weight: 700;
     line-height: $lh-22;
     color: $greyscale900;
+
+    a {
+      @include hover-supported {
+        transition: $animate-delay;
+        color: $primary;
+      }
+    }
+
+    .g-icon {
+      margin: 0 0 0 4px;
+    }
   }
 
   &__follow {

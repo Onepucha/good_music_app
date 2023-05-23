@@ -1,6 +1,6 @@
 export interface Artist {
   _id: string
-  __v?: string
+  __v?: string | number
   cover_src?: string
   album_code?: string
   name?: string
@@ -27,6 +27,7 @@ export interface Album {
   monthlyListeners?: string
   code: string
   is_verified?: boolean
+  release_date?: string
   artists?: Array<AlbumArtist>
   songs?: Array<AlbumSong>
   genres?: Array<AlbumGenre>
@@ -65,12 +66,11 @@ export interface AlbumGenre {
 }
 
 export interface Song {
-  includes(arg0: string): unknown
-
   _id: string
-  __v?: string
+  __v?: string | number
   cover_src?: string
   album_code?: string
+  release_date?: string
   issueYear?: string
   position?: string
   name?: string

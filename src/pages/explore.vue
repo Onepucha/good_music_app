@@ -5,6 +5,7 @@ import DynamicIcon from '@/components/DynamicIcon.vue'
 import gCardDashboard from '@/components/gCardDashboard/gCardDashboard.vue'
 import { Options } from '@/types/options'
 import { Dashboards } from '@/types/dashboards'
+import { useAuthStore } from '@/stores'
 
 const { t } = useTranslation()
 
@@ -14,6 +15,8 @@ defineComponent({
     gCardDashboard,
   },
 })
+
+const authStore = useAuthStore()
 
 interface Data {
   options: Array<Options>
@@ -139,6 +142,10 @@ const filterFn = (val: string, update: any) => {
 const abortFilterFn = () => {
   console.log('delayed filter aborted')
 }
+
+const openSearch = () => {
+  authStore.searchModal = true
+}
 </script>
 
 <template>
@@ -161,7 +168,7 @@ const abortFilterFn = () => {
             </div>
 
             <div class="g-explore__body">
-              <div class="g-explore__search">
+              <div class="g-explore__search" @click.prevent="openSearch">
                 <q-select
                   v-model="model"
                   :label="t('pages.explore.searchLabel')"
