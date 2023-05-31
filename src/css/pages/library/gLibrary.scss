@@ -5,3 +5,26 @@
     margin: 32px 0 0;
   }
 }
+
+body.body--dark {
+  .g-library {
+    &__nav {
+      .g-icon {
+        &-playlists,
+        &-songs {
+          path {
+            fill: $white;
+          }
+        }
+
+        &-downloads,
+        &-albums,
+        &-artists {
+          path {
+            stroke: $white;
+          }
+        }
+      }
+    }
+  }
+}

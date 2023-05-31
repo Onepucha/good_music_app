@@ -8,17 +8,18 @@ export interface Artist {
   monthlyListeners?: string
   code: string
   is_verified?: boolean
-  song?: Array<string>
-  genre?: Array<string>
-  album?: Array<string>
+  song?: Array<string> | undefined
+  genre?: Array<string> | undefined
+  album?: Array<string> | undefined
   is_liked?: boolean
 }
 
 export interface Album {
+  data: any
   description_en: string
   description_ru: string
   _id: string
-  __v?: string
+  __v?: string | number
   cover_src?: string
   album_code?: string
   name?: string
@@ -28,9 +29,9 @@ export interface Album {
   code: string
   is_verified?: boolean
   release_date?: string
-  artists?: Array<AlbumArtist>
-  songs?: Array<AlbumSong>
-  genres?: Array<AlbumGenre>
+  artists?: Array<Artist>
+  songs?: Array<string>
+  genres?: Array<Genre>
   is_liked?: boolean
 }
 

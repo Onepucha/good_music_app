@@ -3,6 +3,7 @@ import { computed, defineComponent, reactive, ref } from 'vue'
 import gCropper from './gCropper.vue'
 import { useAuthStore } from '@/stores'
 import defaultAvatar from '@/assets/images/avatar.png'
+import Global from '@/services/global'
 
 defineComponent({
   components: {
@@ -35,10 +36,18 @@ const data: Data = reactive({
 const cropper = ref<boolean>(false)
 const inputFile = ref<any>()
 
-const handleFile = (file: any) => {
-  const uplloadFile = file.target.files[0]
-  data.imageSrc = URL.createObjectURL(uplloadFile)
-  cropper.value = true
+const handleFile = async (file: any) => {
+  const formData = new FormData()
+  const uploadFile = file.target.files[0]
+  console.log(uploadFile)
+  data.imageSrc = URL.createObjectURL(uploadFile)
+
+  formData.append('file', uploadFile)
+
+  console.log(formData)
+
+  await Global.uploadAvatar(formData)
+  // cropper.value = true
 }
 
 const finishCropper = (croppedImage: string) => {
@@ -54,7 +63,6 @@ const finishCropper = (croppedImage: string) => {
     clearable
     class="hidden"
     label="Browse files..."
-    accept=".jpg, image/*"
     @input="handleFile"
   />
   <div id="display-area">
