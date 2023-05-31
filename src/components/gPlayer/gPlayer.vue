@@ -515,15 +515,16 @@ const getShuffledList = () => {
   return unshuffled
 }
 
-const onPrevSong = () => {
+const onPrevSong = async () => {
   let currentMusic: Song
+  const songUrl = await Songs.playSong(previousItem.value?._id)
 
   currentMusic = {
     _id: previousItem.value?._id,
     title: previousItem.value?.name || nextItem.value?.title,
-    artist: previousItem.value?.artists?.at(0)?.name || nextItem.value?.artist,
-    pic: previousItem.value?.pic || '',
-    src: previousItem.value?.url || previousItem.value?.src,
+    artist: previousItem.value?.artists?.at(0) || previousItem.value?.artist,
+    pic: previousItem.value?.cover_src || '',
+    src: songUrl.data?.url || previousItem.value?.src,
     is_liked: previousItem.value?.is_liked,
   } as Song
 
@@ -532,15 +533,16 @@ const onPrevSong = () => {
   thenPlay()
 }
 
-const onNextSong = () => {
+const onNextSong = async () => {
   let currentMusic: Song
+  const songUrl = await Songs.playSong(nextItem.value?._id)
 
   currentMusic = {
     _id: nextItem.value?._id,
     title: nextItem.value?.name || nextItem.value?.title,
-    artist: nextItem.value?.artists?.at(0)?.name || nextItem.value?.artist,
-    pic: previousItem.value?.pic || '',
-    src: nextItem.value?.url || previousItem.value?.src,
+    artist: nextItem.value?.artists?.at(0) || nextItem.value?.artist,
+    pic: nextItem.value?.cover_src || '',
+    src: songUrl.data?.url || previousItem.value?.src,
     is_liked: nextItem.value?.is_liked,
   } as Song
 

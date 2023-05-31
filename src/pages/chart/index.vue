@@ -6,9 +6,10 @@ import DynamicIcon from '@/components/DynamicIcon.vue'
 import gMusicGalleryList from '@/components/gMusicGallery/gMusicGalleryList.vue'
 import { useTranslation } from '@/composables/lang'
 import { Chart } from '@/types/artist'
-import { useChartsStore } from '@/stores'
+import { useAuthStore, useChartsStore } from '@/stores'
 
 const { t } = useTranslation()
+const authStore = useAuthStore()
 
 defineComponent({
   components: {
@@ -25,6 +26,10 @@ interface Data {
 const data: Data = reactive({
   charts: [],
 })
+
+const openSearch = () => {
+  authStore.searchModal = true
+}
 
 onMounted(async () => {
   const releasesStore = useChartsStore()
@@ -43,7 +48,7 @@ onMounted(async () => {
             icon="back"
             @click.prevent="$router.go(-1)"
           />
-          <DynamicIcon :size="28" name="search" />
+          <DynamicIcon :size="28" name="search" @click.prevent="openSearch" />
         </div>
 
         <g-music-gallery-list

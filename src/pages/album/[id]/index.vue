@@ -16,7 +16,12 @@ import gMusicSongList from '@/components/gMusicSong/gMusicSongList.vue'
 import gMusicPlaylistModal from '@/components/gMusicPlaylistModal/gMusicPlaylistModal.vue'
 import gMusicComments from '@/components/gMusicComments/gMusicComments.vue'
 import { useTranslation } from '@/composables/lang'
-import { useAlertStore, useAuthStore, usePlayerStore } from '@/stores'
+import {
+  useAlertStore,
+  useAuthStore,
+  useLoadingStore,
+  usePlayerStore,
+} from '@/stores'
 import { downloadSong } from '@/utils/utils'
 import Albums from '@/services/albums'
 import Songs from '@/services/songs'
@@ -26,6 +31,7 @@ const { t } = useTranslation()
 const authStore = useAuthStore()
 const playerStore = usePlayerStore()
 const alertStore = useAlertStore()
+const loadingStore = useLoadingStore()
 
 defineComponent({
   components: {
@@ -40,48 +46,44 @@ defineComponent({
 const route = useRoute()
 const router = useRouter()
 
-const isLoading = ref<boolean>(true)
-
 interface Data {
   artist: Artist | undefined
-  album: Album
+  album: Album | undefined
   albumSong: Array<Song>
   songPlaylist: Song | undefined
-  isLoading: boolean
 }
 
 const data: Data = reactive({
   artist: {} as Artist,
-  album: {} as Album,
+  album: undefined,
   albumSong: [],
   songPlaylist: undefined,
-  isLoading: false,
 })
 
 const dialog = ref<boolean>(false)
 const dialogCreateModal = ref<boolean>(false)
 
-const findArtist = computed<any>(() => {
+const findArtist = computed<Artist | undefined>(() => {
   return data.album?.artists?.at(0)
 })
 
 const getAlbumCode = async () => {
   try {
     let id: string | string[] = route.params.id
-    const response: any = await Albums.getInfo({ id })
+    const response = await Albums.getInfo({ id })
     data.album = response.data.album
   } catch (error: unknown) {
-    isLoading.value = false
+    console.error(error)
   }
 }
 
 const getAlbumSongs = async () => {
   try {
     let id: string | string[] = route.params.id
-    const response: any = await Songs.getAlbumSongs({ count: 3, id: id })
+    const response = await Songs.getAlbumSongs({ count: 3, id: id })
     data.albumSong = response.data.songs
   } catch (error: unknown) {
-    isLoading.value = false
+    console.error(error)
   }
 }
 
@@ -207,10 +209,10 @@ const goToAlbum = (url: string) => {
 }
 
 onMounted(async () => {
+  loadingStore.setLoading()
   await getAlbumCode()
   await getAlbumSongs()
-
-  isLoading.value = false
+  loadingStore.hideLoading()
 })
 </script>
 
@@ -223,43 +225,41 @@ onMounted(async () => {
       </i>
     </div>
 
-    <template v-if="!isLoading">
-      <g-album-profiles
-        :album="data?.album"
-        :songs="data.albumSong"
-        :song="data.albumSong.at(0)"
-        @toggleplay="onAudioToggle"
-        @set-liked="setLiked"
-        @download="downloadSong"
-        @view-artist="viewArtist"
-        @go-to-album="goToAlbum"
-        @add-playlist="addPlayList"
-        @dont-play-this="dontPlayThis"
-      />
+    <g-album-profiles
+      :album="data?.album"
+      :songs="data.albumSong"
+      :song="data.albumSong.at(0)"
+      @toggleplay="onAudioToggle"
+      @set-liked="setLiked"
+      @download="downloadSong"
+      @view-artist="viewArtist"
+      @go-to-album="goToAlbum"
+      @add-playlist="addPlayList"
+      @dont-play-this="dontPlayThis"
+    />
 
-      <g-music-song-list
-        :list="data.albumSong"
-        :artist="findArtist"
-        :artist-id="findArtist?._id"
-        :sub-title="t('pages.album.gMusicSongList.subTitle')"
-        :title="t('pages.album.gMusicSongList.title')"
-        @toggleplay="onAudioToggle"
-        @set-liked="setLiked"
-        @view-artist="viewArtist"
-        @add-playlist="addPlayList"
-        @download="downloadSong"
-        @dont-play-this="dontPlayThis"
-      />
+    <g-music-song-list
+      :list="data.albumSong"
+      :artist="findArtist"
+      :artist-id="findArtist?._id"
+      :sub-title="t('pages.album.gMusicSongList.subTitle')"
+      :title="t('pages.album.gMusicSongList.title')"
+      @toggleplay="onAudioToggle"
+      @set-liked="setLiked"
+      @view-artist="viewArtist"
+      @add-playlist="addPlayList"
+      @download="downloadSong"
+      @dont-play-this="dontPlayThis"
+    />
 
-      <g-music-playlist-modal
-        v-if="dialog"
-        :dialog="dialog"
-        :song="data.songPlaylist"
-        @add-playlist-song="addPlaylistSong"
-        @close-modal-create="dialog = false"
-      />
+    <g-music-playlist-modal
+      v-if="dialog"
+      :dialog="dialog"
+      :song="data.songPlaylist"
+      @add-playlist-song="addPlaylistSong"
+      @close-modal-create="dialog = false"
+    />
 
-      <g-music-comments />
-    </template>
+    <g-music-comments />
   </div>
 </template>

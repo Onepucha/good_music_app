@@ -19,21 +19,12 @@ body,
   font-size: $size-18;
   line-height: $lh-22;
   margin: 0;
-  background-color: #fff;
+  background-color: transparent;
 }
 
 .body--light {
   background: $light;
   color: $greyscale900;
-}
-
-.body--dark {
-  background: $dark-1;
-  color: $white;
-
-  .g-readmore {
-    color: $white;
-  }
 }
 
 .q-layout {
@@ -282,5 +273,48 @@ body,
   &__loading {
     position: absolute;
     bottom: 163px;
+  }
+}
+
+body.body--dark {
+  background: $dark-1;
+  color: $white;
+
+  .q-page-container {
+    .q-page {
+      background: $dark-1;
+
+      &__header {
+        .g-icon {
+          &-search {
+            path {
+              stroke: $white;
+            }
+
+            circle {
+              stroke: $white;
+            }
+
+            @include hover-supported {
+              path {
+                stroke: $primary;
+              }
+
+              circle {
+                stroke: $primary;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
+  .g-readmore {
+    color: $white;
+  }
+
+  .g-main-loader {
+    background: $dark-1;
   }
 }

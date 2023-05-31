@@ -156,12 +156,12 @@ import gMusicAlbumItem from '@/components/gMusicAlbumItem/gMusicAlbumItem.vue'
 
 import { useTranslation } from '@/composables/lang'
 import { Artist, Playlists, Song } from '@/types/artist'
-import Songs from '@/services/songs'
 import { useAlertStore, usePlayerStore } from '@/stores'
-import PlaylistsApi from '@/services/playlists'
 import { useRouter } from 'vue-router'
+import Songs from '@/services/songs'
+import PlaylistsApi from '@/services/playlists'
 import Artists from '@/services/artists'
-import Search from '@/services/search'
+import Global from '@/services/global'
 import { debounce } from 'quasar'
 import { downloadSong } from '@/utils/utils'
 
@@ -246,7 +246,7 @@ const listClass = computed<any>(() => {
 const getSearch = async () => {
   try {
     const query = { name: searchQuery.value, type: categoryName.value }
-    const response = await Search.getAll(query)
+    const response = await Global.getAll(query)
     isLoading.value = false
     return response.data
   } catch (error: unknown) {

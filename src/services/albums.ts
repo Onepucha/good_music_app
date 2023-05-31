@@ -1,6 +1,6 @@
 import { api } from '@/boot/axios'
 import { AxiosResponse } from 'axios'
-import { Artist } from '@/types/artist'
+import { Album, Artist } from '@/types/artist'
 
 class Albums {
   getAll(query: any): Promise<AxiosResponse> {
@@ -9,7 +9,7 @@ class Albums {
     })
   }
 
-  getInfo(query: any): Promise<Artist> {
+  getInfo(query: any): Promise<Album> {
     return api.get('/album/info', {
       params: query,
     })

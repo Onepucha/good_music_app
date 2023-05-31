@@ -211,6 +211,46 @@ body.body--dark {
     color: $white;
     background: $dark-1;
 
+    &__toolbar {
+      background: $dark-1;
+    }
+
+    &__search {
+      &-input {
+        .q-field__control {
+          .q-field__native {
+            color: $white;
+          }
+        }
+      }
+
+      &-btn {
+        .g-icon {
+          &-search {
+            path {
+              stroke: $white;
+            }
+
+            circle {
+              stroke: $white;
+            }
+          }
+        }
+      }
+    }
+
+    &__ball {
+      &-btn {
+        .g-icon {
+          &-ball {
+            path {
+              stroke: $white;
+            }
+          }
+        }
+      }
+    }
+
     &__logo {
       background-image: url('src/assets/images/small_logo_dark.svg');
 
