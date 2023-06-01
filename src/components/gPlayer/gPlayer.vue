@@ -1,16 +1,3 @@
-<script lang="ts">
-const REPEAT = {
-  NONE: 'none',
-  MUSIC: 'music',
-  LIST: 'list',
-  NO_REPEAT: 'no-repeat',
-  REPEAT_ONE: 'repeat-one',
-  REPEAT_ALL: 'repeat-all',
-}
-
-const picThemeCache = {} as any
-</script>
-
 <script setup lang="ts">
 import gTrack from './gTrack.vue'
 import gList from './gList.vue'
@@ -23,14 +10,14 @@ import gSongPlay from './gSongPlay.vue'
 
 import {
   computed,
+  CSSProperties,
   defineComponent,
-  reactive,
-  ref,
   nextTick,
   onMounted,
   onUnmounted,
+  reactive,
+  ref,
   watch,
-  CSSProperties,
 } from 'vue'
 import ColorThief from 'color-thief-ts'
 import Hls from 'hls.js'
@@ -58,6 +45,17 @@ defineComponent({
     gSongPlay,
   },
 })
+
+const REPEAT = {
+  NONE: 'none',
+  MUSIC: 'music',
+  LIST: 'list',
+  NO_REPEAT: 'no-repeat',
+  REPEAT_ONE: 'repeat-one',
+  REPEAT_ALL: 'repeat-all',
+}
+
+const picThemeCache = {} as any
 
 interface Props {
   music: Song
@@ -95,7 +93,7 @@ const props = withDefaults(defineProps<Props>(), {
   preload: '',
   volume: 0.8,
   shuffle: false,
-  repeat: REPEAT.NO_REPEAT,
+  repeat: 'no-repeat',
   fixed: false,
 })
 
@@ -157,7 +155,7 @@ const data: Data = reactive({
   rejectPlayPromise: null,
 })
 
-let audio = ref<any>(document.createElement('audio'))
+let audio = ref<HTMLAudioElement>(document.createElement('audio'))
 const showModalSongPlay = ref(false)
 const maximizedToggle = ref(true)
 
@@ -378,9 +376,12 @@ const play = () => {
   const audioPlayPromise = audio.value
     .play()
     .then(() => updateMetadata())
-    .catch((error: any) => {
+    .catch((error: unknown) => {
       console.error(error)
-      alertStore.error(error.message)
+
+      if (error instanceof Error) {
+        alertStore.error(error.message)
+      }
     })
 
   if (audioPlayPromise) {
@@ -681,7 +682,7 @@ const initAudio = () => {
     'waiting',
   ]
   mediaEvents.forEach((event: any) => {
-    audio.value.addEventListener(event, (e: string) => emit(event, e))
+    audio.value.addEventListener(event, (e: Event) => emit(event, e))
   })
 
   audio.value.addEventListener('play', onAudioPlay)
@@ -849,10 +850,10 @@ watch(currentMusic, (music: any) => {
 
 // Audio / Media Session Sample
 const updateMetadata = () => {
-  if ('mediaSession' in navigator) {
+  if ('mediaSession' in navigator && navigator.mediaSession.metadata) {
     navigator.mediaSession.metadata = new MediaMetadata({
       title: currentMusic.value.title,
-      artist: currentMusic.value.artist,
+      artist: currentMusic.value.artist?.name || currentMusic.value.artist,
       album: currentMusic.value?.album,
       artwork: [
         { src: currentMusic.value.pic, sizes: '96x96', type: 'image/png' },
@@ -876,11 +877,11 @@ const updatePositionState = () => {
   }
 }
 
-watch(shouldShowNativeControls, (val: any) => {
+watch(shouldShowNativeControls, (val: boolean) => {
   audio.value.controls = val
 })
 
-watch(isAudioMuted, (val: any) => {
+watch(isAudioMuted, (val: boolean) => {
   audio.value.muted = val
 })
 

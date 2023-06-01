@@ -4,6 +4,7 @@ import gCropper from './gCropper.vue'
 import { useAuthStore } from '@/stores'
 import defaultAvatar from '@/assets/images/avatar.png'
 import Global from '@/services/global'
+import { User } from '@/types/users'
 
 defineComponent({
   components: {
@@ -13,7 +14,7 @@ defineComponent({
 
 const authStore = useAuthStore()
 
-const authUser = computed<any>(() => authStore.user)
+const authUser = computed<User | undefined>(() => authStore.user)
 
 interface Props {
   size?: number
@@ -25,7 +26,7 @@ const props = withDefaults(defineProps<Props>(), {
 
 interface Data {
   imageSrc: string
-  fileName: any[] | File | FileList | null | undefined
+  fileName: File | FileList | null | undefined
 }
 
 const data: Data = reactive({
@@ -34,17 +35,14 @@ const data: Data = reactive({
 })
 
 const cropper = ref<boolean>(false)
-const inputFile = ref<any>()
+const inputFile = ref<File | FileList>()
 
 const handleFile = async (file: any) => {
   const formData = new FormData()
   const uploadFile = file.target.files[0]
-  console.log(uploadFile)
   data.imageSrc = URL.createObjectURL(uploadFile)
 
   formData.append('file', uploadFile)
-
-  console.log(formData)
 
   await Global.uploadAvatar(formData)
   // cropper.value = true

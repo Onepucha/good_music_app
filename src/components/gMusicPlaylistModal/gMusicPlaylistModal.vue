@@ -61,7 +61,7 @@ const closeModal = (bool: boolean, showCreateModal: boolean) => {
 
 const closeModalCreate = () => {
   dialogCreateModal.value = false
-  // emit('close-modal-create', false)
+  emit('close-modal-create', false)
 }
 </script>
 
@@ -85,7 +85,6 @@ const closeModalCreate = () => {
       :dialog="dialogCreateModal"
       @add-playlist-item="addPlaylistItem"
       @close-modal="closeModalCreate"
-      @update:model-value="closeModalCreate"
     />
   </div>
 </template>

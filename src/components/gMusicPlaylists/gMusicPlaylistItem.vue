@@ -42,11 +42,22 @@ const songsLength = computed<boolean>(() => {
 })
 
 const hasAddTrack = computed<boolean>(() => {
-  let trackId: any = props.song?._id
+  const trackId: string | undefined = props.song?._id
 
   if (props.item?.songs) {
-    return props.item?.songs.some((track) => track.includes(trackId as string))
+    const songIds: string[] = Array.isArray(props.item.songs)
+      ? props.item.songs.map((song: Song | string) => {
+          if (typeof song === 'string') {
+            return song
+          } else {
+            return song._id
+          }
+        })
+      : []
+
+    return trackId !== undefined && songIds.includes(trackId)
   }
+
   return false
 })
 

@@ -65,7 +65,7 @@ const allGenres = computed<string>(() => {
 
   return genres
     .map((genre) => {
-      return genre.name
+      return genre?.name
     })
     .join(', ')
 })

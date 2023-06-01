@@ -41,7 +41,6 @@ const data: Data = reactive({
   menuTheme: usersStore.menuTheme,
 })
 const authStore = useAuthStore()
-const { user }: any = useAuthStore()
 
 const followBtnText = computed<string>(() => {
   return props.artist?.is_liked ? 'Following' : 'Follow'

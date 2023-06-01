@@ -9,6 +9,7 @@ import gMusicSongList from '@/components/gMusicSong/gMusicSongList.vue'
 import gMusicPlaylistModal from '@/components/gMusicPlaylistModal/gMusicPlaylistModal.vue'
 import { useTranslation } from '@/composables/lang'
 import Songs from '@/services/songs'
+import PlaylistsApi from '@/services/playlists'
 import { downloadSong } from '@/utils/utils'
 import {
   useAlertStore,
@@ -16,7 +17,6 @@ import {
   useLoadingStore,
   usePlayerStore,
 } from '@/stores'
-import PlaylistsApi from '@/services/playlists'
 
 const { t } = useTranslation()
 
@@ -85,14 +85,26 @@ const setLiked = async (
   }
 ) => {
   try {
-    await Songs.setLiked(object.ids, object.is_add_to_liked)
+    await PlaylistsApi.setLiked(object.ids, object.is_add_to_liked)
 
     const index = data.playlistsSong?.findIndex(
       (song) => song._id === object.ids.at(0)
     )
 
-    if (data.playlistsSong && index !== undefined) {
-      data.playlistsSong[index].is_liked = object.is_add_to_liked
+    if (isSingle) {
+      if (data.playlistsSong && index !== undefined) {
+        data.playlistsSong[0].is_liked = object.is_add_to_liked
+      }
+    } else {
+      if (data.playlist) {
+        data.playlist.is_liked = object.is_add_to_liked
+      }
+    }
+
+    if (object.is_add_to_liked) {
+      alertStore.success(t('successLiked'))
+    } else {
+      alertStore.success(t('successNotLiked'))
     }
   } catch (error: unknown) {
     console.error(error)

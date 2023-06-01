@@ -22,7 +22,6 @@ const data: Data = reactive({
 const emit = defineEmits(['music-speed', 'sleep-time', 'app-share'])
 
 const props = defineProps<{
-  stat?: any
   theme?: string
   hasControls?: boolean
   playing?: boolean

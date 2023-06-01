@@ -37,7 +37,7 @@ const handleInput = (event: Event) => {
     }
   }
 
-  let value: any = code.join('')
+  let value: string = code.join('')
 
   emit('change', value)
 

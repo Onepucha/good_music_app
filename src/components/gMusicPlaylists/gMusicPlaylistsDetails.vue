@@ -52,6 +52,16 @@ const infoLength = computed<boolean>(() => {
   return props.playlist?.info ? props.playlist?.info?.length > 0 : false
 })
 
+const shouldLikeButton = computed<boolean>(() => {
+  const userPlaylists = authStore?.user?.own_playlist
+  const currentPlaylistId = props.playlist?._id
+  if (!userPlaylists || !currentPlaylistId) {
+    return false
+  }
+
+  return userPlaylists.some((playlistId) => playlistId === currentPlaylistId)
+})
+
 const setShare = () => {
   copyToClipboard(`${import.meta.env.VITE_API_URL}${route.path}`)
     .then(() => {
@@ -63,7 +73,7 @@ const setShare = () => {
 }
 
 const setLiked = () => {
-  emit('set-liked', true, {
+  emit('set-liked', false, {
     ids: [props.playlist?._id],
     is_add_to_liked: !props.playlist?.is_liked,
   })
@@ -123,7 +133,7 @@ const dontPlayThis = () => {
     <div class="g-music-playlists-details__main">
       <div class="g-music-playlists-details__actions">
         <DynamicIcon
-          v-if="authStore.user"
+          v-if="!shouldLikeButton"
           :size="24"
           name="heart"
           :class="{ active: !!props.playlist?.is_liked }"

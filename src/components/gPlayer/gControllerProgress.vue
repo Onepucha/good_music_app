@@ -57,7 +57,7 @@ const onDocumentMouseUp = (event: MouseEvent) => {
   emit('dragend', seekPos)
 }
 
-const onThumbTouchStart = (event: any) => {
+const onThumbTouchStart = (event: MouseEvent) => {
   const barWidth = barWrap.value.clientWidth
   let percentage =
     (event.clientX - getElementViewLeft(barWrap.value)) / barWidth
@@ -69,7 +69,7 @@ const onThumbTouchStart = (event: any) => {
   document.addEventListener('touchend', onDocumentTouchEnd)
 }
 
-const onDocumentTouchMove = (event: any) => {
+const onDocumentTouchMove = (event: TouchEvent) => {
   const touch = event.changedTouches[0]
   const barWidth = barWrap.value.clientWidth
   let percentage =
@@ -80,7 +80,7 @@ const onDocumentTouchMove = (event: any) => {
   emit('dragging', percentage)
 }
 
-const onDocumentTouchEnd = (e: any) => {
+const onDocumentTouchEnd = (e: TouchEvent) => {
   document.removeEventListener('touchend', onDocumentTouchEnd)
   document.removeEventListener('touchmove', onDocumentTouchMove)
 

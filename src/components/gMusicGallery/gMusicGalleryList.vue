@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import { defineComponent } from 'vue'
+import { Song } from '@/types/artist'
 
 import gMusicGalleryItem from '@/components/gMusicGallery/gMusicGalleryItem.vue'
 import gMusicSongListNotFound from '@/components/gMusicSong/gMusicSongListNotFound.vue'
@@ -14,7 +15,7 @@ defineComponent({
 interface Props {
   title?: string
   subTitle?: string
-  list: any
+  list: Array<Song>
   type: string
   size?: number
   overflow?: boolean

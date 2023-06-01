@@ -98,15 +98,6 @@ const setLiked = async (
       if (data.song) {
         data.song.is_liked = object.is_add_to_liked
       }
-
-      if (
-        data.song &&
-        data.artistSong &&
-        data.song._id === data.artistSong[index]._id &&
-        index !== undefined
-      ) {
-        data.artistSong[index].is_liked = object.is_add_to_liked
-      }
     } else {
       if (
         data.song &&
@@ -119,6 +110,12 @@ const setLiked = async (
       if (data.artistSong && index !== undefined) {
         data.artistSong[index].is_liked = object.is_add_to_liked
       }
+    }
+
+    if (object.is_add_to_liked) {
+      alertStore.success(t('successLiked'))
+    } else {
+      alertStore.success(t('successNotLiked'))
     }
   } catch (error: unknown) {
     console.error(error)
@@ -154,7 +151,7 @@ const onAudioPlay = async (item: { song: Song; index: number }) => {
       {
         _id: item.song?._id,
         title: item.song?.name,
-        artist: findArtist.value?.name,
+        artist: item.song?.artists?.at(0),
         src: songUrl.data?.url,
         pic: item.song?.cover_src,
         is_liked: item.song?.is_liked,

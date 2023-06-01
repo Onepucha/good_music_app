@@ -9,7 +9,7 @@ import gMusicPlaylistModal from '@/components/gMusicPlaylistModal/gMusicPlaylist
 import gLoader from '@/components/gLoader/gLoader.vue'
 import DynamicIcon from '@/components/DynamicIcon.vue'
 import Albums from '@/services/albums'
-import { Album, AlbumArtist, AlbumSong, Playlists, Song } from '@/types/artist'
+import { Album, Artist, Playlists, Song } from '@/types/artist'
 
 import { useTranslation } from '@/composables/lang'
 import { useRoute, useRouter } from 'vue-router'
@@ -41,7 +41,7 @@ interface Data {
   page: number
   albumCount: number
   isLoading: boolean
-  songPlaylist: Array<AlbumSong> | AlbumSong | undefined
+  songPlaylist: Array<Song> | undefined
 }
 
 const data: Data = reactive({
@@ -80,7 +80,7 @@ const onRecently = () => {
   console.log('Recently')
 }
 
-const shufflePlay = (songs: Array<Song>, artist: AlbumArtist) => {
+const shufflePlay = (songs: Array<Song>, artist: Artist) => {
   // Создаем копию массива песен
   const shuffledSongs = songs.slice()
 
@@ -99,7 +99,7 @@ const shufflePlay = (songs: Array<Song>, artist: AlbumArtist) => {
     {
       _id: songs?.at(0)?._id,
       title: songs.at(0)?.name,
-      artist: artist?.name,
+      artist: artist,
       src: songs.at(0)?.url,
       pic: songs.at(0)?.cover_src,
       is_liked: songs.at(0)?.is_liked,
@@ -116,8 +116,12 @@ const shufflePlay = (songs: Array<Song>, artist: AlbumArtist) => {
 
 const addPlayList = (tracks: Album) => {
   dialog.value = true
-  data.songPlaylist = tracks?.songs as Array<AlbumSong>
+
+  if (tracks?.songs) {
+    data.songPlaylist = tracks?.songs as Array<Song>
+  }
 }
+
 const addPlaylistSong = async (playlist: Playlists) => {
   await editPlaylist(playlist)
 }

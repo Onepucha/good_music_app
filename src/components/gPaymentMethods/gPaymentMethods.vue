@@ -1,17 +1,13 @@
 <script setup lang="ts">
 import { defineComponent } from 'vue'
 import DynamicIcon from '@/components/DynamicIcon.vue'
+import { Payment } from '@/types/options'
 
 defineComponent({
   components: {
     DynamicIcon,
   },
 })
-
-interface Payment {
-  value: string
-  label: string
-}
 
 const props = defineProps<{
   payment: Payment

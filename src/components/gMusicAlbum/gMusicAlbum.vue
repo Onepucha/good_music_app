@@ -3,7 +3,7 @@ import { computed, defineComponent, reactive } from 'vue'
 
 import DynamicIcon from '@/components/DynamicIcon.vue'
 import { useTranslation } from '@/composables/lang'
-import { Album, AlbumArtist } from '@/types/artist'
+import { Album, Artist } from '@/types/artist'
 import {
   useAlertStore,
   useAuthStore,
@@ -36,7 +36,7 @@ const data: Data = reactive({
   menuTheme: usersStore.menuTheme,
 })
 
-const findArtist = computed<AlbumArtist | undefined>(() => {
+const findArtist = computed<Artist | undefined>(() => {
   return props.album?.artists?.at(0)
 })
 

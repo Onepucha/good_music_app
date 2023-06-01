@@ -2,6 +2,7 @@
 import { useTranslation } from '@/composables/lang'
 import DynamicIcon from '@/components/DynamicIcon.vue'
 import { defineComponent } from 'vue'
+import { ItemPlan } from '@/types/options'
 
 const { t } = useTranslation()
 
@@ -12,7 +13,7 @@ defineComponent({
 })
 
 const props = defineProps<{
-  item?: any
+  item?: ItemPlan
 }>()
 </script>
 

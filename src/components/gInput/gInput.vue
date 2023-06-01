@@ -12,7 +12,7 @@ const props = defineProps<{
   icon?: string
   iconClass?: string
   password?: boolean
-  type?: any
+  type?: boolean
 }>()
 
 const text = ref<string>('')

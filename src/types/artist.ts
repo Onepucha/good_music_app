@@ -15,10 +15,10 @@ export interface Artist {
 }
 
 export interface Album {
-  data: any
   description_en: string
   description_ru: string
   _id: string
+  old_id?: string
   __v?: string | number
   cover_src?: string
   album_code?: string
@@ -29,47 +29,17 @@ export interface Album {
   code: string
   is_verified?: boolean
   release_date?: string
-  artists?: Array<Artist>
-  songs?: Array<string>
+  artists?: Array<Artist> | undefined
+  songs?: Array<Song> | Array<string> | undefined
   genres?: Array<Genre>
   is_liked?: boolean
-}
-
-export interface AlbumArtist {
-  album: Array<string>
-  code: string
-  genre: Array<string>
-  is_verified: boolean
-  name: string
-  song: Array<string>
-  __v: number | string
-  _id: string
-}
-
-export interface AlbumSong {
-  albums: Array<string>
-  artists: Array<string>
-  code: string
-  genres: Array<string>
-  label: string
-  name: string
-  release_date: string
-  url: string
-  __v: number | string
-  _id: string
-}
-
-export interface AlbumGenre {
-  code: string
-  name: string
-  __v: number | string
-  _id: string
 }
 
 export interface Song {
   _id: string
   __v?: string | number
   cover_src?: string
+  pic?: string
   album_code?: string
   release_date?: string
   issueYear?: string
@@ -77,20 +47,20 @@ export interface Song {
   name?: string
   code?: string
   info?: string
-  albums?: Array<Genre>
-  genres?: Array<Genre>
+  albums?: Array<Album> | Array<string> | undefined
+  genres?: Array<Genre> | Array<string> | undefined
   song?: Array<string>
   description?: Array<string>
-  artists?: Array<Artist> | undefined
+  artists?: Array<Artist> | Array<string> | undefined
   is_verified?: boolean
   url?: string
   release_data?: string
   label?: string
   title?: string
-  artist?: string
+  artist?: Artist
   src?: string
-  pic?: string
   is_liked?: boolean
+  duration?: number | null
 }
 
 export interface Genre {
@@ -113,7 +83,8 @@ export interface Chart {
 
 export interface Playlists {
   _id: string
-  __v?: string
+  __v?: string | number
+  user: string
   name: string
   icon?: string
   cover_src?: string
@@ -122,9 +93,11 @@ export interface Playlists {
   href: string
   code: string
   public: true
-  songs: Array<Song>
-  albums?: Array<Genre>
-  genres?: Array<AlbumGenre>
+  description: string
+  songs: Array<Song> | Array<string> | string
+  albums?: Array<Album>
+  genres?: Array<Genre>
   is_liked?: boolean
+  is_own?: boolean
   info?: string[] | string | undefined
 }

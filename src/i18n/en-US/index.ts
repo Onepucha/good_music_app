@@ -2,6 +2,8 @@ export default {
   play: 'Play',
   pause: 'Pause',
   success: 'Success',
+  successLiked: 'Success Liked!',
+  successNotLiked: 'Do not like.',
   error: 'Error',
   layouts: {
     navs: {
