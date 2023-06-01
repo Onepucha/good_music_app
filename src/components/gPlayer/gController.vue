@@ -4,6 +4,7 @@ import { computed, defineComponent } from 'vue'
 import gControllerProgress from './gControllerProgress.vue'
 import DynamicIcon from '@/components/DynamicIcon.vue'
 import gPlayBtn from '@/components/gPlayBtn/gPlayBtn.vue'
+import { Stat } from '@/types/options'
 
 defineComponent({
   components: {
@@ -25,20 +26,24 @@ const emit = defineEmits([
 ])
 
 const props = defineProps<{
-  stat?: any
+  stat?: Stat | undefined
   theme?: string
   hasControls?: boolean
   playing?: boolean
 }>()
 
 const loadProgress = computed<number>(() => {
-  if (props.stat?.duration === 0) return 0
-  return props.stat?.loadedTime / props.stat?.duration
+  if (props.stat && props.stat.duration !== 0) {
+    return props.stat.loadedTime / props.stat.duration
+  }
+  return 0
 })
 
 const playProgress = computed<number>(() => {
-  if (props.stat.duration === 0) return 0
-  return props.stat.playedTime / props.stat.duration
+  if (props.stat && props.stat.duration !== 0 && props.stat.playedTime) {
+    return props.stat.playedTime / props.stat.duration
+  }
+  return 0
 })
 
 const secondToTime = (second: number) => {

@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { computed, defineComponent, ref } from 'vue'
+import { computed, CSSProperties, defineComponent, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import gPlayBtn from '@/components/gPlayBtn/gPlayBtn.vue'
 
@@ -37,7 +37,7 @@ const props = withDefaults(defineProps<Props>(), {
 
 const focus = ref<boolean>(false)
 
-const randomGradient = computed<any>(() => {
+const randomGradient = computed<CSSProperties>(() => {
   let colors = [
     '#FCE17B',
     '#F8A088',
@@ -63,7 +63,7 @@ const randomGradient = computed<any>(() => {
   }
 })
 
-const nameAndInfoCharts = computed<any>(() => {
+const nameAndInfoCharts = computed<{ name: string; info: string }>(() => {
   let nameAndInfo = props.item.name.split('-')
 
   return {

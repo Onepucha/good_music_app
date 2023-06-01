@@ -42,11 +42,11 @@ const data: Data = reactive({
   menuTheme: usersStore.menuTheme,
 })
 
-const findArtist = computed<any>(() => {
+const findArtist = computed<Artist | undefined>(() => {
   return props.artist ? props.artist : props.song?.artists?.at(0)
 })
 
-const findArtistId = computed<any>(() => {
+const findArtistId = computed<string | RouteLocationRaw | undefined>(() => {
   return props.artistId ? props.artistId : props.song?.artists?.at(0)?._id
 })
 

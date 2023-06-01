@@ -10,7 +10,7 @@ import gMusicSongListNotFound from '@/components/gMusicSong/gMusicSongListNotFou
 import gMusicPlaylistModal from '@/components/gMusicPlaylistModal/gMusicPlaylistModal.vue'
 import { useTranslation } from '@/composables/lang'
 import { downloadSong } from '@/utils/utils'
-import { Album, AlbumSong, Playlists } from '@/types/artist'
+import { Album, Playlists, Song } from '@/types/artist'
 import { useRoute, useRouter } from 'vue-router'
 import Albums from '@/services/albums'
 import PlaylistsApi from '@/services/playlists'
@@ -39,7 +39,7 @@ interface Data {
   name: string
   description: string
   playlistOptions: any
-  songPlaylist: Array<AlbumSong> | AlbumSong | undefined
+  songPlaylist: Array<Song> | Song | undefined
 }
 
 const data: Data = reactive({
@@ -65,8 +65,12 @@ const onRecently = () => {
 
 const addPlayList = (tracks: Album) => {
   dialog.value = true
-  data.songPlaylist = tracks?.songs as Array<AlbumSong>
+
+  if (tracks?.songs) {
+    data.songPlaylist = tracks?.songs as Array<Song>
+  }
 }
+
 const addPlaylistSong = async (playlist: Playlists) => {
   await editPlaylist(playlist)
 }

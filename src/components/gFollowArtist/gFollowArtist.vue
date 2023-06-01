@@ -19,7 +19,7 @@ const props = defineProps<{
 
 const follow = ref<boolean>(false)
 
-const toggleFollow = (artist: any) => {
+const toggleFollow = (artist: Artist) => {
   follow.value = !follow.value
   emit('add-follow', artist)
 }

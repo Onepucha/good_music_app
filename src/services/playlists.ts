@@ -1,4 +1,5 @@
 import { api } from '@/boot/axios'
+import { AxiosResponse } from 'axios'
 
 class Playlists {
   getAll(query: any): Promise<Array<Playlists>> {
@@ -55,6 +56,13 @@ class Playlists {
 
   removePlaylist(id: string) {
     return api.delete(`/playlist/${id}`)
+  }
+
+  setLiked(ids: string[], is_add_to_liked: boolean): Promise<AxiosResponse> {
+    return api.post('/playlist/manage', {
+      ids,
+      is_add_to_liked,
+    })
   }
 }
 

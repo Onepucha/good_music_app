@@ -1,10 +1,12 @@
 <script setup lang="ts">
 import { parseLrc } from '@/utils/utils'
 import { computed, CSSProperties, reactive, watch } from 'vue'
+import { Stat } from '@/types/options'
+import { Song } from '@/types/artist'
 
 const props = defineProps<{
-  currentMusic: any
-  playStat: object | any
+  currentMusic: Song
+  playStat: Stat
 }>()
 
 interface Data {
@@ -43,7 +45,7 @@ watch(
 
 watch(
   () => props.playStat.playedTime,
-  (playedTime: any) => {
+  (playedTime: number) => {
     for (let i = 0; i < lrcLines.value.length; i++) {
       const line = lrcLines.value[i]
       const nextLine = lrcLines.value[i + 1]

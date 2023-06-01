@@ -22,7 +22,7 @@ defineComponent({
 })
 
 const $q = useQuasar()
-let player = ref<any>(null)
+let player = ref<HTMLElement>(document.createElement('div'))
 
 interface Data {
   volume: number
@@ -36,43 +36,67 @@ const data: Data = reactive({
   muted: false,
   music: {
     _id: '1',
+    name: 'Blinding Lights',
     title: 'Blinding Lights',
-    artist: {
-      _id: '1',
-      name: 'The Weeknd',
-    },
+    artist: 'The Weeknd',
+    artists: [
+      {
+        _id: '1',
+        code: '1',
+        name: 'The Weeknd',
+      },
+    ],
     src: '/audio/The_Weeknd_Blinding_Lights.mp3',
+    cover_src: '/audio/avatars/The_Weeknd.jpeg',
     pic: '/audio/avatars/The_Weeknd.jpeg',
   },
   list: [
     {
       _id: '1',
+      name: 'Blinding Lights',
       title: 'Blinding Lights',
-      artist: {
-        _id: '1',
-        name: 'The Weeknd',
-      },
+      artist: 'The Weeknd',
+      artists: [
+        {
+          _id: '1',
+          code: '1',
+          name: 'The Weeknd',
+        },
+      ],
       src: '/audio/The_Weeknd_Blinding_Lights.mp3',
+      cover_src: '/audio/avatars/The_Weeknd.jpeg',
       pic: '/audio/avatars/The_Weeknd.jpeg',
     },
     {
       _id: '2',
+      name: '7 rings',
       title: '7 rings',
-      artist: {
-        _id: '2',
-        name: 'Ariana Grande',
-      },
+      artist: 'Ariana Grande',
+      artists: [
+        {
+          _id: '2',
+          code: '2',
+          name: 'Ariana Grande',
+        },
+      ],
       src: '/audio/Ariana_Grande_7_rings.mp3',
+      cover_src: '/audio/avatars/Ariana_Grande.jpeg',
       pic: '/audio/avatars/Ariana_Grande.jpeg',
     },
     {
       _id: '3',
+      name: 'WITHOUT YOU',
       title: 'WITHOUT YOU',
-      artist: {
-        _id: '3',
-        name: 'The Kid LAROI.',
-      },
+      artist: 'The Kid LAROI.',
+      artists: [
+        {
+          _id: '3',
+          code: '3',
+          name: 'The Kid LAROI.',
+        },
+      ],
       src: '/audio/The_Kid_LAROI_WITHOUT_YOU.mp3',
+      cover_src: '/audio/avatars/The_Kid_LAROI.jpeg',
       pic: '/audio/avatars/The_Kid_LAROI.jpeg',
     },
   ],
@@ -102,7 +126,7 @@ onMounted(() => {
     {
       _id: data.music._id,
       title: data.music?.title,
-      artist: data.music?.artist,
+      artist: data.music?.artists?.at(0),
       src: data.music?.src,
       pic: data.music?.pic,
     } as Song,

@@ -17,6 +17,7 @@ export interface User {
   updatedAt: string
   __v: number
   token: string
+  own_playlist: Array<string>
 }
 
 export interface LoginInput {

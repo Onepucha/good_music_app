@@ -16,8 +16,9 @@ const props = defineProps<{
 
 const emit = defineEmits(['click-handler'])
 
-const clickHandler = (event: any) => {
-  emit('click-handler', event.target.value)
+const clickHandler = (event: MouseEvent) => {
+  const target = event.target as HTMLInputElement
+  emit('click-handler', target.value)
 }
 </script>
 

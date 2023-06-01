@@ -93,13 +93,15 @@ const shufflePlay = () => {
     ;[shuffledSongs[i], shuffledSongs[j]] = [shuffledSongs[j], shuffledSongs[i]]
   }
 
+  console.log(shuffledSongs)
+
   playerStore.setMusicList(shuffledSongs)
 
   playerStore.setMusic(
     {
       _id: shuffledSongs?.at(0)?._id,
       title: shuffledSongs.at(0)?.name,
-      artist: shuffledSongs?.at(0)?.artists?.at(0)?.name,
+      artist: shuffledSongs?.at(0)?.artists?.at(0),
       src: shuffledSongs.at(0)?.url,
       pic: shuffledSongs.at(0)?.cover_src,
       is_liked: shuffledSongs.at(0)?.is_liked,
@@ -203,6 +205,32 @@ const onAudioPause = () => {
   playerStore.player.pause()
 }
 
+const setLiked = async (
+  isSingle: boolean,
+  object: {
+    ids: string[]
+    is_add_to_liked: boolean
+  }
+) => {
+  try {
+    await Songs.setLiked(object.ids, object.is_add_to_liked)
+
+    const index = data.songs?.findIndex((song) => song._id === object.ids.at(0))
+
+    if (data.songs && index !== undefined) {
+      data.songs[index].is_liked = object.is_add_to_liked
+    }
+
+    if (object.is_add_to_liked) {
+      alertStore.success(t('successLiked'))
+    } else {
+      alertStore.success(t('successNotLiked'))
+    }
+  } catch (error: unknown) {
+    console.error(error)
+  }
+}
+
 const goToAlbum = (url: string) => {
   router.push(`/album/${url}`)
 }
@@ -247,6 +275,7 @@ const openSearch = () => {
         @add-playlist="addPlayList"
         @dont-play-this="dontPlayThis"
         @go-to-album="goToAlbum"
+        @set-liked="setLiked"
       />
 
       <template #loading>

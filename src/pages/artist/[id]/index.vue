@@ -119,6 +119,12 @@ const setLiked = async (
     if (data.artistSong && index !== undefined) {
       data.artistSong[index].is_liked = object.is_add_to_liked
     }
+
+    if (object.is_add_to_liked) {
+      alertStore.success(t('successLiked'))
+    } else {
+      alertStore.success(t('successNotLiked'))
+    }
   } catch (error: unknown) {
     console.error(error)
   }
@@ -153,7 +159,7 @@ const onAudioPlay = async (item: { song: Song; index: number }) => {
       {
         _id: item.song?._id,
         title: item.song?.name,
-        artist: data?.artist?.name,
+        artist: item.song?.artists?.at(0),
         src: songUrl.data?.url,
         pic: item.song?.cover_src,
         is_liked: item.song?.is_liked,

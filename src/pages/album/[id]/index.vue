@@ -70,7 +70,7 @@ const findArtist = computed<Artist | undefined>(() => {
 const getAlbumCode = async () => {
   try {
     let id: string | string[] = route.params.id
-    const response = await Albums.getInfo({ id })
+    const response: any = await Albums.getInfo({ id })
     data.album = response.data.album
   } catch (error: unknown) {
     console.error(error)
@@ -101,7 +101,11 @@ const setLiked = async (
       data.album.is_liked = object.is_add_to_liked
     }
 
-    alertStore.success(t('success'))
+    if (object.is_add_to_liked) {
+      alertStore.success(t('successLiked'))
+    } else {
+      alertStore.success(t('successNotLiked'))
+    }
   } catch (error: unknown) {
     console.error(error)
     alertStore.error(t('error'))
@@ -137,7 +141,7 @@ const onAudioPlay = async (item: { song: Song; index: number }) => {
       {
         _id: item.song?._id,
         title: item.song?.name,
-        artist: findArtist.value?.name,
+        artist: findArtist.value,
         src: songUrl.data?.url,
         pic: item.song?.cover_src,
         is_liked: item.song?.is_liked,

@@ -86,7 +86,6 @@
             :dense="dense"
             :placeholder="t('gMusicComments.yourComment')"
             standout
-            type="textarea"
           />
 
           <q-btn
@@ -109,7 +108,6 @@
         :dense="dense"
         :placeholder="t('gMusicComments.yourComment')"
         standout
-        type="textarea"
       />
       <q-btn
         :label="t('gMusicComments.buttonAddComment')"

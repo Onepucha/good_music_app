@@ -99,6 +99,8 @@
 
 body.body--dark {
   .q-menu {
+    background: $dark-2;
+
     &.popover-menu {
       .q-list {
         .q-item {

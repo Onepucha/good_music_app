@@ -56,7 +56,7 @@ const onDragBegin = (e: MouseEvent) => {
   }
 }
 
-const onDocumentMouseMove = (e: any) => {
+const onDocumentMouseMove = (e: MouseEvent) => {
   data.hasMovedSinceMouseDown = true
   emit('dragging', {
     offsetLeft: e.clientX - data.dragStartX,

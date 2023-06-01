@@ -53,10 +53,10 @@ const listHeightStyle = computed<CSSProperties>(() => {
             {{ index + 1 }}
           </span>
           <span class="g-player-list-title">
-            {{ aMusic.title || 'Untitled' }}
+            {{ aMusic.name || 'Untitled' }}
           </span>
           <span class="g-player-list-author">
-            {{ aMusic.artist || 'Unknown' }}
+            {{ aMusic.artists?.at(0)?.name || 'Unknown' }}
           </span>
         </li>
       </ol>

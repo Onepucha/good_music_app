@@ -2,20 +2,21 @@
 import { onMounted, reactive, ref } from 'vue'
 import Cropper from 'cropperjs'
 import 'cropperjs/dist/cropper.css'
+import { CropperInstance } from '@/types/options'
 
 const props = defineProps<{
   imageSrc: string
 }>()
 
 interface Data {
-  cropper: any
-  destination: object
+  cropper: CropperInstance | undefined
+  destination: string | undefined
   preview: boolean
 }
 
 const data: Data = reactive({
-  cropper: {},
-  destination: {},
+  cropper: undefined,
+  destination: '',
   preview: false,
 })
 
@@ -27,26 +28,28 @@ const startCropper = () => {
     viewMode: 1,
     aspectRatio: 1 / 1,
     crop: () => {
-      data.destination = data.cropper.getCroppedCanvas().toDataURL('image/jpeg')
+      data.destination = data.cropper
+        ?.getCroppedCanvas()
+        .toDataURL('image/jpeg')
       data.preview = true
     },
   })
 }
 
 const destroyCropper = () => {
-  data.cropper.destroy()
+  data.cropper?.destroy()
 }
 
 const resetCropper = () => {
-  data.cropper.reset()
+  data.cropper?.reset()
 }
 
 const rotateLeft = () => {
-  data.cropper.rotate(-90)
+  data.cropper?.rotate(-90)
 }
 
 const rotateRight = () => {
-  data.cropper.rotate(90)
+  data.cropper?.rotate(90)
 }
 
 const finish = () => {
