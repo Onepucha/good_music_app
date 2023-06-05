@@ -187,9 +187,9 @@ onUnmounted(() => {
 
         <router-link v-if="isAuth" class="q-header__profile" to="/profile">
           <div class="q-header__profile-avatar">
-            <q-avatar :size="'32px'" color="primary">
+            <q-avatar :size="'32px'" :color="authUser?.avatar ? '' : 'primary'">
               <template v-if="authUser.avatar">
-                <img :alt="authUser.fullname" src="/images/icons/avatar.png" />
+                <img :alt="authUser.fullname" :src="authUser.avatar" />
               </template>
 
               <template v-else>

@@ -61,6 +61,7 @@ const finishCropper = (croppedImage: string) => {
     clearable
     class="hidden"
     label="Browse files..."
+    max-file-size="1024"
     @input="handleFile"
   />
   <div id="display-area">

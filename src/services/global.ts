@@ -13,7 +13,7 @@ class Global {
       'Content-Type': 'multipart/form-data',
     }
 
-    return api.post('/file/upload', file, { headers })
+    return api.post('/file/avatar', file, { headers })
   }
 }
 

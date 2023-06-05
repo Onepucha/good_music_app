@@ -12,7 +12,7 @@ const props = defineProps<{
   icon?: string
   iconClass?: string
   password?: boolean
-  type?: boolean
+  type?: string
 }>()
 
 const text = ref<string>('')
@@ -38,7 +38,13 @@ const onBlur = () => {
   <div class="g-input">
     <q-input
       v-model="text"
-      :type="isPassword && props.password ? 'password' : 'text'"
+      :type="
+        isPassword && props.password
+          ? 'password'
+          : props?.type
+          ? props.type
+          : 'text'
+      "
       class="g-input"
       v-bind="$attrs"
       @blur="onBlur"
