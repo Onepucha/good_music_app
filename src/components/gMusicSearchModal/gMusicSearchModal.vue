@@ -186,6 +186,7 @@ interface Data {
   searchList: any
   playlist?: Playlists | undefined
   followArtistList: string[] | any
+  songPlaylist: string[] | any
 }
 
 const data: Data = reactive({
@@ -264,6 +265,7 @@ const search = async () => {
   searchResults.value = []
 
   if (searchQuery.value.length < 3) {
+    isLoading.value = false
     searchResults.value = []
     recentSearchesVisible.value = true
     return
@@ -357,7 +359,7 @@ const onAudioPlay = async (item: { song: Song; index: number }) => {
   try {
     const songUrl = await Songs.playSong(item.song._id)
 
-    playerStore.setMusicList(data.songs || [])
+    playerStore.setMusicList(data.songPlaylist || [])
 
     playerStore.setMusic(
       {
@@ -467,7 +469,7 @@ const addFollow = async (artist: Artist) => {
 
     await saveFollowArtist(false, [artist._id])
   } else {
-    const followItem = data.artistList.filter(
+    const followItem = data.followArtistList.filter(
       (item: any) => item._id === artist._id
     )
 
