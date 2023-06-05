@@ -117,12 +117,6 @@ const classesLayout = () => {
   data.isMobile = $q.screen.name === 'xs'
   return $q.screen.name === 'xs' ? 'hHh lpR fFf' : 'lHh lpR fFf'
 }
-
-const avatarOrFullName = computed<string>(() =>
-  typeof authUser.value.avatar !== 'undefined' && authUser.value.avatar !== ''
-    ? authUser.value.avatar
-    : authStore.fullname[0].toUpperCase()
-)
 </script>
 
 <template>
