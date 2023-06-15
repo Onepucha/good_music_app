@@ -9,8 +9,10 @@ import { Album } from '@/types/artist'
 
 import { useTranslation } from '@/composables/lang'
 import Albums from '@/services/albums'
+import { useAuthStore } from '@/stores'
 
 const { t } = useTranslation()
+const authStore = useAuthStore()
 
 defineComponent({
   components: {
@@ -56,6 +58,10 @@ const getAllNewReleases = async (index: number, done: () => void) => {
     scrollTargetRef.value.stop()
   }
 }
+
+const openSearch = () => {
+  authStore.searchModal = true
+}
 </script>
 
 <template>
@@ -66,7 +72,7 @@ const getAllNewReleases = async (index: number, done: () => void) => {
         icon="back"
         @click.prevent="$router.go(-1)"
       />
-      <DynamicIcon :size="28" name="search" />
+      <DynamicIcon :size="28" name="search" @click.prevent="openSearch" />
     </div>
 
     <q-infinite-scroll
