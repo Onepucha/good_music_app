@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, defineComponent, reactive, ref } from 'vue'
 import gCropper from './gCropper.vue'
-import { useAuthStore } from '@/stores'
+import { useAlertStore, useAuthStore } from '@/stores'
 import defaultAvatar from '@/assets/images/avatar.png'
 import Global from '@/services/global'
 import { User } from '@/types/users'
@@ -13,6 +13,7 @@ defineComponent({
 })
 
 const authStore = useAuthStore()
+const alertStore = useAlertStore()
 
 const authUser = computed<User | undefined>(() => authStore.user)
 
@@ -38,13 +39,21 @@ const cropper = ref<boolean>(false)
 const inputFile = ref<File | FileList>()
 
 const handleFile = async (file: any) => {
-  const formData = new FormData()
-  const uploadFile = file.target.files[0]
-  data.imageSrc = URL.createObjectURL(uploadFile)
+  try {
+    const formData = new FormData()
+    const uploadFile = file.target.files[0]
+    data.imageSrc = URL.createObjectURL(uploadFile)
 
-  formData.append('file', uploadFile)
+    formData.append('file', uploadFile)
 
-  await Global.uploadAvatar(formData)
+    await Global.uploadAvatar(formData)
+  } catch (error: unknown) {
+    console.error(error)
+    if (error instanceof Error) {
+      alertStore.error(error.message)
+      data.imageSrc = authStore?.user?.avatar || ''
+    }
+  }
   // cropper.value = true
 }
 

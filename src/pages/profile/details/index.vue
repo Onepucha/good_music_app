@@ -7,6 +7,7 @@ import gMusicGalleryList from '@/components/gMusicGallery/gMusicGalleryList.vue'
 import { useTranslation } from '@/composables/lang'
 import { useAuthStore, useLoadingStore } from '@/stores'
 import PlaylistsApi from '@/services/playlists'
+import { declensionOfWord } from '@/utils/utils'
 
 const { t } = useTranslation()
 
@@ -101,13 +102,27 @@ onMounted(async () => {
                 <div class="g-profile-details__generic-main">
                   <div class="g-profile-details__user-info">
                     <div class="g-profile-details__user-info-comments">
-                      <h4>15</h4>
-                      <span>{{ t('pages.profile.details.infoComments') }}</span>
+                      <h4>0</h4>
+                      <span>
+                        {{
+                          declensionOfWord(authStore?.user?.songs?.length, [
+                            t('pages.profile.details.infoComment'),
+                            t('pages.profile.details.infoComments'),
+                          ])
+                        }}
+                      </span>
                     </div>
 
                     <div class="g-profile-details__user-info-likes">
-                      <h4>206</h4>
-                      <span>{{ t('pages.profile.details.infoLikes') }}</span>
+                      <h4>{{ authStore?.user?.songs?.length || 0 }}</h4>
+                      <span>
+                        {{
+                          declensionOfWord(authStore?.user?.songs?.length, [
+                            t('pages.profile.details.infoLike'),
+                            t('pages.profile.details.infoLikes'),
+                          ])
+                        }}
+                      </span>
                     </div>
                   </div>
                 </div>

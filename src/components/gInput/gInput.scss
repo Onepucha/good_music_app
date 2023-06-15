@@ -41,12 +41,13 @@
           color: $greyscale500;
         }
 
-        &[type="password"]:not(:placeholder-shown) {
+        &[type='password']:not(:placeholder-shown) {
           font-family: Verdana, sans-serif;
         }
       }
 
       .q-field__marginal {
+        gap: 12px;
         height: 54px;
 
         .g-icon {

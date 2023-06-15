@@ -94,6 +94,10 @@ const onSaveProfile = async () => {
     }
   }
 }
+
+const resendEmail = () => {
+  console.log('Resend email')
+}
 </script>
 
 <template>
@@ -185,6 +189,15 @@ const onSaveProfile = async () => {
             >
               <template #append>
                 <DynamicIcon :size="20" name="email_verify" />
+                <q-btn
+                  v-if="!authStore.user.email_verified"
+                  :label="t('pages.profile.edit.emailResend')"
+                  rounded
+                  text-color="''"
+                  unelevated
+                  @click.prevent="resendEmail"
+                >
+                </q-btn>
               </template>
             </g-input>
 

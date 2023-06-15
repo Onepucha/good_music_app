@@ -42,12 +42,28 @@ const routes: RouteRecordRaw[] = [
     ],
   },
   {
+    path: '/new-releases',
+    name: 'NewRelease',
+    component: () => import('layouts/default.vue'),
+    children: [
+      {
+        name: 'NewRelease',
+        path: '',
+        component: () => import('pages/new-releases/index.vue'),
+      },
+    ],
+  },
+  {
     path: '/album',
     name: 'Album',
     component: () => import('layouts/default.vue'),
     children: [
       {
         name: 'Album',
+        path: '',
+        component: () => import('pages/album/index.vue'),
+      },
+      {
         path: ':id',
         component: () => import('pages/album/[id]/index.vue'),
       },

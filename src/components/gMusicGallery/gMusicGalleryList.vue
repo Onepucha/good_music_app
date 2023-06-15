@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { defineComponent } from 'vue'
+import { computed, defineComponent } from 'vue'
 import { Song } from '@/types/artist'
 
 import gMusicGalleryItem from '@/components/gMusicGallery/gMusicGalleryItem.vue'
@@ -29,6 +29,10 @@ const props = withDefaults(defineProps<Props>(), {
   size: 0,
   overflow: false,
 })
+
+const typeRoutes = computed<string>(() => {
+  return props.type === 'new-releases' ? 'album' : props.type
+})
 </script>
 
 <template>
@@ -57,7 +61,7 @@ const props = withDefaults(defineProps<Props>(), {
           :key="item.id"
           :item="item"
           :size="props.size"
-          :type="props.type"
+          :type="typeRoutes"
         />
       </div>
       <g-music-song-list-not-found v-else />
