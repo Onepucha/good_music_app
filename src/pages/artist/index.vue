@@ -7,9 +7,10 @@ import gLoader from '@/components/gLoader/gLoader.vue'
 import DynamicIcon from '@/components/DynamicIcon.vue'
 
 import { useTranslation } from '@/composables/lang'
-import { useArtistsStore } from '@/stores'
+import { useArtistsStore, useAuthStore } from '@/stores'
 
 const { t } = useTranslation()
+const authStore = useAuthStore()
 
 defineComponent({
   components: {
@@ -57,6 +58,10 @@ const getAllArtist = async (index: number, done: () => void) => {
     scrollTargetRef.value.stop()
   }
 }
+
+const openSearch = () => {
+  authStore.searchModal = true
+}
 </script>
 
 <template>
@@ -67,7 +72,7 @@ const getAllArtist = async (index: number, done: () => void) => {
         icon="back"
         @click.prevent="$router.go(-1)"
       />
-      <DynamicIcon :size="28" name="search" />
+      <DynamicIcon :size="28" name="search" @click.prevent="openSearch" />
     </div>
 
     <q-infinite-scroll ref="scrollTargetRef" :offset="250" @load="getAllArtist">
