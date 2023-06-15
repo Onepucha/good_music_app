@@ -159,7 +159,6 @@ const onSaveProfile = async () => {
     let dob: Date | string = dayjs(data.dob).format('YYYY-DD-MM')
 
     await authStore.setProfile({
-      avatar: data.avatar,
       fullname: data.fullname,
       nickname: data.nickname,
       birth_date: new Date(dob),

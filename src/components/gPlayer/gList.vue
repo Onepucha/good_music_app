@@ -45,7 +45,7 @@ const listHeightStyle = computed<CSSProperties>(() => {
         <li
           v-for="(aMusic, index) of musicList"
           :key="index"
-          :class="{ 'g-player-list-light': aMusic === currentMusic }"
+          :class="{ 'g-player-list-light': aMusic._id === currentMusic._id }"
           @click="emit('selectsong', aMusic)"
         >
           <span class="g-player-list-cur" :style="{ background: theme }"></span>
@@ -112,13 +112,6 @@ const listHeightStyle = computed<CSSProperties>(() => {
       background-color: #ccc;
     }
 
-    @include hover-supported {
-      li.g-player-list-light:not(:hover) {
-        background-color: inherit;
-        transition: inherit;
-      }
-    }
-
     &:not(:hover) {
       li.g-player-list-light {
         transition: $animate-delay;
@@ -134,6 +127,7 @@ const listHeightStyle = computed<CSSProperties>(() => {
       border-top: 1px solid #e9e9e9;
       cursor: pointer;
       transition: $animate-delay;
+      color: $white;
       overflow: hidden;
       margin: 0;
       text-align: start;
@@ -145,10 +139,12 @@ const listHeightStyle = computed<CSSProperties>(() => {
 
       @include hover-supported {
         background: #efefef;
+        color: $greyscale900;
       }
 
       &.g-player-list-light {
         background: #efefef;
+        color: $greyscale900;
 
         .g-player-list-cur {
           display: inline-block;
@@ -166,7 +162,6 @@ const listHeightStyle = computed<CSSProperties>(() => {
       }
 
       .g-player-list-index {
-        color: #666;
         margin-right: 12px;
       }
 
@@ -176,7 +171,6 @@ const listHeightStyle = computed<CSSProperties>(() => {
 
       .g-player-list-author {
         flex-shrink: 0;
-        color: #666;
         float: right;
       }
     }

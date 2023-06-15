@@ -3,6 +3,10 @@ import { AxiosResponse } from 'axios'
 import { Album, Artist } from '@/types/artist'
 
 class Albums {
+  getReleases(): Promise<AxiosResponse> {
+    return api.get('/album/releases')
+  }
+
   getAll(query: any): Promise<AxiosResponse> {
     return api.get('/album/all', {
       params: query,

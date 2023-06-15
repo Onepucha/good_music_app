@@ -17,6 +17,11 @@
       flex-direction: column;
       gap: 24px;
     }
+
+    @media #{$tablet} {
+      flex-direction: column;
+      gap: 24px;
+    }
   }
 
   &__wrap {

@@ -42,7 +42,21 @@ export default {
         subTitle: 'See All',
       },
     },
+    newReleases: {
+      titleHead: 'Good music - New Releases',
+      contentHead: 'Good music - New Releases',
+      buttonBackArtists: 'New Releases',
+      buttonBackPopularNewReleases: 'New Releases',
+      gMusicSongList: {
+        title: 'Songs',
+        subTitle: 'See All',
+      },
+    },
     album: {
+      titleHead: 'Good music - Albums',
+      contentHead: 'Good music - Albums',
+      buttonBackArtists: 'Albums',
+      buttonBackPopularAlbums: 'Popular Albums',
       gMusicSongList: {
         title: 'Songs',
         subTitle: 'See All',
@@ -160,6 +174,11 @@ export default {
         title: 'Top Charts',
         subTitle: 'See All',
       },
+      successEmailModal: {
+        title: 'Success',
+        description: 'Your email has been confirmed.',
+        btn: 'Ok',
+      },
     },
     profile: {
       titleHead: 'Good music - Profile',
@@ -178,7 +197,9 @@ export default {
         contentHead: 'Good music - Profile Details',
         buttonBackProfileDetails: 'Profile',
         buttonEditProfile: 'Edit Profile',
+        infoComment: 'Comment',
         infoComments: 'Comments',
+        infoLike: 'Like',
         infoLikes: 'Likes',
         galleryListPlaylists: {
           title: 'Playlists',
@@ -199,6 +220,7 @@ export default {
         dobPlaceholder: 'Date of Birth',
         genderLabel: 'Gender',
         buttonUpdate: 'Update',
+        emailResend: 'Resend',
       },
       popup: {
         title: 'Logout',

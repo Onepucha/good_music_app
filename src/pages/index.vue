@@ -6,7 +6,7 @@
           :list="data.newReleases"
           :sub-title="t('pages.home.galleryListReleases.subTitle')"
           :title="t('pages.home.galleryListReleases.title')"
-          :type="'releases'"
+          :type="'new-releases'"
           overflow
         />
 
@@ -25,6 +25,32 @@
           :type="'chart'"
           overflow
         />
+
+        <q-dialog
+          ref="qDialogPopup"
+          v-model="dialogEmail"
+          :position="position"
+          class="g-popup"
+        >
+          <q-card>
+            <q-card-section class="g-popup__body text-center">
+              <h4>{{ t('pages.home.successEmailModal.title') }}</h4>
+              <h5>
+                {{ t('pages.home.successEmailModal.description') }}
+              </h5>
+              <div class="g-popup__action">
+                <q-btn
+                  v-close-popup
+                  :label="t('pages.home.successEmailModal.btn')"
+                  class="g-popup__btn q-btn-large"
+                  rounded
+                  text-color="''"
+                  unelevated
+                />
+              </div>
+            </q-card-section>
+          </q-card>
+        </q-dialog>
       </div>
     </div>
   </div>
@@ -41,11 +67,11 @@ import {
   useArtistsStore,
   useChartsStore,
   useLoadingStore,
-  useReleasesStore,
   useUsersStore,
 } from 'src/stores'
 import { useTranslation } from 'src/composables/lang'
 import { useRoute } from 'vue-router'
+import Albums from '@/services/albums'
 
 const { t } = useTranslation()
 const route = useRoute()
@@ -59,8 +85,9 @@ defineComponent({
   },
 })
 
-const selected = ref(null)
-const options = ['Option 1', 'Option 2', 'Option 3']
+const dialogEmail = ref<boolean>(false)
+const qDialogPopup = ref<any>(null)
+const position = ref<any>('bottom')
 
 interface Data {
   artists: Array<Artist>
@@ -99,10 +126,10 @@ const getPopularArtist = async () => {
 }
 
 const getReleases = async () => {
-  const releasesStore = useReleasesStore()
-
   try {
-    data.newReleases = await releasesStore.getReleases()
+    const response: any = await Albums.getReleases()
+
+    data.newReleases = response.data.albums
   } catch (error: unknown) {
     console.error(error)
   }
@@ -130,6 +157,7 @@ const emailVerify = async () => {
       typeof params.token !== 'undefined'
     ) {
       await usersStore.emailVerify(route.query.token)
+      dialogEmail.value = true
     }
   } catch (error: unknown) {
     console.error(error)
