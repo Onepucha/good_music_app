@@ -101,6 +101,8 @@ export default {
       titleHead: 'Good music - Not Found',
       contentHead: 'Good music - Not Found',
       title: 'Not Found 404',
+      description: 'Sorry, this page was not found. Please return to the',
+      link: 'main page.',
     },
     explore: {
       titleHead: 'Good music - Explore',
@@ -282,7 +284,7 @@ export default {
       passwordValidDescription: 'Please use minimum 6 characters',
       passwordPlaceholder: 'Password',
       valueTerms: {
-        before: 'I accept {link}',
+        before: 'I accept',
         link: 'Terms of use',
       },
       buttonSignUp: 'Sign up',
@@ -456,6 +458,9 @@ export default {
     removeFromLibrary: 'Remove From Library',
     viewArtist: 'View Artist',
     share: 'Share',
+  },
+  gMusicGalleryItem: {
+    label: 'Go to Release',
   },
   gMusicFiltered: {
     buttonShuffle: 'Shuffle',

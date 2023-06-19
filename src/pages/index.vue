@@ -7,7 +7,10 @@
           :sub-title="t('pages.home.galleryListReleases.subTitle')"
           :title="t('pages.home.galleryListReleases.title')"
           :type="'new-releases'"
+          click-to-play
           overflow
+          @toggleplay="onAudioToggle"
+          @set-liked="setLiked"
         />
 
         <g-music-gallery-list
@@ -57,8 +60,8 @@
 </template>
 
 <script lang="ts" setup>
-import { defineComponent, onMounted, reactive, ref } from 'vue'
-import { Artist, Chart } from 'src/types/artist'
+import { defineComponent, nextTick, onMounted, reactive, ref } from 'vue'
+import { Artist, Chart, Song } from 'src/types/artist'
 
 import gMusicGalleryList from 'components/gMusicGallery/gMusicGalleryList.vue'
 
@@ -67,17 +70,20 @@ import {
   useArtistsStore,
   useChartsStore,
   useLoadingStore,
+  usePlayerStore,
   useUsersStore,
 } from 'src/stores'
 import { useTranslation } from 'src/composables/lang'
 import { useRoute } from 'vue-router'
 import Albums from '@/services/albums'
+import Songs from '@/services/songs'
 
 const { t } = useTranslation()
 const route = useRoute()
 const usersStore = useUsersStore()
 const loadingStore = useLoadingStore()
 const alertStore = useAlertStore()
+const playerStore = usePlayerStore()
 
 defineComponent({
   components: {
@@ -91,7 +97,7 @@ const position = ref<any>('bottom')
 
 interface Data {
   artists: Array<Artist>
-  newReleases: string[] | undefined
+  newReleases: Array<Artist> | undefined
   popularArtists: string[] | undefined
   topCharts: Array<Chart> | undefined
   isLoading: boolean
@@ -164,6 +170,98 @@ const emailVerify = async () => {
     if (error instanceof Error) {
       alertStore.error(error.message)
     }
+  }
+}
+
+const onAudioToggle = (item: { song: Song; index: number }) => {
+  if (playerStore.playing && playerStore.getMusicIndex === item.index) {
+    onAudioPause()
+  } else {
+    if (
+      playerStore.getMusicIndex !== null &&
+      playerStore.getMusicIndex === item.index
+    ) {
+      playerStore.setPlaying(true)
+
+      nextTick(() => {
+        playerStore.player.play()
+      })
+    } else {
+      onAudioPlay({ song: item.song, index: item.index })
+    }
+  }
+}
+
+const onAudioPlay = async (item: { song: Song; index: number }) => {
+  try {
+    if (item && item.song && item.song.songs && item.song.songs.length > 0) {
+      const songUrl = await Songs.playSong(item.song.songs[0])
+
+      playerStore.setMusicList(data?.newReleases || [])
+
+      playerStore.setMusic(
+        {
+          _id: item.song.songs[0],
+          title: item.song?.name,
+          artist: item.song?.artists?.at(0),
+          src: songUrl.data?.url,
+          pic: item.song?.cover_src,
+          is_liked: item.song?.is_liked,
+          genres: item.song?.genres,
+        } as Song,
+        item.index as number
+      )
+      playerStore.setPlaying(true)
+
+      nextTick(() => {
+        playerStore.player.play()
+      })
+    }
+  } catch (error: unknown) {
+    console.error(error)
+    if (error instanceof Error) {
+      alertStore.error(error.message)
+    }
+  }
+}
+
+const onAudioPause = () => {
+  playerStore.setPlaying(false)
+  playerStore.player.pause()
+}
+
+const setLiked = async (
+  isSingle: boolean,
+  object: {
+    ids: string[]
+    is_add_to_liked: boolean
+  }
+) => {
+  try {
+    await Albums.setFollow(object.ids, object.is_add_to_liked)
+
+    const index = data.newReleases?.findIndex(
+      (album) => album._id === object.ids.at(0)
+    )
+
+    if (
+      data &&
+      data.newReleases &&
+      data.newReleases.length > 0 &&
+      index !== undefined &&
+      data.newReleases[index].is_liked !== undefined
+    ) {
+      data.newReleases[index].is_liked = object.is_add_to_liked
+    }
+
+    if (object.is_add_to_liked) {
+      alertStore.success(t('successLiked'))
+    } else {
+      alertStore.success(t('successNotLiked'))
+    }
+  } catch (error: unknown) {
+    console.error(error)
+    alertStore.error(t('error'))
   }
 }
 
