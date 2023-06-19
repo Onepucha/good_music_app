@@ -19,6 +19,7 @@ interface Props {
   type: string
   size?: number
   overflow?: boolean
+  clickToPlay?: boolean
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -30,9 +31,27 @@ const props = withDefaults(defineProps<Props>(), {
   overflow: false,
 })
 
+const emit = defineEmits(['toggleplay', 'set-liked'])
+
 const typeRoutes = computed<string>(() => {
   return props.type === 'new-releases' ? 'album' : props.type
 })
+
+const onAudioToggle = (song: Song, index: number | string) => {
+  emit('toggleplay', { song, index })
+}
+
+const setLiked = (
+  isSingle: boolean,
+  object: { ids: string; is_add_to_liked: boolean }
+) => {
+  let idsSong = [] as Array<string>
+  idsSong.push(object.ids)
+  emit('set-liked', false, {
+    ids: object.ids,
+    is_add_to_liked: object.is_add_to_liked,
+  })
+}
 </script>
 
 <template>
@@ -58,10 +77,13 @@ const typeRoutes = computed<string>(() => {
       >
         <g-music-gallery-item
           v-for="item of list"
-          :key="item.id"
+          :key="item._id"
           :item="item"
           :size="props.size"
           :type="typeRoutes"
+          :click-to-play="clickToPlay"
+          @toggleplay="onAudioToggle(item, item._id)"
+          @set-liked="setLiked"
         />
       </div>
       <g-music-song-list-not-found v-else />

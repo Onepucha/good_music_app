@@ -107,10 +107,12 @@
     flex-wrap: nowrap;
     flex: 1;
     gap: 20px;
+    cursor: pointer;
   }
 
   &__search-input {
     width: 100%;
+    pointer-events: none;
 
     .q-field__control {
       height: 28px;

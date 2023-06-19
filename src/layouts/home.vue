@@ -202,7 +202,7 @@ onUnmounted(() => {
           </div>
         </router-link>
 
-        <div class="q-header__search-container">
+        <div class="q-header__search-container" @click.prevent="openSearch">
           <q-input
             v-if="!data.isMobile"
             v-model="search"
@@ -210,12 +210,7 @@ onUnmounted(() => {
             class="q-header__search-input"
             dense
           />
-          <q-btn
-            :ripple="false"
-            class="q-header__search-btn"
-            unelevated
-            @click.prevent="openSearch"
-          >
+          <q-btn :ripple="false" class="q-header__search-btn" unelevated>
             <DynamicIcon :size="28" name="search" />
           </q-btn>
         </div>

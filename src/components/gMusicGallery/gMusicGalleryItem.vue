@@ -1,29 +1,28 @@
 <script lang="ts" setup>
 import { computed, CSSProperties, defineComponent, ref } from 'vue'
 import { useRouter } from 'vue-router'
+import { useQuasar } from 'quasar'
 import gPlayBtn from '@/components/gPlayBtn/gPlayBtn.vue'
+import DynamicIcon from '@/components/DynamicIcon.vue'
+import { Album, Song } from '@/types/artist'
+import { useAuthStore, usePlayerStore } from '@/stores'
+import { useTranslation } from '@/composables/lang'
 
+const { t } = useTranslation()
 const router = useRouter()
+const $q = useQuasar()
+const authStore = useAuthStore()
+const playerStore = usePlayerStore()
 
 defineComponent({
   components: {
     gPlayBtn,
+    DynamicIcon,
   },
 })
 
-interface Item {
-  _id: number | string
-  cover_src?: string
-  name: string
-  code: string
-  info?: string
-  genre?: Array<string>
-  song?: Array<string>
-  is_verified?: boolean
-}
-
 interface Props {
-  item: Item
+  item: Song | Album
   hover?: boolean
   clickToPlay?: boolean
   type: string
@@ -35,7 +34,11 @@ const props = withDefaults(defineProps<Props>(), {
   type: '',
 })
 
+const emit = defineEmits(['toggleplay', 'set-liked'])
+
 const focus = ref<boolean>(false)
+const value = ref<number>(5.5)
+const isMobile = ref<boolean | undefined>($q.platform.is.mobile)
 
 const randomGradient = computed<CSSProperties>(() => {
   let colors = [
@@ -64,7 +67,11 @@ const randomGradient = computed<CSSProperties>(() => {
 })
 
 const nameAndInfoCharts = computed<{ name: string; info: string }>(() => {
-  let nameAndInfo = props.item.name.split('-')
+  let nameAndInfo = props.item?.name?.split('-')
+
+  if (!nameAndInfo) {
+    return { name: '', info: '' }
+  }
 
   return {
     name: nameAndInfo[0],
@@ -72,27 +79,49 @@ const nameAndInfoCharts = computed<{ name: string; info: string }>(() => {
   }
 })
 
-const clickHandler = () => {
-  props.clickToPlay ? play() : goTo()
+const songId = computed<string>(() => {
+  const song = props?.item?.songs?.at(0)
+  return song ? String(song) : ''
+})
+
+const handleClick = () => {
+  if (!isMobile.value && props.clickToPlay) {
+    // goTo()
+  } else {
+    goTo()
+  }
 }
 
-const play = () => {
-  console.log('play')
+const handleTouch = () => {
+  if (isMobile.value) {
+    props.clickToPlay ? onAudioToggle() : goTo()
+  }
+}
+
+const onAudioToggle = () => {
+  emit('toggleplay', props.item)
 }
 
 const goTo = () => {
   router.push(`${props.type}/${props.item._id}`)
+}
+
+const setLiked = () => {
+  emit('set-liked', true, {
+    ids: [props.item?._id],
+    is_add_to_liked: !props.item?.is_liked,
+  })
 }
 </script>
 
 <template>
   <div
     :class="{
-      'g-music-gallery-item__hover': hover,
+      'g-music-gallery-item__hover': props.hover && !isMobile,
       'g-music-gallery-item-artist': props.type === 'artist',
     }"
     class="g-music-gallery-item"
-    @click.prevent="clickHandler"
+    @click.prevent="handleClick"
   >
     <div
       class="g-music-gallery-item__picture"
@@ -102,8 +131,30 @@ const goTo = () => {
       @mouseleave="focus = false"
       @mouseover="focus = true"
     >
-      <div v-show="focus" class="g-music-gallery-item__shade">
-        <g-play-btn v-if="clickToPlay" />
+      <div
+        v-show="focus && props.clickToPlay"
+        class="g-music-gallery-item__shade"
+      >
+        <g-play-btn
+          :playing="playerStore.playing && playerStore.musicId === songId"
+          @click.prevent="onAudioToggle"
+        />
+
+        <DynamicIcon
+          v-if="authStore.user"
+          :class="{ active: !!props.item?.is_liked }"
+          :size="26"
+          name="like"
+          @click.prevent="setLiked"
+        />
+
+        <div
+          v-if="props.type === 'album'"
+          class="g-music-gallery-item__shade-label"
+          @click.prevent="goTo"
+        >
+          {{ t('gMusicGalleryItem.label') }}
+        </div>
       </div>
 
       <img
@@ -133,6 +184,17 @@ const goTo = () => {
           {{ props.item.name }}
         </div>
       </div>
+
+      <q-circular-progress
+        v-if="props.type === 'album' && false"
+        class="g-music-gallery-item__progress"
+        show-value
+        :value="value"
+        size="40px"
+        color="primary"
+        :min="0"
+        :max="10"
+      />
     </div>
 
     <div class="g-music-gallery-item__description">
