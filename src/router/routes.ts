@@ -191,19 +191,6 @@ const routes: RouteRecordRaw[] = [
     ],
   },
   {
-    path: '/releases',
-    name: 'Releases',
-    component: () => import('layouts/default.vue'),
-    children: [
-      {
-        path: '',
-        name: 'Releases',
-        component: () => import('pages/releases/index.vue'),
-      },
-      { path: ':id', component: () => import('pages/releases/[id].vue') },
-    ],
-  },
-  {
     path: '/library',
     name: 'Library',
     meta: { requiresAuth: true },
