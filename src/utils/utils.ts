@@ -1,3 +1,5 @@
+import Songs from '@/services/songs'
+
 export function getCookie(name: string) {
   const matches = document.cookie.match(
     new RegExp(
@@ -104,23 +106,29 @@ export function isEmpty(obj: object) {
   return Object.keys(obj).length === 0 && obj.constructor === Object
 }
 
-let downloadUrl = ''
-
-export async function downloadSong(src: string, name: string) {
+export async function downloadSong(id: string, name: string) {
   try {
-    const response = await fetch(src)
-    const blob = await response.blob()
-    const url = window.URL.createObjectURL(blob)
-    downloadUrl = url
+    const response = await Songs.playSong(id)
+    const url = response.data?.url
+
+    if (!url) {
+      throw new Error('Failed to get download URL')
+    }
+
+    const blobResponse = await fetch(url, { mode: 'no-cors' })
+    const blob = await blobResponse.blob()
+    const downloadUrl = window.URL.createObjectURL(blob)
 
     const link = document.createElement('a')
-    link.href = url
+    link.href = downloadUrl
     link.download = `${name}.mp3`
     document.body.appendChild(link)
     link.click()
     document.body.removeChild(link)
+
+    window.URL.revokeObjectURL(downloadUrl)
   } catch (error) {
-    console.error(error)
+    console.error('Failed to download song:', error)
   }
 }
 

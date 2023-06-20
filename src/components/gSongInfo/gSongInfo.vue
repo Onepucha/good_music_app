@@ -92,7 +92,7 @@ const onAudioToggle = () => {
 }
 
 const downloadSong = () => {
-  emit('download', props.song?.url, props.song?.name)
+  emit('download', props.song?._id, props.song?.name)
 }
 
 const viewArtist = () => {

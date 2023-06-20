@@ -88,7 +88,7 @@ const onAudioToggle = (song: Song, index: number | string) => {
 }
 
 const downloadSong = () => {
-  emit('download', props.playlist?.url, props.playlist?.name)
+  emit('download', props.playlist?._id, props.playlist?.name)
 }
 
 const dontPlayThis = () => {

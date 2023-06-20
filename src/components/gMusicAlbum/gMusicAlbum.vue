@@ -57,7 +57,7 @@ const addPlayList = () => {
 }
 
 const downloadSong = () => {
-  emit('download', props.album.name)
+  emit('download', props.album._id)
 }
 
 const removeLibrary = () => {
