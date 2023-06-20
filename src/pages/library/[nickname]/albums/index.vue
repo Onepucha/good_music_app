@@ -16,6 +16,7 @@ import { useRoute, useRouter } from 'vue-router'
 import { downloadSong } from '@/utils/utils'
 import { useAlertStore, useAuthStore, usePlayerStore } from '@/stores'
 import PlaylistsApi from '@/services/playlists'
+import { useMeta } from 'quasar'
 
 const route = useRoute()
 const router = useRouter()
@@ -50,6 +51,18 @@ const data: Data = reactive({
   albumCount: 24,
   isLoading: false,
   songPlaylist: undefined,
+})
+
+useMeta(() => {
+  return {
+    title: t('pages.library.albums.titleHead'),
+    meta: {
+      description: {
+        name: 'description',
+        content: t('pages.library.albums.contentHead'),
+      },
+    },
+  }
 })
 
 const scrollTargetRef = ref<any>(document.createElement('div'))

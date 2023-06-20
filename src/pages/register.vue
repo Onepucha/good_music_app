@@ -17,6 +17,7 @@ import gDisplayer from '@/components/gCropper/gDisplayer.vue'
 
 import { useArtistsStore } from '@/stores/artists.store'
 import { useTranslation } from '@/composables/lang'
+import { useMeta } from 'quasar'
 
 const { t } = useTranslation()
 const router = useRouter()
@@ -70,6 +71,18 @@ const data: Data = reactive({
   showing: false,
   artistList: [],
   followArtistList: [],
+})
+
+useMeta(() => {
+  return {
+    title: t('pages.register.titleHead'),
+    meta: {
+      description: {
+        name: 'description',
+        content: t('pages.register.contentHead'),
+      },
+    },
+  }
 })
 
 const rules = computed(() => {

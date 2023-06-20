@@ -19,6 +19,7 @@ import Songs from '@/services/songs'
 import { downloadSong } from '@/utils/utils'
 import { useAlertStore, usePlayerStore } from '@/stores'
 import PlaylistsApi from '@/services/playlists'
+import { useMeta } from 'quasar'
 
 const { t } = useTranslation()
 
@@ -48,6 +49,18 @@ const data: Data = reactive({
   song: undefined,
   artistSong: [],
   songPlaylist: undefined,
+})
+
+useMeta(() => {
+  return {
+    title: `${t('pages.artists.titleHead')} - ${data.song?.name}`,
+    meta: {
+      description: {
+        name: 'description',
+        content: `${t('pages.artists.contentHead')} - ${data.song?.name}`,
+      },
+    },
+  }
 })
 
 const dialog = ref<boolean>(false)

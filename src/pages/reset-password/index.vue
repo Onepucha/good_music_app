@@ -12,6 +12,7 @@ import { useVuelidate } from '@vuelidate/core'
 import { useRoute, useRouter } from 'vue-router'
 import { useTranslation } from '@/composables/lang'
 import { useAlertStore, useUsersStore } from '@/stores'
+import { useMeta } from 'quasar'
 
 const { t } = useTranslation()
 const router = useRouter()
@@ -39,6 +40,18 @@ const data: Data = reactive({
   token: '',
   rememberMe: false,
   isLoading: false,
+})
+
+useMeta(() => {
+  return {
+    title: t('pages.reset-password.titleHead'),
+    meta: {
+      description: {
+        name: 'description',
+        content: t('pages.reset-password.contentHead'),
+      },
+    },
+  }
 })
 
 const route = useRoute()

@@ -3,6 +3,7 @@ import { defineComponent, ref } from 'vue'
 import gBack from '@/components/gBack/gBack.vue'
 import gMusicSubscribe from '@/components/gMusicSubscribe/gMusicSubscribe.vue'
 import { useTranslation } from '@/composables/lang'
+import { useMeta } from 'quasar'
 
 const { t } = useTranslation()
 
@@ -48,6 +49,18 @@ const items = ref([
     ],
   },
 ])
+
+useMeta(() => {
+  return {
+    title: t('pages.premium.titleHead'),
+    meta: {
+      description: {
+        name: 'description',
+        content: t('pages.premium.contentHead'),
+      },
+    },
+  }
+})
 </script>
 
 <template>

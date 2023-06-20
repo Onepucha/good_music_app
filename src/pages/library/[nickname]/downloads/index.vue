@@ -6,6 +6,7 @@ import gBack from '@/components/gBack/gBack.vue'
 import gMusicSongListNotFound from '@/components/gMusicSong/gMusicSongListNotFound.vue'
 import { useTranslation } from '@/composables/lang'
 import { useAuthStore } from '@/stores'
+import { useMeta } from 'quasar'
 
 const { t } = useTranslation()
 
@@ -25,6 +26,18 @@ interface Data {
 
 const data: Data = reactive({
   downloads: [],
+})
+
+useMeta(() => {
+  return {
+    title: t('pages.library.downloads.titleHead'),
+    meta: {
+      description: {
+        name: 'description',
+        content: t('pages.library.downloads.contentHead'),
+      },
+    },
+  }
 })
 
 const openSearch = () => {

@@ -91,12 +91,6 @@ export default {
         title: 'Weekly Album Charts',
       },
     },
-    releases: {
-      titleHead: 'Good music - New Releases',
-      contentHead: 'Good music - New Releases',
-      buttonBackReleases: 'New Releases',
-      buttonBackRelease: 'New Releases',
-    },
     notFound: {
       titleHead: 'Good music - Not Found',
       contentHead: 'Good music - Not Found',
@@ -122,6 +116,8 @@ export default {
         artists: 'Artists',
       },
       playlists: {
+        titleHead: 'Good music - Library playlists',
+        contentHead: 'Good music - Library playlists',
         label: 'Sort by',
         recently: 'Recently Added',
         popup: {
@@ -133,14 +129,20 @@ export default {
         },
       },
       downloads: {
+        titleHead: 'Good music - Library downloads',
+        contentHead: 'Good music - Library downloads',
         label: 'Sort by',
         recently: 'Recently Downloaded',
       },
       songs: {
+        titleHead: 'Good music - Library songs',
+        contentHead: 'Good music - Library songs',
         label: 'Sort by',
         recently: 'Recently Downloaded',
       },
       singers: {
+        titleHead: 'Good music - Library singers',
+        contentHead: 'Good music - Library singers',
         label: 'Sort by',
         recently: 'Recently Downloaded',
         buttonBackArtists: 'Artists',
@@ -152,6 +154,8 @@ export default {
         },
       },
       albums: {
+        titleHead: 'Good music - Library albums',
+        contentHead: 'Good music - Library albums',
         label: 'Sort by',
         recently: 'Recently Added',
         buttonBackArtists: 'Artists',
@@ -331,6 +335,10 @@ export default {
       buttonBackSecurity: 'Security',
       rememberMe: 'Remember me',
       googleAuthenticator: 'Google Authenticator',
+    },
+    premium: {
+      titleHead: 'Good music - Premium',
+      contentHead: 'Good music - Premium',
     },
     language: {
       titleHead: 'Good music - Language',

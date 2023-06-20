@@ -20,6 +20,7 @@ import {
   useLoadingStore,
   usePlayerStore,
 } from '@/stores'
+import { useMeta } from 'quasar'
 
 const route = useRoute()
 const router = useRouter()
@@ -54,6 +55,18 @@ const data: Data = reactive({
   page: 0,
   albumCount: 24,
   isLoading: false,
+})
+
+useMeta(() => {
+  return {
+    title: t('pages.library.songs.titleHead'),
+    meta: {
+      description: {
+        name: 'description',
+        content: t('pages.library.songs.contentHead'),
+      },
+    },
+  }
 })
 
 const scrollTargetRef = ref<any>(document.createElement('div'))

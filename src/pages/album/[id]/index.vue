@@ -26,6 +26,7 @@ import { downloadSong } from '@/utils/utils'
 import Albums from '@/services/albums'
 import Songs from '@/services/songs'
 import PlaylistsApi from '@/services/playlists'
+import { useMeta } from 'quasar'
 
 const { t } = useTranslation()
 const authStore = useAuthStore()
@@ -41,6 +42,18 @@ defineComponent({
     gMusicPlaylistModal,
     gMusicComments,
   },
+})
+
+useMeta(() => {
+  return {
+    title: t('pages.album.titleHead'),
+    meta: {
+      description: {
+        name: 'description',
+        content: t('pages.album.contentHead'),
+      },
+    },
+  }
 })
 
 const route = useRoute()

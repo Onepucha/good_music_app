@@ -17,7 +17,10 @@ import {
 import { downloadSong } from '@/utils/utils'
 import Songs from '@/services/songs'
 import PlaylistsApi from '@/services/playlists'
+import { useMeta } from 'quasar'
 
+const route = useRoute()
+const router = useRouter()
 const { t } = useTranslation()
 const authStore = useAuthStore()
 const playerStore = usePlayerStore()
@@ -31,9 +34,6 @@ defineComponent({
     gMusicPlaylistModal,
   },
 })
-
-const route = useRoute()
-const router = useRouter()
 
 const isLoading = ref<boolean>(true)
 
@@ -49,6 +49,18 @@ const data: Data = reactive({
   artistSong: [],
   songPlaylist: undefined,
   isLoading: false,
+})
+
+useMeta(() => {
+  return {
+    title: `${t('pages.artists.titleHead')} - ${data.artist.name}`,
+    meta: {
+      description: {
+        name: 'description',
+        content: `${t('pages.artists.contentHead')} - ${data.artist.name}`,
+      },
+    },
+  }
 })
 
 const dialog = ref<boolean>(false)

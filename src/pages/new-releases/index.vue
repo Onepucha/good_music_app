@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import { defineComponent, nextTick, reactive, ref } from 'vue'
+import { useMeta } from 'quasar'
 
 import gBack from '@/components/gBack/gBack.vue'
 import gMusicGalleryList from '@/components/gMusicGallery/gMusicGalleryList.vue'
@@ -12,7 +13,9 @@ import { useTranslation } from '@/composables/lang'
 import Albums from '@/services/albums'
 import { useAlertStore, useAuthStore, usePlayerStore } from '@/stores'
 import Songs from '@/services/songs'
+import { useRoute } from 'vue-router'
 
+const route = useRoute()
 const { t } = useTranslation()
 const authStore = useAuthStore()
 const alertStore = useAlertStore()
@@ -26,6 +29,20 @@ defineComponent({
     gLoader,
     DynamicIcon,
   },
+})
+
+const title = ref('Some title')
+
+useMeta(() => {
+  return {
+    title: t('pages.newReleases.titleHead'),
+    meta: {
+      description: {
+        name: 'description',
+        content: t('pages.newReleases.contentHead'),
+      },
+    },
+  }
 })
 
 interface Data {

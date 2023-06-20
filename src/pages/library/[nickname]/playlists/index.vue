@@ -11,6 +11,7 @@ import PlaylistsApi from '@/services/playlists'
 import { Playlists } from '@/types/artist'
 import { useAuthStore } from '@/stores'
 import gMusicCreatePlaylistModal from '@/components/gMusicCreatePlaylistModal/gMusicCreatePlaylistModal.vue'
+import { useMeta } from 'quasar'
 
 const { t } = useTranslation()
 const authStore = useAuthStore()
@@ -42,6 +43,18 @@ const data: Data = reactive({
   playlist: undefined,
   page: 0,
   playlistsCount: 24,
+})
+
+useMeta(() => {
+  return {
+    title: t('pages.library.playlists.titleHead'),
+    meta: {
+      description: {
+        name: 'description',
+        content: t('pages.library.playlists.contentHead'),
+      },
+    },
+  }
 })
 
 const dialog = ref<boolean>(false)

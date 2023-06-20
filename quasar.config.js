@@ -134,7 +134,7 @@ module.exports = configure(function (ctx) {
       // directives: [],
 
       // Quasar plugins
-      plugins: ['Notify', 'BottomSheet', 'Loading'],
+      plugins: ['Notify', 'BottomSheet', 'Loading', 'Meta'],
     },
 
     // animations: 'all', // --- includes all animations

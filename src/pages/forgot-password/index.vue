@@ -10,6 +10,7 @@ import BgForgotPassword from '@/assets/images/bg_forgot_password.png'
 import { useVuelidate } from '@vuelidate/core'
 import { useTranslation } from '@/composables/lang'
 import { useAlertStore, useUsersStore } from '@/stores'
+import { useMeta } from 'quasar'
 
 const { t } = useTranslation()
 
@@ -29,6 +30,18 @@ interface Data {
 const data: Data = reactive({
   email: '',
   isLoading: false,
+})
+
+useMeta(() => {
+  return {
+    title: t('pages.forgot-password.titleHead'),
+    meta: {
+      description: {
+        name: 'description',
+        content: t('pages.forgot-password.contentHead'),
+      },
+    },
+  }
 })
 
 const dense = ref<boolean>(false)

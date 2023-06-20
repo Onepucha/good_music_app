@@ -9,6 +9,7 @@ import DynamicIcon from '@/components/DynamicIcon.vue'
 
 import { useTranslation } from '@/composables/lang'
 import { useArtistsStore, useAuthStore } from '@/stores'
+import { useMeta } from 'quasar'
 
 const { t } = useTranslation()
 const authStore = useAuthStore()
@@ -21,6 +22,18 @@ defineComponent({
     gLoader,
     DynamicIcon,
   },
+})
+
+useMeta(() => {
+  return {
+    title: t('pages.artists.titleHead'),
+    meta: {
+      description: {
+        name: 'description',
+        content: t('pages.artists.contentHead'),
+      },
+    },
+  }
 })
 
 interface Data {

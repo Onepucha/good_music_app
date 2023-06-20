@@ -10,6 +10,7 @@ import { Album } from '@/types/artist'
 
 import { useTranslation } from '@/composables/lang'
 import Albums from '@/services/albums'
+import { useMeta } from 'quasar'
 
 const { t } = useTranslation()
 
@@ -21,6 +22,18 @@ defineComponent({
     gLoader,
     DynamicIcon,
   },
+})
+
+useMeta(() => {
+  return {
+    title: t('pages.album.titleHead'),
+    meta: {
+      description: {
+        name: 'description',
+        content: t('pages.album.contentHead'),
+      },
+    },
+  }
 })
 
 interface Data {
