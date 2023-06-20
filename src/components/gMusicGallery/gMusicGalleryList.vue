@@ -3,12 +3,10 @@ import { computed, defineComponent } from 'vue'
 import { Song } from '@/types/artist'
 
 import gMusicGalleryItem from '@/components/gMusicGallery/gMusicGalleryItem.vue'
-import gMusicSongListNotFound from '@/components/gMusicSong/gMusicSongListNotFound.vue'
 
 defineComponent({
   components: {
     gMusicGalleryItem,
-    gMusicSongListNotFound,
   },
 })
 
@@ -71,7 +69,6 @@ const setLiked = (
       </div>
 
       <div
-        v-if="list.length"
         :class="{ 'g-music-gallery-list__body-overflow': overflow }"
         class="g-music-gallery-list__body"
       >
@@ -86,7 +83,6 @@ const setLiked = (
           @set-liked="setLiked"
         />
       </div>
-      <g-music-song-list-not-found v-else />
     </div>
   </div>
 </template>

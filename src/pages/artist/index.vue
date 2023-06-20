@@ -3,6 +3,7 @@ import { defineComponent, reactive, ref } from 'vue'
 
 import gBack from '@/components/gBack/gBack.vue'
 import gMusicGalleryList from '@/components/gMusicGallery/gMusicGalleryList.vue'
+import gMusicSongListNotFound from '@/components/gMusicSong/gMusicSongListNotFound.vue'
 import gLoader from '@/components/gLoader/gLoader.vue'
 import DynamicIcon from '@/components/DynamicIcon.vue'
 
@@ -16,6 +17,7 @@ defineComponent({
   components: {
     gBack,
     gMusicGalleryList,
+    gMusicSongListNotFound,
     gLoader,
     DynamicIcon,
   },
@@ -36,6 +38,7 @@ const data: Data = reactive({
 })
 
 const scrollTargetRef = ref<any>(document.createElement('div'))
+const noMoreItems = ref<boolean>(false)
 
 const getAllArtist = async (index: number, done: () => void) => {
   const artistStore = useArtistsStore()
@@ -49,10 +52,12 @@ const getAllArtist = async (index: number, done: () => void) => {
 
     if (response.data.length === 0) {
       scrollTargetRef.value.stop()
+      noMoreItems.value = true
+    } else {
+      data.artists = data.artists.concat(response.data)
     }
 
     done()
-    data.artists = data.artists.concat(response.data)
   } catch (error: unknown) {
     console.error(error)
     scrollTargetRef.value.stop()
@@ -77,6 +82,8 @@ const openSearch = () => {
 
     <q-infinite-scroll ref="scrollTargetRef" :offset="250" @load="getAllArtist">
       <g-music-gallery-list :list="data.artists" :type="'artist'" />
+
+      <g-music-song-list-not-found v-if="noMoreItems" />
 
       <template #loading>
         <div class="row justify-center q-my-md">
