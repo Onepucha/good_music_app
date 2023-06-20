@@ -8,6 +8,7 @@ import gChartInfo from '@/components/gChartInfo/gChartInfo.vue'
 import gMusicAlbum from '@/components/gMusicAlbum/gMusicAlbum.vue'
 import { useTranslation } from '@/composables/lang'
 import { useAlbumsStore } from '@/stores/albums.store'
+import { useMeta } from 'quasar'
 
 const { t } = useTranslation()
 
@@ -37,6 +38,18 @@ interface Data {
 
 const data: Data = reactive({
   albumList: [],
+})
+
+useMeta(() => {
+  return {
+    title: `${t('pages.chart.titleHead')} - ${chart?.name}`,
+    meta: {
+      description: {
+        name: 'description',
+        content: `${t('pages.chart.contentHead')} - ${chart?.name}`,
+      },
+    },
+  }
 })
 
 const getAlbums = async (index: number, done: () => void) => {

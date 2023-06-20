@@ -8,7 +8,7 @@ import { allLocales } from '@/boot/i18n'
 import DynamicIcon from '@/components/DynamicIcon.vue'
 import gCardPremium from '@/components/gCardPremium/gCardPremium.vue'
 import gDisplayer from '@/components/gCropper/gDisplayer.vue'
-import { useQuasar } from 'quasar'
+import { useMeta, useQuasar } from 'quasar'
 import { useRouter } from 'vue-router'
 
 const router = useRouter()
@@ -41,6 +41,18 @@ const data: Data = reactive({
     src: 'https://images.unsplash.com/photo-1619737307100-55b82496fcda?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=634&q=80',
     type: 'image/jpg',
   },
+})
+
+useMeta(() => {
+  return {
+    title: t('pages.profile.titleHead'),
+    meta: {
+      description: {
+        name: 'description',
+        content: t('pages.profile.contentHead'),
+      },
+    },
+  }
 })
 
 const dialog = ref<boolean>(false)

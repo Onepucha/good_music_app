@@ -9,6 +9,7 @@ import { useAlertStore, useAuthStore } from '@/stores'
 import DynamicIcon from '@/components/DynamicIcon.vue'
 import gBack from '@/components/gBack/gBack.vue'
 import gInput from '@/components/gInput/gInput.vue'
+import { useMeta } from 'quasar'
 
 const { t } = useTranslation()
 
@@ -50,6 +51,18 @@ const data: Data = reactive({
   isDisabled: false,
   options: ['Male', 'Female'],
   datepickerTheme: false,
+})
+
+useMeta(() => {
+  return {
+    title: t('pages.profile.edit.titleHead'),
+    meta: {
+      description: {
+        name: 'description',
+        content: t('pages.profile.edit.contentHead'),
+      },
+    },
+  }
 })
 
 const rules = computed(() => {

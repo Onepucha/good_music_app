@@ -4,6 +4,7 @@ import { defineComponent, reactive, ref } from 'vue'
 import { useAuthStore } from '@/stores'
 
 import DynamicIcon from '@/components/DynamicIcon.vue'
+import { useMeta } from 'quasar'
 
 const { t } = useTranslation()
 const authStore = useAuthStore()
@@ -22,6 +23,18 @@ interface Data {
 const data: Data = reactive({
   volume: 1,
   muted: false,
+})
+
+useMeta(() => {
+  return {
+    title: t('pages.library.titleHead'),
+    meta: {
+      description: {
+        name: 'description',
+        content: t('pages.library.contentHead'),
+      },
+    },
+  }
 })
 
 const payment = ref<string>('')

@@ -4,6 +4,7 @@ import { defineComponent, reactive } from 'vue'
 import DynamicIcon from '@/components/DynamicIcon.vue'
 import gBack from '@/components/gBack/gBack.vue'
 import { useTranslation } from '@/composables/lang'
+import { useMeta } from 'quasar'
 
 const { t } = useTranslation()
 
@@ -58,6 +59,18 @@ const data: Data = reactive({
       info: t('pages.notification.securityInfo'),
     },
   ],
+})
+
+useMeta(() => {
+  return {
+    title: t('pages.notification.titleHead'),
+    meta: {
+      description: {
+        name: 'description',
+        content: t('pages.notification.contentHead'),
+      },
+    },
+  }
 })
 </script>
 

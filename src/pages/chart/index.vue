@@ -7,6 +7,7 @@ import gMusicGalleryList from '@/components/gMusicGallery/gMusicGalleryList.vue'
 import { useTranslation } from '@/composables/lang'
 import { Chart } from '@/types/artist'
 import { useAuthStore, useChartsStore } from '@/stores'
+import { useMeta } from 'quasar'
 
 const { t } = useTranslation()
 const authStore = useAuthStore()
@@ -17,6 +18,18 @@ defineComponent({
     DynamicIcon,
     gMusicGalleryList,
   },
+})
+
+useMeta(() => {
+  return {
+    title: t('pages.chart.titleHead'),
+    meta: {
+      description: {
+        name: 'description',
+        content: t('pages.chart.contentHead'),
+      },
+    },
+  }
 })
 
 interface Data {

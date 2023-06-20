@@ -6,6 +6,7 @@ import gBack from '@/components/gBack/gBack.vue'
 import gSocial from '@/components/gSocial/gSocial.vue'
 import { useTranslation } from '@/composables/lang'
 import { useRouter } from 'vue-router'
+import { useMeta } from 'quasar'
 
 const { t } = useTranslation()
 const router = useRouter()
@@ -32,6 +33,18 @@ const data: User = reactive({
   password: '',
   isLoading: false,
   isDisabled: false,
+})
+
+useMeta(() => {
+  return {
+    title: t('pages.login.titleHead'),
+    meta: {
+      description: {
+        name: 'description',
+        content: t('pages.login.contentHead'),
+      },
+    },
+  }
 })
 
 const onSubmit = async () => {

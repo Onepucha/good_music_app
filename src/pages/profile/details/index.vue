@@ -9,6 +9,7 @@ import { useTranslation } from '@/composables/lang'
 import { useAuthStore, useLoadingStore } from '@/stores'
 import PlaylistsApi from '@/services/playlists'
 import { declensionOfWord } from '@/utils/utils'
+import { useMeta } from 'quasar'
 
 const { t } = useTranslation()
 
@@ -36,6 +37,18 @@ const data: Data = reactive({
   fullname: authStore?.user?.fullname || '',
   playlists: [],
   isLoading: false,
+})
+
+useMeta(() => {
+  return {
+    title: t('pages.profile.details.titleHead'),
+    meta: {
+      description: {
+        name: 'description',
+        content: t('pages.profile.details.contentHead'),
+      },
+    },
+  }
 })
 
 const getPlaylists = async () => {

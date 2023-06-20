@@ -1,7 +1,20 @@
 <script lang="ts" setup>
 import { useTranslation } from '@/composables/lang'
+import { useMeta } from 'quasar'
 
 const { t } = useTranslation()
+
+useMeta(() => {
+  return {
+    title: t('pages.notFound.titleHead'),
+    meta: {
+      description: {
+        name: 'description',
+        content: t('pages.notFound.contentHead'),
+      },
+    },
+  }
+})
 </script>
 
 <template>

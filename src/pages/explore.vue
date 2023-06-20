@@ -6,6 +6,7 @@ import gCardDashboard from '@/components/gCardDashboard/gCardDashboard.vue'
 import { Options } from '@/types/options'
 import { Dashboards } from '@/types/dashboards'
 import { useAuthStore } from '@/stores'
+import { useMeta } from 'quasar'
 
 const { t } = useTranslation()
 
@@ -119,6 +120,18 @@ const data: Data = reactive({
       href: '/romance',
     },
   ],
+})
+
+useMeta(() => {
+  return {
+    title: t('pages.explore.titleHead'),
+    meta: {
+      description: {
+        name: 'description',
+        content: t('pages.explore.contentHead'),
+      },
+    },
+  }
 })
 
 const options = ref<Array<Options>>(data.options)

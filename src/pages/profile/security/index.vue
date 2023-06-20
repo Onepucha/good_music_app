@@ -4,6 +4,7 @@ import { defineComponent, reactive } from 'vue'
 import DynamicIcon from '@/components/DynamicIcon.vue'
 import gBack from '@/components/gBack/gBack.vue'
 import { useTranslation } from '@/composables/lang'
+import { useMeta } from 'quasar'
 
 const { t } = useTranslation()
 
@@ -20,6 +21,18 @@ interface Data {
 
 const data: Data = reactive({
   rememberMe: false,
+})
+
+useMeta(() => {
+  return {
+    title: t('pages.security.titleHead'),
+    meta: {
+      description: {
+        name: 'description',
+        content: t('pages.security.contentHead'),
+      },
+    },
+  }
 })
 
 const toggleRememberMe = () => {

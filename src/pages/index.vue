@@ -80,6 +80,7 @@ import { useTranslation } from 'src/composables/lang'
 import { useRoute } from 'vue-router'
 import Albums from '@/services/albums'
 import Songs from '@/services/songs'
+import { useMeta } from 'quasar'
 
 const { t } = useTranslation()
 const route = useRoute()
@@ -118,6 +119,18 @@ const data: Data = reactive({
   isDisabled: false,
   page: 0,
   artistCount: 24,
+})
+
+useMeta(() => {
+  return {
+    title: t('pages.home.titleHead'),
+    meta: {
+      description: {
+        name: 'description',
+        content: t('pages.home.contentHead'),
+      },
+    },
+  }
 })
 
 const getPopularArtist = async () => {

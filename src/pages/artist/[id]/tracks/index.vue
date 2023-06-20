@@ -12,6 +12,7 @@ import { useRoute, useRouter } from 'vue-router'
 import { useAlertStore, useArtistsStore, usePlayerStore } from '@/stores'
 import { downloadSong } from '@/utils/utils'
 import PlaylistsApi from '@/services/playlists'
+import { useMeta } from 'quasar'
 
 const { t } = useTranslation()
 
@@ -22,6 +23,18 @@ defineComponent({
     gMusicSongList,
     gMusicPlaylistModal,
   },
+})
+
+useMeta(() => {
+  return {
+    title: `${t('pages.artists.titleHead')} - Tracks`,
+    meta: {
+      description: {
+        name: 'description',
+        content: `${t('pages.artists.contentHead')} - Tracks`,
+      },
+    },
+  }
 })
 
 const route = useRoute()

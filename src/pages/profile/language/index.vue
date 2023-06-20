@@ -5,6 +5,7 @@ import { allLocales } from '@/boot/i18n'
 
 import gBack from '@/components/gBack/gBack.vue'
 import { useTranslation } from '@/composables/lang'
+import { useMeta } from 'quasar'
 
 const { t, locale } = useTranslation()
 const authStore = useAuthStore()
@@ -22,6 +23,18 @@ interface Data {
 
 const data: Data = reactive({
   lang: locale,
+})
+
+useMeta(() => {
+  return {
+    title: t('pages.language.titleHead'),
+    meta: {
+      description: {
+        name: 'description',
+        content: t('pages.language.contentHead'),
+      },
+    },
+  }
 })
 
 const setUserLocale = async (item: {

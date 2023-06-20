@@ -12,6 +12,7 @@ import { downloadSong } from '@/utils/utils'
 import { Album, Artist, Song } from '@/types/artist'
 import { useRoute, useRouter } from 'vue-router'
 import Artists from '@/services/artists'
+import { useMeta } from 'quasar'
 
 const route = useRoute()
 const router = useRouter()
@@ -51,18 +52,17 @@ const data: Data = reactive({
   isLoading: false,
 })
 
-const singers = reactive([
-  {
-    _id: 1,
-    name: 'The Weeknd',
-    songs: ['1231', '131231'],
-  },
-  {
-    _id: 2,
-    name: 'Ariana Grande',
-    songs: ['1231'],
-  },
-])
+useMeta(() => {
+  return {
+    title: t('pages.library.singers.titleHead'),
+    meta: {
+      description: {
+        name: 'description',
+        content: t('pages.library.singers.contentHead'),
+      },
+    },
+  }
+})
 
 const onRecently = () => {
   console.log('Recently')

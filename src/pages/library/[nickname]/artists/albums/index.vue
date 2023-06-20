@@ -14,6 +14,7 @@ import { Album, Playlists, Song } from '@/types/artist'
 import { useRoute, useRouter } from 'vue-router'
 import Albums from '@/services/albums'
 import PlaylistsApi from '@/services/playlists'
+import { useMeta } from 'quasar'
 
 const route = useRoute()
 const router = useRouter()
@@ -54,6 +55,18 @@ const data: Data = reactive({
   albumsCount: 24,
   songPlaylist: undefined,
   isLoading: false,
+})
+
+useMeta(() => {
+  return {
+    title: t('pages.library.albums.titleHead'),
+    meta: {
+      description: {
+        name: 'description',
+        content: t('pages.library.albums.contentHead'),
+      },
+    },
+  }
 })
 
 const dialog = ref<boolean>(false)

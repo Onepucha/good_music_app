@@ -17,6 +17,7 @@ import {
   useLoadingStore,
   usePlayerStore,
 } from '@/stores'
+import { useMeta } from 'quasar'
 
 const { t } = useTranslation()
 
@@ -52,6 +53,18 @@ const data: Data = reactive({
   playlist: undefined,
   playlistsSong: [],
   songPlaylist: undefined,
+})
+
+useMeta(() => {
+  return {
+    title: t('pages.playlists.titleHead'),
+    meta: {
+      description: {
+        name: 'description',
+        content: t('pages.playlists.contentHead'),
+      },
+    },
+  }
 })
 
 const getInfoPlaylist = async () => {
