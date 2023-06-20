@@ -74,7 +74,7 @@ const setLiked = () => {
 }
 
 const downloadSong = () => {
-  emit('download', props.playlist?.url, props.playlist?.name)
+  emit('download', props.playlist?._id, props.playlist?.name)
 }
 
 const setShare = () => {

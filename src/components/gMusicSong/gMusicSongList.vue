@@ -54,8 +54,8 @@ const setLiked = (
   })
 }
 
-const downloadSong = (url: string, name: string) => {
-  emit('download', url, name)
+const downloadSong = (id: string, name: string) => {
+  emit('download', id, name)
 }
 
 const viewArtist = (url: string) => {
