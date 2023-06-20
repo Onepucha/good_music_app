@@ -4,6 +4,7 @@ import { defineComponent, onMounted, reactive } from 'vue'
 import DynamicIcon from '@/components/DynamicIcon.vue'
 import gBack from '@/components/gBack/gBack.vue'
 import gMusicGalleryList from '@/components/gMusicGallery/gMusicGalleryList.vue'
+import gMusicSongListNotFound from '@/components/gMusicSong/gMusicSongListNotFound.vue'
 import { useTranslation } from '@/composables/lang'
 import { useAuthStore, useLoadingStore } from '@/stores'
 import PlaylistsApi from '@/services/playlists'
@@ -16,6 +17,7 @@ defineComponent({
     DynamicIcon,
     gBack,
     gMusicGalleryList,
+    gMusicSongListNotFound,
   },
 })
 
@@ -131,6 +133,7 @@ onMounted(async () => {
 
             <div class="g-profile-details__body">
               <g-music-gallery-list
+                v-if="data.playlists.length"
                 :list="data.playlists"
                 :sub-title="
                   t('pages.profile.details.galleryListPlaylists.subTitle')
@@ -138,6 +141,8 @@ onMounted(async () => {
                 :title="t('pages.profile.details.galleryListPlaylists.title')"
                 :type="`/library/${authStore.user?.nickname}/playlists`"
               />
+
+              <g-music-song-list-not-found v-else />
             </div>
           </div>
         </div>

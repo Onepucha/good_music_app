@@ -3,6 +3,7 @@
     <div class="row">
       <div class="col-12 col-md-12">
         <g-music-gallery-list
+          v-if="data.newReleases.length"
           :list="data.newReleases"
           :sub-title="t('pages.home.galleryListReleases.subTitle')"
           :title="t('pages.home.galleryListReleases.title')"
@@ -14,6 +15,7 @@
         />
 
         <g-music-gallery-list
+          v-if="data.popularArtists.length"
           :list="data.popularArtists"
           :sub-title="t('pages.home.galleryListPopularArtists.subTitle')"
           :title="t('pages.home.galleryListPopularArtists.title')"
@@ -22,6 +24,7 @@
         />
 
         <g-music-gallery-list
+          v-if="data.topCharts.length"
           :list="data.topCharts"
           :sub-title="t('pages.home.galleryListTopCharts.subTitle')"
           :title="t('pages.home.galleryListTopCharts.title')"
@@ -61,7 +64,7 @@
 
 <script lang="ts" setup>
 import { defineComponent, nextTick, onMounted, reactive, ref } from 'vue'
-import { Artist, Chart, Song } from 'src/types/artist'
+import { Album, Artist, Chart, Song } from 'src/types/artist'
 
 import gMusicGalleryList from 'components/gMusicGallery/gMusicGalleryList.vue'
 
@@ -97,7 +100,7 @@ const position = ref<any>('bottom')
 
 interface Data {
   artists: Array<Artist>
-  newReleases: Array<Artist> | undefined
+  newReleases: Array<Artist> | Array<Album>
   popularArtists: string[] | undefined
   topCharts: Array<Chart> | undefined
   isLoading: boolean
