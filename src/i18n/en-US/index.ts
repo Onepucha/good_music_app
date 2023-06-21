@@ -482,8 +482,10 @@ export default {
   gMusicComments: {
     title: 'Comments',
     yourComment: 'Your Comment',
+    placeholderReplyComment: 'Your Comment',
     buttonDeleteComment: 'Delete',
     buttonReplyComment: 'Reply',
+    buttonCancelComment: 'Cancel',
     buttonAddReply: 'Add Reply',
     buttonAddComment: 'Add Comment',
   },

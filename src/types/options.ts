@@ -37,3 +37,12 @@ export interface CropperInstance {
 
   rotate(degree: number): void
 }
+
+export interface Comment {
+  _id: string
+  text: string
+  user?: string
+  nickname?: string
+  replies: Comment[]
+  createdAt?: string
+}
