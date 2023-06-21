@@ -60,8 +60,11 @@ const setLiked = () => {
         {{ currentMusic.title || 'Untitled' }}
       </div>
 
-      <div v-if="$q.platform.is.desktop" class="g-player-track__info-artists">
-        {{ currentMusic.artist?.name || 'Unknown' }}
+      <div
+        v-if="$q.platform.is.desktop && currentMusic.artist?.name"
+        class="g-player-track__info-artists"
+      >
+        {{ currentMusic.artist?.name }}
       </div>
     </div>
 

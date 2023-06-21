@@ -19,6 +19,22 @@
     }
   }
 
+  .q-form {
+    margin: 24px 0 0;
+  }
+
+  .q-card__actions {
+    display: flex;
+    gap: 16px;
+    flex-wrap: nowrap;
+    padding: 0;
+    margin: 16px 0 0;
+
+    .q-btn--rectangle {
+      padding: 16px 14px;
+    }
+  }
+
   &__reply {
     &-actions {
       display: flex;
