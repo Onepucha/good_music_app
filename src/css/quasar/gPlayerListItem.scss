@@ -43,6 +43,12 @@
     color: $primary;
 
     .g-player-list-item {
+      &__picture {
+        &::before {
+          opacity: 1;
+        }
+      }
+
       &__title {
         &-artist {
           color: $primary300;
@@ -113,9 +119,15 @@
     font-size: $size-18;
     font-weight: 700;
     line-height: $lh-22;
+
+    @media #{$mobile} {
+      font-size: $size-16;
+      line-height: $lh-22;
+    }
   }
 
   &__picture {
+    position: relative;
     width: 40px;
     min-width: 40px;
     height: 40px;
@@ -123,6 +135,24 @@
     display: block;
     border-radius: 6px;
     overflow: hidden;
+
+    &::before {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      content: '';
+      background-image: url(data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjIiIGhlaWdodD0iMjIiIHZpZXdCb3g9IjAgMCAyMiAyMiIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cGF0aCBmaWxsLXJ1bGU9ImV2ZW5vZGQiIGNsaXAtcnVsZT0iZXZlbm9kZCIgZD0iTTEuODMzOTggMTEuMDA1M0MxLjgzMzk4IDUuOTQ1NzQgNS45NDgzNyAxLjgzMzM0IDExLjAwMDcgMS44MzMzNEMxNi4wNTI5IDEuODMzMzQgMjAuMTY3MyA1Ljk0NTc0IDIwLjE2NzMgMTEuMDA1M0MyMC4xNjczIDE2LjA1NDMgMTYuMDUyOSAyMC4xNjY3IDExLjAwMDcgMjAuMTY2N0M1Ljk0ODM3IDIwLjE2NjcgMS44MzM5OCAxNi4wNTQzIDEuODMzOTggMTEuMDA1M1pNMTQuMzYyOSAxMS45MzNDMTQuNDYwMyAxMS44MzU4IDE0LjU4NDEgMTEuNjg1NCAxNC42MTA3IDExLjY1QzE0Ljc1MjMgMTEuNDY0MyAxNC44MjMgMTEuMjM0NCAxNC44MjMgMTEuMDA1M0MxNC44MjMgMTAuNzQ4IDE0Ljc0MzQgMTAuNTA5MiAxNC41OTMgMTAuMzE0NkMxNC41ODA3IDEwLjMwMjMgMTQuNTU2NSAxMC4yNzYgMTQuNTI1MSAxMC4yNDE4QzE0LjQ2NjIgMTAuMTc3NyAxNC4zODE3IDEwLjA4NTggMTQuMzAxIDEwLjAwNTFDMTMuNTc1NSA5LjIyNjgxIDExLjY4MiA3Ljk1MzMgMTAuNjkxIDcuNTY0MTdDMTAuNTQwNSA3LjUwMzE1IDEwLjE2MDEgNy4zNjk2IDkuOTU2NTcgNy4zNjA3NkM5Ljc2MTkxIDcuMzYwNzYgOS41NzYxIDcuNDA0OTggOS4zOTkxNCA3LjQ5MzQyQzkuMTc3OTQgNy42MTcyMyA5LjAwMDk3IDcuODExOCA4LjkwMzY0IDguMDQxNzRDOC44NDE3MSA4LjIwMDkzIDguNzQ0MzggOC42Nzg1IDguNzQ0MzggOC42ODczNEM4LjY0NzA1IDkuMjA5MTMgOC41OTM5NiAxMC4wNTgxIDguNTkzOTYgMTAuOTk1NkM4LjU5Mzk2IDExLjg4OTcgOC42NDcwNSAxMi43MDI1IDguNzI2NjggMTMuMjMzMUM4LjcyODg3IDEzLjIzNTMgOC43MzY0OCAxMy4yNzMyIDguNzQ4MzEgMTMuMzMyMkM4Ljc4NDI1IDEzLjUxMTQgOC44NTkxNCAxMy44ODQ4IDguOTM5MDQgMTQuMDM3OUM5LjEzMzY5IDE0LjQwOTMgOS41MTQxNiAxNC42MzkzIDkuOTIxMTggMTQuNjM5M0g5Ljk1NjU3QzEwLjIyMiAxNC42MzA0IDEwLjc3OTQgMTQuNDAwNSAxMC43Nzk0IDE0LjM5MTZDMTEuNzE3MyAxNC4wMDI1IDEzLjU2NjYgMTIuNzkwOSAxNC4zMDk5IDExLjk4NjFMMTQuMzYyOSAxMS45MzNaIiBmaWxsPSJ3aGl0ZSIvPjwvc3ZnPg==);
+      background-repeat: no-repeat;
+      background-position: center;
+      background-size: 22px;
+      opacity: 0;
+      transition: $animate-delay;
+    }
 
     &-default {
       background: linear-gradient(
@@ -221,19 +251,12 @@
       line-height: $lh-14;
       letter-spacing: 0.2px;
       color: $greyscale700;
-
     }
   }
 }
 
 body.body--dark {
   .g-player-list-item {
-    &__position {
-      color: $white;
-    }
-
-    &__title {
-      color: $white;
-    }
+    color: $white;
   }
 }
