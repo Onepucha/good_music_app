@@ -129,7 +129,6 @@ const setLiked = () => {
       class="g-music-gallery-item__picture"
       :class="{
         'g-music-gallery-item__picture-default': !props.item?.cover_src,
-        'g-music-gallery-item__picture-loading': !isLoaded,
       }"
       :style="{
         'background-color': placeholderColor,

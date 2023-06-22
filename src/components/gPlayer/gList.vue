@@ -1,8 +1,15 @@
 <script setup lang="ts">
-import { computed, CSSProperties } from 'vue'
+import { computed, CSSProperties, defineComponent } from 'vue'
 import { Song } from '@/types/artist'
+import gListItem from './gListItem.vue'
 
 const emit = defineEmits(['selectsong'])
+
+defineComponent({
+  components: {
+    gListItem,
+  },
+})
 
 interface Props {
   show?: boolean
@@ -30,6 +37,10 @@ const listHeightStyle = computed<CSSProperties>(() => {
     maxHeight: props.listmaxheight || '',
   }
 })
+
+const selectSong = (song: Song) => {
+  emit('selectsong', song)
+}
 </script>
 
 <template>
@@ -42,23 +53,14 @@ const listHeightStyle = computed<CSSProperties>(() => {
       :style="listHeightStyle"
     >
       <ol ref="ol" :style="listHeightStyle">
-        <li
+        <g-list-item
           v-for="(aMusic, index) of musicList"
-          :key="index"
-          :class="{ 'g-player-list-light': aMusic._id === currentMusic._id }"
-          @click="emit('selectsong', aMusic)"
-        >
-          <span class="g-player-list-cur" :style="{ background: theme }"></span>
-          <span class="g-player-list-index">
-            {{ index + 1 }}
-          </span>
-          <span class="g-player-list-title">
-            {{ aMusic.name || 'Untitled' }}
-          </span>
-          <span class="g-player-list-author">
-            {{ aMusic.artists?.at(0)?.name || 'Unknown' }}
-          </span>
-        </li>
+          :key="aMusic._id"
+          :current-music="currentMusic"
+          :item="aMusic"
+          :position="index + 1"
+          @selectsong="selectSong"
+        />
       </ol>
     </div>
   </transition>
@@ -73,9 +75,13 @@ const listHeightStyle = computed<CSSProperties>(() => {
     position: fixed;
     height: 100%;
     width: 100%;
-    background: rgb(26, 26, 26);
+    background: $greyscale100;
     overflow: hidden auto;
     z-index: -1;
+
+    @media #{$mobile} {
+      z-index: 102;
+    }
   }
 
   &.slide-v-enter-active,
@@ -84,9 +90,18 @@ const listHeightStyle = computed<CSSProperties>(() => {
     will-change: height;
   }
 
-  &.slide-v-enter,
+  &.slide-v-enter-from,
   &.slide-v-leave-to {
-    height: 0 !important;
+    overflow: hidden;
+    max-height: 0;
+    height: 0;
+  }
+
+  &.slide-v-enter-to,
+  &.slide-v-leave-from {
+    overflow: hidden;
+    max-height: 100%;
+    height: auto;
   }
 
   ol {
@@ -110,69 +125,6 @@ const listHeightStyle = computed<CSSProperties>(() => {
 
     &::-webkit-scrollbar-thumb:hover {
       background-color: #ccc;
-    }
-
-    &:not(:hover) {
-      li.g-player-list-light {
-        transition: $animate-delay;
-      }
-    }
-
-    li {
-      position: relative;
-      height: 32px;
-      line-height: 32px;
-      padding: 0 15px;
-      font-size: 12px;
-      border-top: 1px solid #e9e9e9;
-      cursor: pointer;
-      transition: $animate-delay;
-      color: $white;
-      overflow: hidden;
-      margin: 0;
-      text-align: start;
-      display: flex;
-
-      &:first-child {
-        border-top: none;
-      }
-
-      @include hover-supported {
-        background: #efefef;
-        color: $greyscale900;
-      }
-
-      &.g-player-list-light {
-        background: #efefef;
-        color: $greyscale900;
-
-        .g-player-list-cur {
-          display: inline-block;
-        }
-      }
-
-      .g-player-list-cur {
-        display: none;
-        width: 3px;
-        height: 22px;
-        position: absolute;
-        left: 0;
-        top: 5px;
-        transition: $animate-delay;
-      }
-
-      .g-player-list-index {
-        margin-right: 12px;
-      }
-
-      .g-player-list-title {
-        flex-grow: 1;
-      }
-
-      .g-player-list-author {
-        flex-shrink: 0;
-        float: right;
-      }
     }
   }
 }

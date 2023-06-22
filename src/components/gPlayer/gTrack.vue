@@ -61,10 +61,13 @@ const setLiked = () => {
       </div>
 
       <div
-        v-if="$q.platform.is.desktop && currentMusic.artist?.name"
+        v-if="
+          $q.platform.is.desktop &&
+          (currentMusic?.artist?.name || currentMusic?.artist)
+        "
         class="g-player-track__info-artists"
       >
-        {{ currentMusic.artist?.name }}
+        {{ currentMusic?.artist?.name || currentMusic?.artist }}
       </div>
     </div>
 

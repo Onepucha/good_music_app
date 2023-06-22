@@ -27,14 +27,14 @@
             <q-item-label caption>{{ comment.createdAt }}</q-item-label>
             <q-item-label>
               <div
-                v-if="comment.user === currentUser._id"
+                v-if="comment.user === currentUser?._id"
                 class="g-link"
                 @click.prevent="deleteComment(comment._id)"
               >
                 {{ t('gMusicComments.buttonDeleteComment') }}
               </div>
             </q-item-label>
-            <q-item-label>
+            <q-item-label v-if="currentUser">
               <div class="g-link" @click.prevent="toggleReply(comment._id)">
                 {{ t('gMusicComments.buttonReplyComment') }}
               </div>
@@ -68,14 +68,14 @@
                 <q-item-label caption>{{ reply.createdAt }}</q-item-label>
                 <q-item-label>
                   <div
-                    v-if="reply.user === currentUser._id"
+                    v-if="reply.user === currentUser?._id"
                     class="g-link"
                     @click.prevent="deleteComment(reply._id, comment._id)"
                   >
                     {{ t('gMusicComments.buttonDeleteComment') }}
                   </div>
                 </q-item-label>
-                <q-item-label>
+                <q-item-label v-if="currentUser">
                   <div
                     class="g-link"
                     @click.prevent="toggleReply(reply._id, comment._id)"
@@ -118,7 +118,7 @@
                   </q-item-label>
                   <q-item-label>
                     <div
-                      v-if="replyToReply.user === currentUser._id"
+                      v-if="replyToReply.user === currentUser?._id"
                       class="g-link"
                       @click.prevent="
                         deleteComment(replyToReply._id, reply._id, comment._id)
@@ -174,7 +174,7 @@
             autofocus
             standout
           />
-          <q-card-actions>
+          <q-card-actions v-if="currentUser">
             <q-btn
               :label="t('gMusicComments.buttonReplyComment')"
               :loading="isLoading"
@@ -201,7 +201,7 @@
       </template>
     </q-list>
 
-    <div class="g-music-comments__actions">
+    <div v-if="currentUser" class="g-music-comments__actions">
       <g-input
         v-model="newCommentText"
         :dense="dense"
@@ -219,12 +219,29 @@
         @click.prevent="addComment"
       />
     </div>
+    <div v-else class="g-music-comments__need-login">
+      <q-card class="g-music-comments__card">
+        <q-card-section>
+          <div class="g-music-comments__card-picture">
+            <DynamicIcon name="signin" :size="32" />
+          </div>
+
+          <div class="g-music-comments__card-info">
+            <router-link class="g-link" to="/login">
+              {{ t('gMusicComments.signIn') }}
+            </router-link>
+            {{ t('gMusicComments.signInLeave') }}
+          </div>
+        </q-card-section>
+      </q-card>
+    </div>
   </div>
 </template>
 
 <script setup lang="ts">
 import { defineComponent, ref } from 'vue'
 import gInput from '@/components/gInput/gInput.vue'
+import DynamicIcon from '@/components/DynamicIcon.vue'
 import { v4 as uuid } from 'uuid'
 import { User } from 'src/types/users'
 import { useAuthStore } from '@/stores'
@@ -236,6 +253,7 @@ const authStore = useAuthStore()
 defineComponent({
   components: {
     gInput,
+    DynamicIcon,
   },
 })
 

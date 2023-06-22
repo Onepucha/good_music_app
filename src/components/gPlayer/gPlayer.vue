@@ -1073,8 +1073,19 @@ defineExpose({ data, play, pause, toggle })
           @track-rewind-next="onRewindNext"
         />
 
-        <g-controller-bottom />
+        <g-controller-bottom @show-playlists="data.showList = true" />
       </g-song-play>
+
+      <g-list
+        :show="data.showList"
+        :current-music="currentMusic"
+        :music-list="musicList"
+        :play-index="playIndex"
+        :listmaxheight="listMaxHeight"
+        :theme="currentTheme"
+        :fixed="fixed"
+        @selectsong="onSelectSong"
+      />
     </q-dialog>
   </div>
 </template>
