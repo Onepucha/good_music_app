@@ -39,6 +39,8 @@ const emit = defineEmits(['toggleplay', 'set-liked'])
 const focus = ref<boolean>(false)
 const value = ref<number>(5.5)
 const isMobile = ref<boolean | undefined>($q.platform.is.mobile)
+const isLoaded = ref<boolean>(false)
+const placeholderColor = ref<string>('#bdbdbd')
 
 const randomGradient = computed<CSSProperties>(() => {
   let colors = [
@@ -127,6 +129,10 @@ const setLiked = () => {
       class="g-music-gallery-item__picture"
       :class="{
         'g-music-gallery-item__picture-default': !props.item?.cover_src,
+        'g-music-gallery-item__picture-loading': !isLoaded,
+      }"
+      :style="{
+        'background-color': placeholderColor,
       }"
       @mouseleave="focus = false"
       @mouseover="focus = true"
@@ -163,6 +169,7 @@ const setLiked = () => {
         :src="props.item?.cover_src"
         class="g-music-gallery-item__picture"
         loading="lazy"
+        @load="isLoaded = true"
       />
 
       <div
