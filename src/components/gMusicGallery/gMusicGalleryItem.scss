@@ -157,6 +157,14 @@
       user-select: none;
       aspect-ratio: 1/1;
     }
+
+    &-default {
+      background-color: $greyscale400;
+    }
+
+    &-loading {
+      opacity: 0.5;
+    }
   }
 
   &__gradient {
@@ -167,15 +175,14 @@
     width: 160px;
     height: 160px;
     border-radius: 16px;
-    background:
-      linear-gradient(
-        141.82deg,
-        #42d0e1 0%,
-        #f2e58d 32.64%,
-        #fec856 50.01%,
-        #f77e0c 78.11%,
-        #f0de51 101.07%
-      );
+    background: linear-gradient(
+      141.82deg,
+      #42d0e1 0%,
+      #f2e58d 32.64%,
+      #fec856 50.01%,
+      #f77e0c 78.11%,
+      #f0de51 101.07%
+    );
     animation: rotate-hue 6s alternate infinite;
 
     @keyframes rotate-hue {
