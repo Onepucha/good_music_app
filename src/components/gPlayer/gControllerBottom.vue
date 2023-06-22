@@ -19,7 +19,12 @@ const data: Data = reactive({
   menuTheme: usersStore.menuTheme,
 })
 
-const emit = defineEmits(['music-speed', 'sleep-time', 'app-share'])
+const emit = defineEmits([
+  'music-speed',
+  'sleep-time',
+  'app-share',
+  'show-playlists',
+])
 
 const props = defineProps<{
   theme?: string
@@ -50,7 +55,10 @@ const props = defineProps<{
           @click.prevent="emit('app-share')"
         />
 
-        <i class="g-icon g-icon-dots" @click.prevent.stop="">
+        <i
+          class="g-icon g-icon-dots"
+          @click.prevent.stop="emit('show-playlists', true)"
+        >
           <span></span>
 
           <q-menu

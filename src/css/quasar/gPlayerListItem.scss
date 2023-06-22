@@ -1,0 +1,239 @@
+.g-player-list-item {
+  position: relative;
+  display: flex;
+  gap: 16px;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 16px;
+  background: transparent;
+  color: $greyscale900;
+  transition: $animate-delay;
+  cursor: pointer;
+
+  @media #{$mobile} {
+    padding: 10px 12px;
+  }
+
+  & + & {
+    &::before {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 1px;
+      background: $greyscale300;
+      content: '';
+    }
+  }
+
+  &:last-child {
+    &::after {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 1px;
+      background: $greyscale300;
+      content: '';
+    }
+  }
+
+  @include hover-supported {
+    background: $greyscale50;
+    color: $primary;
+
+    .g-player-list-item {
+      &__title {
+        &-artist {
+          color: $primary300;
+        }
+      }
+
+      &__action {
+        &::before {
+          background: $primary300;
+        }
+
+        &-date-added {
+          color: $primary300;
+        }
+
+        &-duration {
+          color: $primary300;
+        }
+      }
+    }
+  }
+
+  &_active {
+    background: $greyscale50;
+    color: $primary;
+    pointer-events: none;
+
+    .g-player-list-item {
+      &__title {
+        &-artist {
+          color: $primary300;
+        }
+      }
+
+      &__action {
+        &::before {
+          background: $primary300;
+        }
+
+        &-date-added {
+          color: $primary300;
+        }
+
+        &-duration {
+          color: $primary300;
+        }
+      }
+    }
+  }
+
+  &__content {
+    display: flex;
+    gap: 16px;
+    align-items: center;
+    justify-content: flex-start;
+
+    @media #{$mobile} {
+      gap: 12px;
+    }
+  }
+
+  &__position {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 22px;
+    min-width: 22px;
+    font-size: $size-18;
+    font-weight: 700;
+    line-height: $lh-22;
+  }
+
+  &__picture {
+    width: 40px;
+    min-width: 40px;
+    height: 40px;
+    min-height: 40px;
+    display: block;
+    border-radius: 6px;
+    overflow: hidden;
+
+    &-default {
+      background: linear-gradient(
+        141.82deg,
+        #42d0e1 0%,
+        #f2e58d 32.64%,
+        #fec856 50.01%,
+        #f77e0c 78.11%,
+        #f0de51 101.07%
+      );
+      animation: rotate-hue 6s alternate infinite;
+
+      @keyframes rotate-hue {
+        to {
+          filter: hue-rotate(1turn);
+        }
+      }
+    }
+
+    img {
+      width: 100%;
+      height: 100%;
+    }
+  }
+
+  &__title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: $size-18;
+    font-weight: 700;
+    line-height: $lh-22;
+    letter-spacing: 0.2px;
+
+    @media #{$mobile} {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 2px;
+      font-size: $size-16;
+      line-height: $lh-22;
+    }
+
+    &-artist {
+      font-size: $size-16;
+      font-weight: 400;
+      line-height: $lh-22;
+      letter-spacing: 0.2px;
+      color: $greyscale400;
+
+      @media #{$mobile} {
+        font-size: $size-12;
+        line-height: $lh-14;
+      }
+    }
+  }
+
+  &__action {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 27px;
+
+    &::before {
+      position: absolute;
+      left: 0;
+      right: 0;
+      margin: 0 auto;
+      top: 50%;
+      transform: translateY(-50%);
+      content: '';
+      height: 8px;
+      width: 1px;
+      background: $greyscale700;
+
+      @media #{$mobile} {
+        display: none;
+      }
+    }
+
+    &-date-added {
+      font-size: $size-12;
+      font-weight: 400;
+      line-height: $lh-14;
+      letter-spacing: 0.2px;
+      color: $greyscale700;
+
+      @media #{$mobile} {
+        display: none;
+      }
+    }
+
+    &-duration {
+      font-size: $size-12;
+      font-weight: 400;
+      line-height: $lh-14;
+      letter-spacing: 0.2px;
+      color: $greyscale700;
+
+    }
+  }
+}
+
+body.body--dark {
+  .g-player-list-item {
+    &__position {
+      color: $white;
+    }
+
+    &__title {
+      color: $white;
+    }
+  }
+}

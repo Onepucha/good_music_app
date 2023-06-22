@@ -488,6 +488,8 @@ export default {
     buttonCancelComment: 'Cancel',
     buttonAddReply: 'Add Reply',
     buttonAddComment: 'Add Comment',
+    signIn: 'Sign in',
+    signInLeave: 'in to leave comments.',
   },
   gMusicSearch: {
     searchLabel: 'Artists, Songs, Podcasts, & More',
