@@ -1,142 +1,3 @@
-<template>
-  <q-dialog
-    class="g-music-search-modal"
-    :maximized="maximizedToggle"
-    transition-show="slide-left"
-    transition-hide="slide-right"
-  >
-    <q-card>
-      <div class="g-music-search">
-        <div class="g-music-search__header">
-          <div class="g-music-search__input">
-            <g-back v-close-popup icon="back" @click.prevent="clearSearch" />
-            <g-input
-              v-model="searchQuery"
-              clearable
-              clear-icon="close"
-              :icon-class="'search'"
-              :placeholder="t('gMusicSearch.searchLabel')"
-              standout
-              @keyup.enter="addRecentSearch"
-              @clear="clearSearch"
-            />
-          </div>
-
-          <div v-if="recentSearches.length >= 0" class="g-music-search__filter">
-            <q-btn
-              v-for="category in categories"
-              :id="category._id"
-              :key="category._id"
-              :label="category.label"
-              class="q-btn-small"
-              :class="category.active ? '' : 'q-btn-border'"
-              rounded
-              text-color="''"
-              unelevated
-              @click="toggleFilter(category._id, category.type)"
-            />
-          </div>
-        </div>
-
-        <div class="g-music-search__content scroll">
-          <div
-            v-if="
-              recentSearchesVisible &&
-              recentSearches.length > 0 &&
-              searchResults.length === 0 &&
-              !isLoading
-            "
-            class="g-music-search__recent"
-          >
-            <div class="g-music-search__recent-header">
-              <h5>Recent searches:</h5>
-              <div
-                v-show="recentSearches.length > 0"
-                class="g-link"
-                @click="clearRecentSearches()"
-              >
-                Clear all
-              </div>
-            </div>
-            <q-list class="g-music-search__recent-list">
-              <q-item
-                v-for="(recentSearch, index) in recentSearches"
-                :key="index"
-                class="g-music-search__recent-list-item"
-                clickable
-                @click="recentSearchClick(recentSearch)"
-              >
-                <q-item-section>{{ recentSearch }}</q-item-section>
-                <q-item-section side>
-                  <span
-                    class="g-music-search__recent__close"
-                    @click.stop="removeRecentSearch(index)"
-                  >
-                  </span>
-                </q-item-section>
-              </q-item>
-            </q-list>
-          </div>
-
-          <div v-if="searchResults?.length > 0" :class="listClass">
-            <template v-for="result in searchResults" :key="result.id">
-              <template v-if="result.type === 'song'">
-                <g-music-song
-                  :key="result.data._id"
-                  :artist="result.data?.artists?.at(0)"
-                  :artist-id="result.data?.artists?.at(0)?._id"
-                  :song="result.data"
-                  @toggleplay="
-                    onAudioToggle({ song: result.data, index: result.data._id })
-                  "
-                  @set-liked="setLiked"
-                  @download="downloadSong"
-                  @view-artist="viewArtist"
-                  @go-to-album="goToAlbum"
-                  @add-playlist="addPlayList"
-                  @dont-play-this="dontPlayThis"
-                />
-              </template>
-
-              <template v-if="result.type === 'artist'">
-                <g-follow-artist
-                  redirect
-                  :artist="result.data"
-                  @add-follow="addFollow"
-                />
-              </template>
-
-              <template v-if="result.type === 'album'">
-                <g-music-album-item :album="result.data" />
-              </template>
-
-              <template v-if="result.type === 'playlist'">
-                <g-music-playlist :playlist="result.data" />
-              </template>
-            </template>
-          </div>
-          <g-loader v-if="isLoading" />
-          <div
-            v-else-if="searchResults?.length === 0"
-            class="g-music-search__not-found"
-          >
-            <div class="g-music-search__not-found-images">
-              <img src="/images/not-found-songs.svg" alt="not-found-songs" />
-            </div>
-            <h4 class="g-music-search__not-found-title">
-              {{ t('gMusicSearch.titleNotFound') }}
-            </h4>
-            <p
-              class="g-music-search__not-found-description"
-              v-html="t('gMusicSearch.descriptionNotFound')"
-            ></p>
-          </div>
-        </div>
-      </div>
-    </q-card>
-  </q-dialog>
-</template>
-
 <script setup lang="ts">
 import {
   computed,
@@ -491,5 +352,147 @@ onMounted(() => {
   }
 })
 </script>
+
+<template>
+  <q-dialog
+    class="g-music-search-modal"
+    :maximized="maximizedToggle"
+    transition-show="slide-left"
+    transition-hide="slide-right"
+  >
+    <q-card>
+      <div class="g-music-search">
+        <div class="g-music-search__header">
+          <div class="g-music-search__input">
+            <g-back v-close-popup icon="back" @click.prevent="clearSearch" />
+            <g-input
+              v-model="searchQuery"
+              clearable
+              clear-icon="close"
+              :icon-class="'search'"
+              :placeholder="t('gMusicSearch.searchLabel')"
+              standout
+              @keyup.enter="addRecentSearch"
+              @clear="clearSearch"
+            />
+          </div>
+
+          <div v-if="recentSearches.length >= 0" class="g-music-search__filter">
+            <q-btn
+              v-for="category in categories"
+              :id="category._id"
+              :key="category._id"
+              :label="category.label"
+              class="q-btn-small"
+              :class="category.active ? '' : 'q-btn-border'"
+              rounded
+              text-color="''"
+              unelevated
+              @click="toggleFilter(category._id, category.type)"
+            />
+          </div>
+        </div>
+
+        <div class="g-music-search__content scroll">
+          <div
+            v-if="
+              recentSearchesVisible &&
+              recentSearches.length > 0 &&
+              searchResults.length === 0 &&
+              !isLoading
+            "
+            class="g-music-search__recent"
+          >
+            <div class="g-music-search__recent-header">
+              <h5>Recent searches:</h5>
+              <div
+                v-show="recentSearches.length > 0"
+                class="g-link"
+                @click="clearRecentSearches()"
+              >
+                Clear all
+              </div>
+            </div>
+            <q-list class="g-music-search__recent-list">
+              <q-item
+                v-for="(recentSearch, index) in recentSearches"
+                :key="index"
+                class="g-music-search__recent-list-item"
+                clickable
+                @click="recentSearchClick(recentSearch)"
+              >
+                <q-item-section>{{ recentSearch }}</q-item-section>
+                <q-item-section side>
+                  <span
+                    class="g-music-search__recent__close"
+                    @click.stop="removeRecentSearch(index)"
+                  >
+                  </span>
+                </q-item-section>
+              </q-item>
+            </q-list>
+          </div>
+
+          <div v-if="searchResults?.length > 0" :class="listClass">
+            <template v-for="result in searchResults" :key="result.id">
+              <template v-if="result.type === 'song'">
+                <g-music-song
+                  :key="result.data._id"
+                  :artist="result.data?.artists?.at(0)"
+                  :artist-id="result.data?.artists?.at(0)?._id"
+                  :song="result.data"
+                  @toggleplay="
+                    onAudioToggle({ song: result.data, index: result.data._id })
+                  "
+                  @set-liked="setLiked"
+                  @download="downloadSong"
+                  @view-artist="viewArtist"
+                  @go-to-album="goToAlbum"
+                  @add-playlist="addPlayList"
+                  @dont-play-this="dontPlayThis"
+                />
+              </template>
+
+              <template v-if="result.type === 'artist'">
+                <g-follow-artist
+                  redirect
+                  :artist="result.data"
+                  @add-follow="addFollow"
+                />
+              </template>
+
+              <template v-if="result.type === 'album'">
+                <g-music-album-item :album="result.data" />
+              </template>
+
+              <template v-if="result.type === 'playlist'">
+                <g-music-playlist :playlist="result.data" />
+              </template>
+            </template>
+          </div>
+          <g-loader v-if="isLoading" />
+          <div
+            v-else-if="searchResults?.length === 0"
+            class="g-music-search__not-found"
+          >
+            <div class="g-music-search__not-found-images">
+              <img
+                src="src/assets/images/not-found-songs.svg"
+                alt="not-found-songs"
+              />
+            </div>
+            <h4 class="g-music-search__not-found-title">
+              {{ t('gMusicSearch.titleNotFound') }}
+            </h4>
+            <p
+              class="g-music-search__not-found-description"
+              v-html="t('gMusicSearch.descriptionNotFound')"
+            ></p>
+          </div>
+        </div>
+      </div>
+    </q-card>
+  </q-dialog>
+</template>
 
 <style scoped></style>

@@ -7,7 +7,7 @@ const { t } = useTranslation()
 <template>
   <div class="g-music-song-list-not-found">
     <div class="g-music-song-list-not-found__images">
-      <img src="/images/not-found-songs.svg" alt="not-found-songs" />
+      <img src="src/assets/images/not-found-songs.svg" alt="not-found-songs" />
     </div>
     <h4 class="g-music-song-list-not-found__title">
       {{ t('gMusicSongListNotFound.title') }}
