@@ -130,9 +130,6 @@ const setLiked = () => {
       :class="{
         'g-music-gallery-item__picture-default': !props.item?.cover_src,
       }"
-      :style="{
-        'background-color': placeholderColor,
-      }"
       @mouseleave="focus = false"
       @mouseover="focus = true"
     >
@@ -167,7 +164,9 @@ const setLiked = () => {
         :alt="props.item.name"
         :src="props.item?.cover_src"
         class="g-music-gallery-item__picture"
-        loading="lazy"
+        :style="{
+          'background-color': placeholderColor,
+        }"
         @load="isLoaded = true"
       />
 
