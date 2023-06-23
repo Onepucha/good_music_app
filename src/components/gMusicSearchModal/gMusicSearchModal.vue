@@ -476,10 +476,7 @@ onMounted(() => {
             class="g-music-search__not-found"
           >
             <div class="g-music-search__not-found-images">
-              <img
-                src="src/assets/images/not-found-songs.svg"
-                alt="not-found-songs"
-              />
+              <img src="/images/not-found-songs.svg" alt="not-found-songs" />
             </div>
             <h4 class="g-music-search__not-found-title">
               {{ t('gMusicSearch.titleNotFound') }}
