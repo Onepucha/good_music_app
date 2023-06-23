@@ -316,7 +316,7 @@ const comments = ref<Comment[]>(
 
 localStorage.setItem('comments', JSON.stringify(comments))
 
-const currentUser = ref<User | undefined>(authStore?.user)
+const currentUser = ref<User | any>(authStore?.user || false)
 const newCommentText = ref<string>('')
 const replyText = ref<{ [commentId: string]: string }>({})
 const replyOpen = ref<{ [commentId: string]: boolean }>({})
