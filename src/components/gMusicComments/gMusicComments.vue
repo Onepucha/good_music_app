@@ -25,7 +25,7 @@
 
           <q-item-section side top>
             <q-item-label caption>{{ comment.createdAt }}</q-item-label>
-            <q-item-label>
+            <q-item-label v-if="currentUser">
               <div
                 v-if="comment.user === currentUser?._id"
                 class="g-link"
@@ -66,7 +66,7 @@
 
               <q-item-section side top>
                 <q-item-label caption>{{ reply.createdAt }}</q-item-label>
-                <q-item-label>
+                <q-item-label v-if="currentUser">
                   <div
                     v-if="reply.user === currentUser?._id"
                     class="g-link"
@@ -116,7 +116,7 @@
                   <q-item-label caption
                     >{{ replyToReply.createdAt }}
                   </q-item-label>
-                  <q-item-label>
+                  <q-item-label v-if="currentUser">
                     <div
                       v-if="replyToReply.user === currentUser?._id"
                       class="g-link"
