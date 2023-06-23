@@ -7,6 +7,7 @@ import {
   usePlayerStore,
   useUsersStore,
 } from '@/stores'
+import { computed } from 'vue'
 
 const { t } = useTranslation()
 const authStore = useAuthStore()
@@ -21,6 +22,10 @@ const props = defineProps<{
 }>()
 
 const emit = defineEmits(['selectsong'])
+
+const padPosition = computed<string>(() => {
+  return props.position.toString().padStart(2, '0')
+})
 </script>
 
 <template>
@@ -31,7 +36,7 @@ const emit = defineEmits(['selectsong'])
   >
     <div class="g-player-list-item__content">
       <div v-if="props.position" class="g-player-list-item__position">
-        {{ props.position }}
+        {{ padPosition }}
       </div>
       <div
         class="g-player-list-item__picture"
@@ -49,9 +54,9 @@ const emit = defineEmits(['selectsong'])
       <div class="g-player-list-item__title">
         {{ props.item.name || 'Untitled' }}
 
-        <span class="g-player-list-item__title-artist">{{
-          props.item.artist || 'Untitled'
-        }}</span>
+        <span class="g-player-list-item__title-artist">
+          {{ props.item?.artist || props.item?.artists[0]?.name || 'Untitled' }}
+        </span>
       </div>
     </div>
 
