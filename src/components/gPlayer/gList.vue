@@ -71,7 +71,7 @@ const selectSong = (song: Song) => {
   overflow: hidden;
 
   &.g-player-list-fixed {
-    top: 0;
+    bottom: 0;
     position: fixed;
     height: 100%;
     width: 100%;
