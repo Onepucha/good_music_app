@@ -330,6 +330,7 @@ const addComment = () => {
     replies: [],
     createdAt: new Date().toLocaleString(),
   })
+
   newCommentText.value = ''
   localStorage.setItem('comments', JSON.stringify(comments))
 }
