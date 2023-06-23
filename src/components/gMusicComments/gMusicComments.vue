@@ -25,16 +25,16 @@
 
           <q-item-section side top>
             <q-item-label caption>{{ comment.createdAt }}</q-item-label>
-            <q-item-label v-if="currentUser">
+            <q-item-label v-if="authStore.user">
               <div
-                v-if="comment.user === currentUser?._id"
+                v-if="comment.user === authStore.user._id"
                 class="g-link"
                 @click.prevent="deleteComment(comment._id)"
               >
                 {{ t('gMusicComments.buttonDeleteComment') }}
               </div>
             </q-item-label>
-            <q-item-label v-if="currentUser">
+            <q-item-label v-if="authStore.user">
               <div class="g-link" @click.prevent="toggleReply(comment._id)">
                 {{ t('gMusicComments.buttonReplyComment') }}
               </div>
@@ -66,16 +66,16 @@
 
               <q-item-section side top>
                 <q-item-label caption>{{ reply.createdAt }}</q-item-label>
-                <q-item-label v-if="currentUser">
+                <q-item-label v-if="authStore.user">
                   <div
-                    v-if="reply.user === currentUser?._id"
+                    v-if="reply.user === authStore.user?._id"
                     class="g-link"
                     @click.prevent="deleteComment(reply._id, comment._id)"
                   >
                     {{ t('gMusicComments.buttonDeleteComment') }}
                   </div>
                 </q-item-label>
-                <q-item-label v-if="currentUser">
+                <q-item-label v-if="authStore.user">
                   <div
                     class="g-link"
                     @click.prevent="toggleReply(reply._id, comment._id)"
@@ -116,9 +116,9 @@
                   <q-item-label caption
                     >{{ replyToReply.createdAt }}
                   </q-item-label>
-                  <q-item-label v-if="currentUser">
+                  <q-item-label v-if="authStore.user">
                     <div
-                      v-if="replyToReply.user === currentUser?._id"
+                      v-if="replyToReply.user === authStore.user?._id"
                       class="g-link"
                       @click.prevent="
                         deleteComment(replyToReply._id, reply._id, comment._id)
@@ -174,7 +174,7 @@
             autofocus
             standout
           />
-          <q-card-actions v-if="currentUser">
+          <q-card-actions v-if="authStore.user">
             <q-btn
               :label="t('gMusicComments.buttonReplyComment')"
               :loading="isLoading"
@@ -201,7 +201,7 @@
       </template>
     </q-list>
 
-    <div v-if="currentUser" class="g-music-comments__actions">
+    <div v-if="authStore.user" class="g-music-comments__actions">
       <g-input
         v-model="newCommentText"
         :dense="dense"
