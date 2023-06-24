@@ -14,12 +14,7 @@ import { Playlists, Song } from '@/types/artist'
 import { useTranslation } from '@/composables/lang'
 import { useRoute, useRouter } from 'vue-router'
 import { downloadSong } from '@/utils/utils'
-import {
-  useAlertStore,
-  useAuthStore,
-  useLoadingStore,
-  usePlayerStore,
-} from '@/stores'
+import { useAlertStore, useAuthStore, usePlayerStore } from '@/stores'
 import { useMeta } from 'quasar'
 
 const route = useRoute()
@@ -27,7 +22,6 @@ const router = useRouter()
 const { t } = useTranslation()
 const playerStore = usePlayerStore()
 const alertStore = useAlertStore()
-const loadingStore = useLoadingStore()
 const authStore = useAuthStore()
 
 defineComponent({

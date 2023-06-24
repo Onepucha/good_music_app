@@ -12,13 +12,14 @@ import { downloadSong } from '@/utils/utils'
 import { Album, Artist, Song } from '@/types/artist'
 import { useRoute, useRouter } from 'vue-router'
 import Artists from '@/services/artists'
-import { useAuthStore } from '@/stores'
+import { useAlertStore, useAuthStore } from '@/stores'
 import { useMeta } from 'quasar'
 
 const route = useRoute()
 const router = useRouter()
 const { t } = useTranslation()
 const authStore = useAuthStore()
+const alertStore = useAlertStore()
 
 defineComponent({
   components: {
@@ -80,8 +81,22 @@ const addPlayList = (song: Song) => {
   console.log(song)
 }
 
-const removeLibrary = (album: Album) => {
-  console.log(album)
+const removeLibrary = async (album: Album) => {
+  try {
+    await Artists.setFollow([album._id], false)
+
+    const indexToDelete = data.singers.findIndex(
+      (item: Artist) => item._id === album._id
+    )
+
+    if (indexToDelete !== -1) {
+      data.singers.splice(indexToDelete, 1)
+      alertStore.success(t('success'))
+    }
+  } catch (error: unknown) {
+    console.error(error)
+    alertStore.error(t('error'))
+  }
 }
 
 const viewArtist = (url: string) => {
