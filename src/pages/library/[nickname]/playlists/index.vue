@@ -76,8 +76,14 @@ const yourLikes = ref({
   songs: authStore.user?.songs,
 })
 
-const onRecently = () => {
-  console.log('Recently')
+const onRecently = async (direction: string) => {
+  const response: any = await PlaylistsApi.getLikedYour({
+    count: data.playlistsCount,
+    page: 1,
+    direction: direction,
+  })
+
+  data.playlists = response?.data?.playlists
 }
 
 const scrollTargetRef = ref<any>(document.createElement('div'))

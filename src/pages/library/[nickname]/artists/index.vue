@@ -66,8 +66,14 @@ useMeta(() => {
   }
 })
 
-const onRecently = () => {
-  console.log('Recently')
+const onRecently = async (direction: string) => {
+  const response: any = await Artists.getLiked({
+    count: data.singersCount,
+    page: 1,
+    direction: direction,
+  })
+
+  data.singers = response.data.singers
 }
 
 const addPlayList = (song: Song) => {

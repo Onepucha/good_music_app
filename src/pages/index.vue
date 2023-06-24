@@ -71,6 +71,7 @@ import gMusicGalleryList from 'components/gMusicGallery/gMusicGalleryList.vue'
 import {
   useAlertStore,
   useArtistsStore,
+  useAuthStore,
   useChartsStore,
   useLoadingStore,
   usePlayerStore,
@@ -95,6 +96,7 @@ defineComponent({
   },
 })
 
+const authStore = useAuthStore()
 const dialogEmail = ref<boolean>(false)
 const qDialogPopup = ref<any>(null)
 const position = ref<any>('bottom')
@@ -180,6 +182,7 @@ const emailVerify = async () => {
     ) {
       await usersStore.emailVerify(route.query.token)
       dialogEmail.value = true
+      await authStore.userInfo()
     }
   } catch (error: unknown) {
     console.error(error)

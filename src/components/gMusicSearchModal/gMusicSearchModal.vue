@@ -61,7 +61,7 @@ const MAX_RECENT_SEARCHES = 10
 
 const tab = ref<string>('songs')
 const searchQuery = ref<string>('')
-const searchResults = ref([])
+const searchResults = ref<any>([])
 const maximizedToggle = ref<boolean>(true)
 const dialogAddModal = ref<boolean>(false)
 const recentSearches = ref<string[]>([])
@@ -216,7 +216,6 @@ const onAudioToggle = (item: { song: Song; index: number }) => {
 }
 
 const onAudioPlay = async (item: { song: Song; index: number }) => {
-  console.log(item)
   try {
     const songUrl = await Songs.playSong(item.song._id)
 
@@ -300,43 +299,45 @@ const setLiked = async (
   try {
     await Songs.setLiked(object.ids, object.is_add_to_liked)
 
-    const song = searchResults.value.filter(
-      (item: { data: Song; type: string }) => {
-        return item.data._id === object.ids[0]
-      }
+    const index = searchResults.value?.findIndex(
+      (song: { type: string; data: Song }) =>
+        song?.data?._id === object.ids.at(0)
     )
 
-    searchResults.value.filter((item) => {
-      if (item === song.at(0)) {
-        ;(item as { data: { is_liked: boolean } }).data.is_liked = true
-        return true
-      }
-      return false
-    })
+    if (index !== undefined) {
+      searchResults.value[index].data.is_liked = object.is_add_to_liked
+    }
+
+    if (searchResults.value[index].data.is_liked) {
+      alertStore.success(t('successLiked'))
+    } else {
+      alertStore.success(t('successNotLiked'))
+    }
   } catch (error: unknown) {
     console.error(error)
   }
 }
 
-const addFollow = async (artist: Artist) => {
-  const isFollowItem = data.followArtistList.filter(
-    (item: any) => item._id === artist?._id
-  )
-
-  if (isFollowItem.length) {
-    data.followArtistList = data.followArtistList.filter(
-      (item: any) => item._id !== artist._id
+const addFollow = async (artist: Artist, follow: boolean) => {
+  try {
+    const isFollowItem: Array<Artist> = searchResults.value.filter(
+      (item: { type: string; data: Artist }) => item.data._id === artist?._id
     )
 
-    await saveFollowArtist(false, [artist._id])
-  } else {
-    const followItem = data.followArtistList.filter(
-      (item: any) => item._id === artist._id
-    )
+    await saveFollowArtist(follow, [artist._id])
 
-    data.followArtistList.push(followItem[0]._id)
+    isFollowItem[0].is_liked = follow
 
-    await saveFollowArtist(true, [followItem[0]._id])
+    if (isFollowItem[0].is_liked) {
+      alertStore.success(t('successLiked'))
+    } else {
+      alertStore.success(t('successNotLiked'))
+    }
+  } catch (error: unknown) {
+    console.error(error)
+    if (error instanceof Error) {
+      alertStore.error(error.message)
+    }
   }
 }
 

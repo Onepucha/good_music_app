@@ -89,8 +89,14 @@ const getLikedAlbums = async (index: number, done: () => void) => {
   }
 }
 
-const onRecently = () => {
-  console.log('Recently')
+const onRecently = async (direction: string) => {
+  const response: any = await Albums.getLiked({
+    count: data.albumCount,
+    page: 1,
+    direction: direction,
+  })
+
+  data.albums = response.data.albums
 }
 
 const shufflePlay = (songs: Array<Song>, artist: Artist) => {
@@ -153,14 +159,6 @@ const editPlaylist = async (playlist: Playlists) => {
   } catch (error: unknown) {
     dialog.value = false
     console.error(error)
-  }
-}
-
-const closeModal = (bool: boolean, showCreateModal: boolean) => {
-  dialog.value = bool
-
-  if (showCreateModal) {
-    dialogCreateModal.value = true
   }
 }
 

@@ -125,6 +125,35 @@ const setLiked = async (
   }
 }
 
+const setLikedSong = async (
+  isSingle: boolean,
+  object: {
+    ids: string[]
+    is_add_to_liked: boolean
+  }
+) => {
+  try {
+    await Songs.setLiked(object.ids, object.is_add_to_liked)
+
+    const index = data.albumSong?.findIndex(
+      (song) => song._id === object.ids.at(0)
+    )
+
+    if (data.albumSong && index !== undefined) {
+      data.albumSong[index].is_liked = object.is_add_to_liked
+    }
+
+    if (object.is_add_to_liked) {
+      alertStore.success(t('successLiked'))
+    } else {
+      alertStore.success(t('successNotLiked'))
+    }
+  } catch (error: unknown) {
+    console.error(error)
+    alertStore.error(t('error'))
+  }
+}
+
 const onAudioToggle = (item: { song: Song; index: number }) => {
   if (playerStore.playing && playerStore.getMusicIndex === item.index) {
     onAudioPause()
@@ -262,7 +291,7 @@ onMounted(async () => {
       :sub-title="t('pages.album.gMusicSongList.subTitle')"
       :title="t('pages.album.gMusicSongList.title')"
       @toggleplay="onAudioToggle"
-      @set-liked="setLiked"
+      @set-liked="setLikedSong"
       @view-artist="viewArtist"
       @add-playlist="addPlayList"
       @download="downloadSong"

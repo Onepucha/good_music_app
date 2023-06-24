@@ -5,7 +5,7 @@ import dayjs from 'dayjs'
 import { useTranslation } from '@/composables/lang'
 import { email, minLength, required } from '@vuelidate/validators'
 import { useVuelidate } from '@vuelidate/core'
-import { useAlertStore, useAuthStore } from '@/stores'
+import { useAlertStore, useAuthStore, useUsersStore } from '@/stores'
 import DynamicIcon from '@/components/DynamicIcon.vue'
 import gBack from '@/components/gBack/gBack.vue'
 import gInput from '@/components/gInput/gInput.vue'
@@ -22,6 +22,8 @@ defineComponent({
 })
 
 const authStore = useAuthStore()
+const usersStore = useUsersStore()
+const alertStore = useAlertStore()
 const dense = ref<boolean>(false)
 const qDateProxy = ref<any>(null)
 
@@ -79,9 +81,6 @@ const v$ = useVuelidate(rules, data)
 data.datepickerTheme = !!JSON.parse(localStorage.getItem('darkMode') as string)
 
 const onSaveProfile = async () => {
-  const authStore = useAuthStore()
-  const alertStore = useAlertStore()
-
   v$.value.$validate()
 
   if (!v$.value.$error) {
@@ -108,8 +107,16 @@ const onSaveProfile = async () => {
   }
 }
 
-const resendEmail = () => {
-  console.log('Resend email')
+const resendEmail = async () => {
+  try {
+    await usersStore.sendVerifyEmail(data.email)
+    alertStore.success(t('pages.profile.edit.sendEmailSuccess'))
+  } catch (error: unknown) {
+    console.error(error)
+    if (error instanceof Error) {
+      alertStore.error(error.message)
+    }
+  }
 }
 </script>
 

@@ -21,7 +21,7 @@ const follow = ref<boolean>(false)
 
 const toggleFollow = (artist: Artist) => {
   follow.value = !follow.value
-  emit('add-follow', artist)
+  emit('add-follow', artist, follow.value)
 }
 
 const followBtnText = computed<string>(() => {
