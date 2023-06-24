@@ -246,6 +246,7 @@ import { v4 as uuid } from 'uuid'
 import { User } from 'src/types/users'
 import { useAuthStore } from '@/stores'
 import { useTranslation } from '@/composables/lang'
+import { Comment } from '@/types/options'
 
 const { t } = useTranslation()
 const authStore = useAuthStore()
@@ -256,15 +257,6 @@ defineComponent({
     DynamicIcon,
   },
 })
-
-interface Comment {
-  _id: string
-  text: string
-  user?: string
-  nickname?: string
-  replies: Comment[]
-  createdAt?: string
-}
 
 const dense = ref<boolean>(false)
 const isLoading = ref<boolean>(false)
