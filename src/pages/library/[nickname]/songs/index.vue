@@ -92,8 +92,14 @@ const getLikedSongs = async (index: number, done: () => void) => {
   }
 }
 
-const onRecently = () => {
-  console.log('Recently')
+const onRecently = async (direction: string) => {
+  const response: any = await Songs.getLiked({
+    count: data.albumCount,
+    page: 1,
+    direction: direction,
+  })
+
+  data.songs = response.data.songs
 }
 
 const shufflePlay = () => {
@@ -230,8 +236,15 @@ const setLiked = async (
 
     const index = data.songs?.findIndex((song) => song._id === object.ids.at(0))
 
-    if (data.songs && index !== undefined) {
+    if (data.songs && object.is_add_to_liked && index !== undefined) {
       data.songs[index].is_liked = object.is_add_to_liked
+    } else {
+      const index = data.songs?.findIndex(
+        (song) => song._id === object.ids.at(0)
+      )
+      if (index !== undefined) {
+        data.songs.splice(index, 1)
+      }
     }
 
     if (object.is_add_to_liked) {

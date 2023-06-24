@@ -227,6 +227,7 @@ export default {
         genderLabel: 'Gender',
         buttonUpdate: 'Update',
         emailResend: 'Resend',
+        sendEmailSuccess: 'Send email success!',
       },
       popup: {
         title: 'Logout',

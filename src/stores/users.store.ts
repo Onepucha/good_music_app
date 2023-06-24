@@ -29,8 +29,12 @@ export const useUsersStore = defineStore('users', () => {
   }
 
   const sendCode = async (email: object) => {
-    await api.post<sendCode>('user/send-link', email)
+    await api.post<sendCode>('user/send-link-restore-password', email)
     await router.push('/login')
+  }
+
+  const sendVerifyEmail = async (email: string) => {
+    await api.post<sendCode>('user/send-link-verify-email', { email: email })
   }
 
   const changePassword = async (password: string, token: string) => {
@@ -53,6 +57,7 @@ export const useUsersStore = defineStore('users', () => {
     setMenuTheme,
     register,
     sendCode,
+    sendVerifyEmail,
     changePassword,
     emailVerify,
   }

@@ -51,6 +51,16 @@
     @include hover-supported {
       color: $primary400;
     }
+
+    .g-icon {
+      transition: $animate-delay;
+
+      &-recently {
+        &.desc {
+          rotate: 180deg;
+        }
+      }
+    }
   }
 
   &__footer {

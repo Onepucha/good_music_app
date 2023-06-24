@@ -72,8 +72,14 @@ useMeta(() => {
 const dialog = ref<boolean>(false)
 const dialogCreateModal = ref<boolean>(false)
 
-const onRecently = () => {
-  console.log('Recently')
+const onRecently = async (direction: string) => {
+  const response: any = await Albums.getLiked({
+    count: data.albumsCount,
+    page: 1,
+    direction: direction,
+  })
+
+  data.albums = response.data.albums
 }
 
 const addPlayList = (tracks: Album) => {

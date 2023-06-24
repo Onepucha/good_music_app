@@ -22,11 +22,21 @@ const props = defineProps<{
 }>()
 
 const isLoading = ref<boolean>(false)
+const recently = ref<boolean>(false)
+const recentlyValue = ref<string>('asc')
 
 const emit = defineEmits(['recently', 'toggleplay', 'shuffle'])
 
 const onRecently = () => {
-  emit('recently')
+  recently.value = !recently.value
+
+  if (recently.value) {
+    recentlyValue.value = 'desc'
+  } else {
+    recentlyValue.value = 'asc'
+  }
+
+  emit('recently', recentlyValue.value)
 }
 
 const onAudioToggle = (song: Song, index: number | string) => {
@@ -39,6 +49,10 @@ const onShuffle = () => {
 
 const playOrPauseBtnLabel = computed<string>(() => {
   return playerStore.playing ? t('pause') : t('play')
+})
+
+const recentlyClass = computed<string>(() => {
+  return recently.value ? 'desc' : 'asc'
 })
 </script>
 
@@ -55,7 +69,7 @@ const playOrPauseBtnLabel = computed<string>(() => {
         @click.prevent="onRecently"
       >
         <span>{{ props.recently }}</span>
-        <DynamicIcon name="recently" :size="20" />
+        <DynamicIcon :class="recentlyClass" name="recently" :size="20" />
       </div>
     </div>
 
