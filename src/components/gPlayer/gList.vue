@@ -128,4 +128,12 @@ const selectSong = (song: Song) => {
     }
   }
 }
+
+body.body--dark {
+  .g-player-list {
+    &.g-player-list-fixed {
+      background: $dark-1;
+    }
+  }
+}
 </style>

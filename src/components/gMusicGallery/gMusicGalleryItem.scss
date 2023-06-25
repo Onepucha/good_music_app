@@ -267,5 +267,20 @@ body.body--dark {
         color: $white;
       }
     }
+
+    &__shade {
+      .g-play-btn {
+        .g-icon {
+          &-play,
+          &-pause {
+            svg {
+              path {
+                filter: invert(0);
+              }
+            }
+          }
+        }
+      }
+    }
   }
 }

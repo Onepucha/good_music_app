@@ -196,4 +196,17 @@ const secondToTime = (second: number) => {
     }
   }
 }
+
+body.body--dark {
+  .g-player-controller {
+    .g-player-track-control {
+      &-bar {
+        .g-player-ptime,
+        .g-player-dtime {
+          color: $white;
+        }
+      }
+    }
+  }
+}
 </style>

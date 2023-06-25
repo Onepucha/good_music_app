@@ -155,14 +155,15 @@
     }
 
     &-default {
-      background: linear-gradient(
-        141.82deg,
-        #42d0e1 0%,
-        #f2e58d 32.64%,
-        #fec856 50.01%,
-        #f77e0c 78.11%,
-        #f0de51 101.07%
-      );
+      background:
+        linear-gradient(
+          141.82deg,
+          #42d0e1 0%,
+          #f2e58d 32.64%,
+          #fec856 50.01%,
+          #f77e0c 78.11%,
+          #f0de51 101.07%
+        );
       animation: rotate-hue 6s alternate infinite;
 
       @keyframes rotate-hue {
@@ -258,5 +259,27 @@
 body.body--dark {
   .g-player-list-item {
     color: $white;
+
+    & + .g-player-list-item {
+      &::before {
+        background: $white;
+      }
+    }
+
+    &:last-child {
+      &::after {
+        background: $white;
+      }
+    }
+
+    @include hover-supported {
+      background: $dark-2;
+      color: $primary;
+    }
+
+    &_active {
+      background: $dark-2;
+      color: $primary;
+    }
   }
 }
