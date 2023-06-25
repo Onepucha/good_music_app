@@ -16,7 +16,7 @@ defineComponent({
 })
 
 interface Data {
-  rememberMe: any
+  rememberMe: boolean
 }
 
 const data: Data = reactive({
