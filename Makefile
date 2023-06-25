@@ -3,7 +3,7 @@ deploy-stage:
 	npx quasar build
 	cp -a dist/spa/. dist/
 	rm -rf dist/spa
-	@pm2 start ecosystem.config.cjs --only frontend-stage
+	@pm2 start ecosystem.config.cjs --only frontend
 
 deploy:
 	npx quasar build

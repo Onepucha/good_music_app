@@ -22,15 +22,15 @@ const props = defineProps<{
 }>()
 
 const isLoading = ref<boolean>(false)
-const recently = ref<boolean>(false)
+const recentlyActive = ref<boolean>(false)
 const recentlyValue = ref<string>('asc')
 
 const emit = defineEmits(['recently', 'toggleplay', 'shuffle'])
 
 const onRecently = () => {
-  recently.value = !recently.value
+  recentlyActive.value = !recentlyActive.value
 
-  if (recently.value) {
+  if (recentlyActive.value) {
     recentlyValue.value = 'desc'
   } else {
     recentlyValue.value = 'asc'
@@ -52,7 +52,7 @@ const playOrPauseBtnLabel = computed<string>(() => {
 })
 
 const recentlyClass = computed<string>(() => {
-  return recently.value ? 'desc' : 'asc'
+  return recentlyActive.value ? 'desc' : 'asc'
 })
 </script>
 

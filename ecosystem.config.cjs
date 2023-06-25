@@ -1,12 +1,12 @@
 /* eslint-disable camelcase */
-'use strict';
+'use strict'
 
 module.exports = {
-    apps: [
-        {
-            name: 'frontend-stage',
-            script: 'npm run start-prod',
-            autorestart: true,
-        },
-    ],
-};
+  apps: [
+    {
+      name: 'frontend',
+      script: 'npm run start-prod',
+      autorestart: true,
+    },
+  ],
+}

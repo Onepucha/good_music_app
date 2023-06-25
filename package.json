@@ -16,8 +16,8 @@
     "prepare": "husky install"
   },
   "dependencies": {
-    "@quasar/cli": "^2.0.0",
-    "@quasar/extras": "^1.16.2",
+    "@quasar/cli": "2.0.0",
+    "@quasar/extras": "1.16.2",
     "@unocss/reset": "^0.50.6",
     "@vuelidate/core": "^2.0.2",
     "@vuelidate/validators": "^2.0.2",
@@ -28,7 +28,7 @@
     "dayjs": "^1.11.7",
     "hls.js": "1.3.2-0.canary.8897",
     "pinia": "^2.0.33",
-    "quasar": "^2.11.10",
+    "quasar": "2.11.10",
     "stores": "^1.0.0",
     "surge": "^0.23.1",
     "to": "^0.2.9",
@@ -44,7 +44,7 @@
     "@commitlint/cli": "^17.5.1",
     "@commitlint/config-conventional": "^17.4.4",
     "@intlify/vite-plugin-vue-i18n": "^3.4.0",
-    "@quasar/app-vite": "^1.2.1",
+    "@quasar/app-vite": "1.2.1",
     "@types/node": "^12.20.55",
     "@types/uuid": "^9.0.1",
     "@typescript-eslint/eslint-plugin": "^5.57.1",
