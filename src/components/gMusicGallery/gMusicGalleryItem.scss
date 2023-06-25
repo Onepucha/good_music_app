@@ -19,6 +19,7 @@
       border-radius: 50%;
       max-width: 160px;
       max-height: 160px;
+      object-fit: cover;
     }
 
     .g-music-gallery-item__gradient {
@@ -41,9 +42,9 @@
     cursor: pointer;
     overflow: hidden;
     transition: $animate-delay;
-    animation: fadeIn 0.3s;
+    animation: fade-in 0.3s;
 
-    @keyframes fadeIn {
+    @keyframes fade-in {
       from {
         opacity: 0;
       }
