@@ -17,6 +17,8 @@
     .g-music-gallery-item__picture,
     .g-music-gallery-item__gradient {
       border-radius: 50%;
+      max-width: 160px;
+      max-height: 160px;
     }
 
     .g-music-gallery-item__gradient {

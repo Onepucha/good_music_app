@@ -88,15 +88,9 @@ const songId = computed<string>(() => {
 
 const handleClick = () => {
   if (!isMobile.value && props.clickToPlay) {
-    // goTo()
+    return false
   } else {
     goTo()
-  }
-}
-
-const handleTouch = () => {
-  if (isMobile.value) {
-    props.clickToPlay ? onAudioToggle() : goTo()
   }
 }
 
@@ -204,7 +198,7 @@ const setLiked = () => {
 
     <div class="g-music-gallery-item__description">
       <router-link
-        :to="props.item.code"
+        :to="`${props.type}/${props.item._id}`"
         class="g-music-gallery-item__description-title"
       >
         {{ props.item.name }}
