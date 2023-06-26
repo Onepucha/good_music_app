@@ -289,7 +289,7 @@ onMounted(async () => {
   await emailVerify()
   await getReleases()
   await getPopularArtist()
-  await getCharts()
+  // await getCharts()
   loadingStore.hideLoading()
 })
 </script>

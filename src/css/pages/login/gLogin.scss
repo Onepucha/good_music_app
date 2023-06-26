@@ -19,7 +19,7 @@
     position: relative;
     display: flex;
     flex-direction: column;
-    padding: 16px 30px 48px 30px;
+    padding: 16px 30px 48px;
     flex: 0 0 440px;
 
     @media #{$tablet} {
@@ -34,10 +34,18 @@
 
   &__illustration {
     flex: 1 1 0;
-    background-color: $greyscale900;
-    background-image: url('src/assets/images/illustration.png');
+    background-color: $greyscale50;
+    background-image: url('src/assets/images/monkey-1.png');
     background-repeat: no-repeat;
     background-position: left center;
+    background-size: contain;
+    background-origin: content-box;
+    transition: $animate-delay;
+    padding: 38px 49px 36px 0;
+
+    &.hidden-password {
+      background-image: url('src/assets/images/monkey-2.png');
+    }
 
     @media #{$tablet} {
       display: none;

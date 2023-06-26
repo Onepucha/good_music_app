@@ -20,6 +20,7 @@ defineComponent({
 })
 
 const dense = ref<boolean>(false)
+const focus = ref<boolean>(false)
 
 interface User {
   email: string
@@ -64,6 +65,14 @@ const onSubmit = async () => {
     }
   }
 }
+
+const onFocus = (val: boolean) => {
+  focus.value = val
+}
+
+const onBlur = (val: boolean) => {
+  focus.value = val
+}
 </script>
 
 <template>
@@ -105,6 +114,8 @@ const onSubmit = async () => {
           class="g-login__inputs-label"
           password
           standout
+          @focus="onFocus"
+          @blur="onBlur"
         />
       </div>
 
@@ -133,6 +144,9 @@ const onSubmit = async () => {
       </div>
     </form>
 
-    <div class="g-login__illustration" />
+    <div
+      class="g-login__illustration"
+      :class="{ 'hidden-password': focus && data.password.length > 0 }"
+    />
   </div>
 </template>

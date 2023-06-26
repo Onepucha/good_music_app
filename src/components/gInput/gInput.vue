@@ -15,6 +15,8 @@ const props = defineProps<{
   type?: string
 }>()
 
+const emit = defineEmits(['focus', 'blur'])
+
 const text = ref<string>('')
 const isPassword = ref<boolean>(true)
 const focus = ref<boolean>(false)
@@ -27,10 +29,12 @@ const iconPassword = computed<string>(() => {
 // Methods
 const onFocus = () => {
   focus.value = true
+  emit('focus', focus.value)
 }
 
 const onBlur = () => {
   focus.value = false
+  emit('blur', focus.value)
 }
 </script>
 
