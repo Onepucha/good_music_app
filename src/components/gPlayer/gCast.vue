@@ -19,6 +19,7 @@ const props = defineProps<{
   volume: number
   muted: boolean
   hasMenu?: boolean
+  menuActive: boolean
 }>()
 
 const $q = useQuasar()
@@ -65,6 +66,7 @@ const emit = defineEmits([
     <DynamicIcon
       v-if="props.hasMenu"
       class="g-player-icon-menu"
+      :class="{ active: props.menuActive }"
       name="menu"
       @click.prevent="emit('togglelist')"
     />
@@ -81,8 +83,6 @@ const emit = defineEmits([
   .g-icon {
     cursor: pointer;
 
-    &-shuffle-player,
-    &-repeat-all,
     &-menu {
       path {
         fill: $greyscale500;
@@ -91,6 +91,46 @@ const emit = defineEmits([
       @include hover-supported {
         path {
           fill: $primary;
+        }
+      }
+    }
+
+    &-menu {
+      &.active {
+        path {
+          fill: $primary;
+        }
+
+        @include hover-supported {
+          path {
+            fill: $primary300;
+          }
+        }
+      }
+    }
+
+    &-shuffle-player,
+    &-repeat-all,
+    &-repeat-one {
+      &.inactive {
+        path {
+          fill: $greyscale500;
+        }
+
+        @include hover-supported {
+          path {
+            fill: $primary;
+          }
+        }
+      }
+
+      path {
+        fill: $primary;
+      }
+
+      @include hover-supported {
+        path {
+          fill: $primary300;
         }
       }
     }
