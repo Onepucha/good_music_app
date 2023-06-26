@@ -17,14 +17,14 @@
     .g-music-gallery-item__picture,
     .g-music-gallery-item__gradient {
       border-radius: 50%;
-      max-width: 160px;
-      max-height: 160px;
+      height: 100%;
+      width: 100%;
       object-fit: cover;
     }
 
     .g-music-gallery-item__gradient {
-      min-width: 160px;
-      min-height: 160px;
+      height: 100%;
+      width: 100%;
       padding: 5px;
     }
   }
@@ -171,8 +171,8 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    width: 160px;
-    height: 160px;
+    width: 100%;
+    height: 100%;
     border-radius: 16px;
     background:
       linear-gradient(
