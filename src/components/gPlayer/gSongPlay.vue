@@ -76,10 +76,7 @@ const allGenres = computed<string>(() => {
           </div>
 
           <div v-if="infoLength" class="g-song-play__info-info">
-            <span
-              v-for="(item, index) in props.currentMusic?.info"
-              :key="index"
-            >
+            <span v-for="item in props.currentMusic?.info" :key="item._id">
               {{ item }}
             </span>
           </div>

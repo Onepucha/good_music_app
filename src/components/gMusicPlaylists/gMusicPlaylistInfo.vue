@@ -26,6 +26,7 @@ const props = defineProps<{
 }>()
 
 interface Menu {
+  _id: string
   label: string
   icon: string
 }
@@ -39,30 +40,37 @@ const data: Data = reactive({
   menuTheme: usersStore.menuTheme,
   menu: [
     {
+      _id: '1',
       label: t('gMusicSong.like'),
       icon: 'like',
     },
     {
+      _id: '2',
       label: t('gMusicSong.addToPlaylist'),
       icon: 'add_playlist',
     },
     {
+      _id: '3',
       label: t('gMusicSong.dontPlayThis'),
       icon: 'dont_play',
     },
     {
+      _id: '4',
       label: t('gMusicSong.download'),
       icon: 'download_song',
     },
     {
+      _id: '5',
       label: t('gMusicSong.viewArtist'),
       icon: 'artist',
     },
     {
+      _id: '6',
       label: t('gMusicSong.gotoAlbum'),
       icon: 'play_album',
     },
     {
+      _id: '7',
       label: t('gMusicSong.share'),
       icon: 'share',
     },
@@ -151,8 +159,8 @@ const setShare = () => {
             >
               <q-list>
                 <q-item
-                  v-for="(item, index) in data.menu"
-                  :key="index"
+                  v-for="item in data.menu"
+                  :key="item._id"
                   v-close-popup
                   clickable
                 >

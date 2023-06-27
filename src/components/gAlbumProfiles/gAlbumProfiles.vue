@@ -34,6 +34,7 @@ const emit = defineEmits([
   'toggleplay',
   'add-playlist',
   'download',
+  'download-songs',
   'dont-play-this',
   'view-artist',
   'set-liked',
@@ -74,6 +75,10 @@ const setShare = () => {
 
 const downloadSong = () => {
   emit('download', props.song?._id, props.song?.name)
+}
+
+const downloadSongs = () => {
+  emit('download-songs', props.album?._id)
 }
 
 const addPlayList = () => {
@@ -141,7 +146,7 @@ const setLiked = () => {
           v-if="authStore.user"
           :size="24"
           name="download_song"
-          @click.prevent="downloadSong"
+          @click.prevent="downloadSongs"
         />
 
         <i class="g-icon g-icon-dots" @click.prevent.stop="">

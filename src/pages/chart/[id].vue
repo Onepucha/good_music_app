@@ -82,8 +82,8 @@ const getAlbums = async (index: number, done: () => void) => {
           @load="getAlbums"
         >
           <g-music-album
-            v-for="(album, index) in data.albumList"
-            :key="index"
+            v-for="album in data.albumList"
+            :key="album._id"
             :album="album"
           />
 

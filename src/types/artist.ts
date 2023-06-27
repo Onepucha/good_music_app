@@ -32,7 +32,7 @@ export interface Album {
   release_date?: string
   artists?: Array<Artist> | undefined
   songs?: Array<Song> | Array<string> | undefined
-  genres?: Array<Genre>
+  genres?: Array<Genre> | Array<string>
   is_liked?: boolean
 }
 

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, defineComponent, onBeforeMount, reactive } from 'vue'
+import { computed, defineComponent, reactive } from 'vue'
 import { Artist, Song } from '@/types/artist'
 
 import DynamicIcon from '@/components/DynamicIcon.vue'
@@ -39,17 +39,16 @@ const emit = defineEmits([
 
 interface Data {
   menuTheme: boolean
-  durationSong: string | undefined
 }
 
 const props = defineProps<{
   song?: Song | undefined
   artist: Artist
+  durationSong?: string | undefined
 }>()
 
 const data: Data = reactive({
   menuTheme: usersStore.menuTheme,
-  durationSong: undefined,
 })
 
 const infoLength = computed<boolean>(() => {
@@ -57,7 +56,7 @@ const infoLength = computed<boolean>(() => {
 })
 
 const duration = computed<boolean>(() => {
-  return typeof data.durationSong !== 'undefined'
+  return typeof props.durationSong !== 'undefined'
 })
 
 const allGenres = computed<string>(() => {
@@ -110,17 +109,6 @@ const addPlayList = () => {
 const dontPlayThis = () => {
   emit('dont-play-this', props.song)
 }
-
-onBeforeMount(() => {
-  const audioFile = new Audio(props.song?.url)
-  audioFile.addEventListener('loadedmetadata', () => {
-    const date = new Date(audioFile.duration * 1000)
-    const minutes = date.getMinutes().toString().padStart(2, '0')
-    const seconds = date.getSeconds().toString().padStart(2, '0')
-
-    data.durationSong = `${minutes}:${seconds} mins`
-  })
-})
 </script>
 
 <template>
@@ -150,7 +138,7 @@ onBeforeMount(() => {
 
       <div class="g-song-info__info">
         <span>Songs</span>
-        <span v-if="duration">{{ data.durationSong }}</span>
+        <span v-if="duration">{{ props.durationSong }}</span>
         <span v-else>
           <q-skeleton animation="fade" style="width: 100px" />
         </span>

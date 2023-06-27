@@ -54,6 +54,7 @@ const emit = defineEmits([
   'add-follow',
   'toggleplay',
   'download',
+  'download-songs',
   'add-playlist',
   'dont-play-this',
 ])
@@ -76,8 +77,8 @@ const setShare = () => {
     })
 }
 
-const downloadSong = () => {
-  emit('download', props.song._id, props.song.name)
+const downloadSongs = () => {
+  emit('download-songs', props.artist?._id)
 }
 
 const addPlayList = () => {
@@ -176,7 +177,7 @@ const dontPlayThis = () => {
                 v-if="authStore.user && props.song"
                 v-close-popup
                 clickable
-                @click.prevent="downloadSong"
+                @click.prevent="downloadSongs"
               >
                 <q-item-section avatar>
                   <DynamicIcon :size="20" name="download_song" />

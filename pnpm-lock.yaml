@@ -4,9 +4,9 @@ specifiers:
   '@commitlint/cli': ^17.5.1
   '@commitlint/config-conventional': ^17.4.4
   '@intlify/vite-plugin-vue-i18n': ^3.4.0
-  '@quasar/app-vite': ^1.2.1
-  '@quasar/cli': ^2.0.0
-  '@quasar/extras': ^1.16.2
+  '@quasar/app-vite': 1.2.1
+  '@quasar/cli': 2.0.0
+  '@quasar/extras': 1.16.2
   '@types/node': ^12.20.55
   '@types/uuid': ^9.0.1
   '@typescript-eslint/eslint-plugin': ^5.57.1
@@ -25,10 +25,11 @@ specifiers:
   eslint-plugin-vue: ^9.10.0
   hls.js: 1.3.2-0.canary.8897
   husky: ^8.0.3
+  jszip: ^3.10.1
   pinia: ^2.0.33
   postcss-html: ^1.5.0
   prettier: ^2.8.7
-  quasar: ^2.11.10
+  quasar: 2.11.10
   stores: ^1.0.0
   stylelint: ^14.16.1
   stylelint-config-prettier: ^9.0.5
@@ -68,6 +69,7 @@ dependencies:
   cropperjs: 1.5.13
   dayjs: 1.11.7
   hls.js: 1.3.2-0.canary.8897
+  jszip: 3.10.1
   pinia: 2.0.33_hmuptsblhheur2tugfgucj7gc4
   quasar: 2.11.10
   stores: 1.0.0
@@ -6629,6 +6631,10 @@ packages:
     engines: {node: '>= 4'}
     dev: true
 
+  /immediate/3.0.6:
+    resolution: {integrity: sha512-XXOFtyqDjNDAQxVfYxuF7g9Il/IbWmmlQg2MYKOH8ExIT1qg6xc4zyS3HaEEATgs1btfzxq15ciUiY7gjSXRGQ==}
+    dev: false
+
   /import-fresh/3.3.0:
     resolution: {integrity: sha512-veYYhQa+D1QBKznvhUHxb8faxlrwUnxseDAbAp457E0wLNio2bOSKnjYDhMj+YiAq61xrMGhQk9iXVk5FzgQMw==}
     engines: {node: '>=6'}
@@ -7443,6 +7449,15 @@ packages:
       verror: 1.10.0
     dev: false
 
+  /jszip/3.10.1:
+    resolution: {integrity: sha512-xXDvecyTpGLrqFrvkrUSoxxfJI5AH7U8zxxtVclpsUtMCq4JQ290LY8AW5c7Ggnr/Y/oK+bQMbqK2qmtk3pN4g==}
+    dependencies:
+      lie: 3.3.0
+      pako: 1.0.11
+      readable-stream: 2.3.8
+      setimmediate: 1.0.5
+    dev: false
+
   /keyv/4.5.2:
     resolution: {integrity: sha512-5MHbFaKn8cNSmVW7BYnijeAVlE4cYA/SVkifVgrh7yotnfhKmjuXpDKjrABLnT0SfHWV21P8ow07OGfRrNDg8g==}
     dependencies:
@@ -7543,6 +7558,12 @@ packages:
       prelude-ls: 1.2.1
       type-check: 0.4.0
     dev: true
+
+  /lie/3.3.0:
+    resolution: {integrity: sha512-UaiMJzeWRlEujzAuw5LokY1L5ecNQYZKfmyZ9L7wDHb/p5etKaxXhohBcrw0EYby+G/NA52vRSN4N39dxHAIwQ==}
+    dependencies:
+      immediate: 3.0.6
+    dev: false
 
   /lines-and-columns/1.2.4:
     resolution: {integrity: sha512-7ylylesZQ/PV29jhEDl3Ufjo6ZX7gCqJr5F7PKrqc93v7fzSymt1BpwEU8nAUXs8qzzvqhbjhK5QZg6Mt/HkBg==}
@@ -8698,6 +8719,10 @@ packages:
     engines: {node: '>=0.10.0'}
     dev: false
 
+  /pako/1.0.11:
+    resolution: {integrity: sha512-4hLB8Py4zZce5s4yd9XzopqwVv/yGNhV1Bl8NTmCq1763HeK2+EwVTv+leGeL13Dnh2wfbqowVPXCIO0z4taYw==}
+    dev: false
+
   /param-case/2.1.1:
     resolution: {integrity: sha512-eQE845L6ot89sk2N8liD8HAuH4ca6Vvr7VWAWwt7+kvvG5aBcPmmphQ68JsEG2qa9n1TykS2DLeMt363AAH8/w==}
     dependencies:
@@ -9816,6 +9841,10 @@ packages:
     engines: {node: '>=6.0'}
     dependencies:
       is-plain-object: 2.0.4
+    dev: false
+
+  /setimmediate/1.0.5:
+    resolution: {integrity: sha512-MATJdZp8sLqDl/68LfQmbP8zKPLQNV6BIZoIgrscFDQ+RsvK/BxeDQOgyxKKoh0y/8h3BqVFnCqQ/gd+reiIXA==}
     dev: false
 
   /setprototypeof/1.2.0:

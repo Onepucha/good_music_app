@@ -214,8 +214,8 @@ const openSearch = () => {
     >
       <template v-if="data.albums.length">
         <g-music-album
-          v-for="(album, index) in data.albums"
-          :key="index"
+          v-for="album in data.albums"
+          :key="album._id"
           :album="album"
           @shuffle-play="shufflePlay"
           @add-playlist="addPlayList"

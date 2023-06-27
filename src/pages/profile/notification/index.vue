@@ -16,6 +16,7 @@ defineComponent({
 })
 
 interface Notification {
+  _id: string
   label: string
   info: string
 }
@@ -27,34 +28,42 @@ interface Data {
 const data: Data = reactive({
   notification: [
     {
+      _id: '1',
       label: t('pages.notification.recommendedMusic'),
       info: t('pages.notification.recommendedMusicInfo'),
     },
     {
+      _id: '2',
       label: t('pages.notification.newMusic'),
       info: t('pages.notification.newMusicInfo'),
     },
     {
+      _id: '3',
       label: t('pages.notification.playlistUpdates'),
       info: t('pages.notification.playlistUpdatesInfo'),
     },
     {
+      _id: '4',
       label: t('pages.notification.artistUpdates'),
       info: t('pages.notification.artistUpdatesInfo'),
     },
     {
+      _id: '5',
       label: t('pages.notification.productNews'),
       info: t('pages.notification.productNewsInfo'),
     },
     {
+      _id: '6',
       label: t('pages.notification.paymentsAndSubscriptions'),
       info: t('pages.notification.paymentsAndSubscriptionsInfo'),
     },
     {
+      _id: '7',
       label: t('pages.notification.newFeatures'),
       info: t('pages.notification.newFeaturesInfo'),
     },
     {
+      _id: '8',
       label: t('pages.notification.security'),
       info: t('pages.notification.securityInfo'),
     },
@@ -86,8 +95,8 @@ useMeta(() => {
 
         <q-list class="g-notification__nav">
           <q-item
-            v-for="(item, index) in data.notification"
-            :key="index"
+            v-for="item in data.notification"
+            :key="item._id"
             class="g-notification__nav-item"
             clickable
           >

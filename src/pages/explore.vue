@@ -60,61 +60,61 @@ const data: Data = reactive({
   ],
   dashboards: [
     {
-      id: '1',
+      _id: '1',
       backgroundUrl: '/images/dashbords/charts.png',
       title: 'charts',
       href: '/chart',
     },
     {
-      id: '2',
+      _id: '2',
       backgroundUrl: '/images/dashbords/podcasts.png',
       title: 'podcasts',
       href: '/podcasts',
     },
     {
-      id: '3',
+      _id: '3',
       backgroundUrl: '/images/dashbords/newReleases.png',
       title: 'newReleases',
       href: '/releases',
     },
     {
-      id: '4',
+      _id: '4',
       backgroundUrl: '/images/dashbords/onlyYou.png',
       title: 'onlyYou',
       href: '/onlyYou',
     },
     {
-      id: '5',
+      _id: '5',
       backgroundUrl: '/images/dashbords/pop.png',
       title: 'pop',
       href: '/pop',
     },
     {
-      id: '6',
+      _id: '6',
       backgroundUrl: '/images/dashbords/kPop.png',
       title: 'kPop',
       href: '/kPop',
     },
     {
-      id: '7',
+      _id: '7',
       backgroundUrl: '/images/dashbords/rock.png',
       title: 'rock',
       href: '/rock',
     },
     {
-      id: '8',
+      _id: '8',
       backgroundUrl: '/images/dashbords/hipHop.png',
       title: 'hipHop',
       href: '/hipHop',
     },
     {
-      id: '9',
+      _id: '9',
       backgroundUrl: '/images/dashbords/jazz.png',
       title: 'jazz',
       href: '/jazz',
     },
     {
-      id: '10',
+      _id: '10',
       backgroundUrl: '/images/dashbords/romance.png',
       title: 'romance',
       href: '/romance',
@@ -224,8 +224,8 @@ const openSearch = () => {
 
               <div class="g-explore__dashboard">
                 <g-card-dashboard
-                  v-for="(item, index) in data.dashboards"
-                  :key="index"
+                  v-for="item in data.dashboards"
+                  :key="item._id"
                   :item="item"
                 />
               </div>

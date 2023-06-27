@@ -43,12 +43,14 @@ interface Data {
   song: Song | undefined
   artistSong: Array<Song>
   songPlaylist: Song | undefined
+  durationSong: string | undefined
 }
 
 const data: Data = reactive({
   song: undefined,
   artistSong: [],
   songPlaylist: undefined,
+  durationSong: undefined,
 })
 
 useMeta(() => {
@@ -223,17 +225,31 @@ const editPlaylist = async (playlist: Playlists) => {
   }
 }
 
-const closeModal = (bool: boolean) => {
-  dialog.value = bool
-}
-
 const dontPlayThis = (song: Song) => {
   console.log(song)
+}
+
+const getCurrentSong = async () => {
+  if (data.song?._id) {
+    const response = await Songs.playSong(data.song?._id)
+    console.log(response.data)
+
+    const audioFile = new Audio(response.data?.url)
+
+    audioFile.addEventListener('loadedmetadata', () => {
+      const date = new Date(audioFile.duration * 1000)
+      const minutes = date.getMinutes().toString().padStart(2, '0')
+      const seconds = date.getSeconds().toString().padStart(2, '0')
+
+      data.durationSong = `${minutes}:${seconds} mins`
+    })
+  }
 }
 
 onMounted(async () => {
   await getSong()
   await getArtistSongs()
+  await getCurrentSong()
 
   isLoading.value = false
 })
@@ -252,6 +268,7 @@ onMounted(async () => {
       <g-song-info
         :song="data.song"
         :artist="findArtist"
+        :duration-song="data.durationSong"
         @set-liked="setLiked"
         @add-playlist="addPlayList"
         @download="downloadSong"

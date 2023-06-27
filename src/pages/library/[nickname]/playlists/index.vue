@@ -198,8 +198,8 @@ const openSearch = () => {
           <g-music-playlist-item :item="yourLikes" />
 
           <g-music-playlist-item
-            v-for="(playlist, index) in data.playlists"
-            :key="index"
+            v-for="playlist in data.playlists"
+            :key="playlist._id"
             :item="playlist"
             @add-playlist="openAddPlaylist"
             @remove-playlist="removePlaylist"

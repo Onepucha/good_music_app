@@ -27,6 +27,7 @@ import Albums from '@/services/albums'
 import Songs from '@/services/songs'
 import PlaylistsApi from '@/services/playlists'
 import { useMeta } from 'quasar'
+import JSZip from 'jszip'
 
 const { t } = useTranslation()
 const authStore = useAuthStore()
@@ -254,6 +255,37 @@ const goToAlbum = (url: string) => {
   router.push(`/album/${url}`)
 }
 
+const downloadSongs = async (id: string) => {
+  const zip = new JSZip()
+  try {
+    const response = await Songs.getAlbumSongs({ id: id })
+    const songs = response.data.songs
+
+    // Пройдемся по всем трекам и добавим их в архив
+    for (const song of songs) {
+      const songResponse = await Songs.playSong(song._id)
+      const songData = songResponse.data
+      const blob = new Blob([songData], { type: 'audio/mpeg' })
+      zip.file(`${song.name}.mp3`, blob)
+    }
+
+    // Сгенерируем архив и скачаем его
+    const zipData = await zip.generateAsync({ type: 'blob' })
+    const url = URL.createObjectURL(zipData)
+    const link = ref(document.createElement('a'))
+    link.value.href = url
+    link.value.download = `${data.album?.name}.zip`
+    document.body.appendChild(link.value)
+    link.value.click()
+    document.body.removeChild(link.value)
+  } catch (error: unknown) {
+    console.error(error)
+    if (error instanceof Error) {
+      alertStore.error(error.message)
+    }
+  }
+}
+
 onMounted(async () => {
   loadingStore.setLoading()
   await getAlbumCode()
@@ -277,7 +309,7 @@ onMounted(async () => {
       :song="data.albumSong.at(0)"
       @toggleplay="onAudioToggle"
       @set-liked="setLiked"
-      @download="downloadSong"
+      @download-songs="downloadSongs"
       @view-artist="viewArtist"
       @go-to-album="goToAlbum"
       @add-playlist="addPlayList"
