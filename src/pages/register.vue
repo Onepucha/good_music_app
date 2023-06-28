@@ -222,9 +222,6 @@ const onSaveArtists = async () => {
     console.error(error)
     data.isLoading = false
     await router.push('/')
-    if (error instanceof Error) {
-      alertStore.error(error.message)
-    }
   }
 }
 
