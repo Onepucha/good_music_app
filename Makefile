@@ -1,5 +1,6 @@
 deploy-stage:
 	@cp .env.production .env
+	npm update
 	npx quasar build
 	cp -a dist/spa/. dist/
 	rm -rf dist/spa
