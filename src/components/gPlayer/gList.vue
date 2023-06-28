@@ -78,6 +78,7 @@ const selectSong = (song: Song) => {
     background: $greyscale100;
     overflow: hidden auto;
     z-index: -1;
+    padding: 0 0 86px;
 
     @media #{$mobile} {
       z-index: 102;

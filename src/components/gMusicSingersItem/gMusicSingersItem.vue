@@ -75,13 +75,13 @@ const setShare = () => {
       <div
         class="g-music-singers-item__picture"
         :class="{
-          'g-music-singers-item__picture-default': !props.singer?.imageUrl,
+          'g-music-singers-item__picture-default': !props.singer?.cover_src,
         }"
       >
         <img
-          v-if="props.singer?.imageUrl"
+          v-if="props.singer?.cover_src"
           :alt="props.singer.name"
-          :src="props.singer?.imageUrl"
+          :src="props.singer?.cover_src"
         />
       </div>
 

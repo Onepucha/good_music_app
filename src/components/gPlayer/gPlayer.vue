@@ -334,6 +334,7 @@ const nextItem = computed(() => {
   const currentIndex = data.internalList.findIndex(
     (item) => item._id === currentMusic.value._id
   )
+
   if (currentIndex < data.internalList.length - 1) {
     return data.internalList[currentIndex + 1]
   } else {
@@ -518,16 +519,29 @@ const getShuffledList = () => {
 
 const onPrevSong = async () => {
   let currentMusic: Song
-  const songUrl = await Songs.playSong(previousItem.value?._id)
+  try {
+    const songUrl = await Songs.playSong(previousItem.value?._id)
 
-  currentMusic = {
-    _id: previousItem.value?._id,
-    title: previousItem.value?.name || nextItem.value?.title,
-    artist: previousItem.value?.artists?.at(0) || previousItem.value?.artist,
-    pic: previousItem.value?.cover_src || '',
-    src: songUrl.data?.url || previousItem.value?.src,
-    is_liked: previousItem.value?.is_liked,
-  } as Song
+    currentMusic = {
+      _id: previousItem.value?._id,
+      title: previousItem.value?.name || previousItem.value?.title,
+      artist: previousItem.value?.artists?.at(0) || previousItem.value?.artist,
+      pic: previousItem.value?.cover_src || '',
+      src: songUrl.data?.url || previousItem.value?.src,
+      is_liked: previousItem.value?.is_liked,
+    } as Song
+  } catch (error: unknown) {
+    console.error(error)
+
+    currentMusic = {
+      _id: previousItem.value?._id,
+      title: previousItem.value?.name || previousItem.value?.title,
+      artist: previousItem.value?.artists?.at(0) || previousItem.value?.artist,
+      pic: previousItem.value?.cover_src || '',
+      src: previousItem.value?.src,
+      is_liked: previousItem.value?.is_liked,
+    } as Song
+  }
 
   data.internalMusic = currentMusic
   playerStore.setMusic(currentMusic, 0)
@@ -536,16 +550,29 @@ const onPrevSong = async () => {
 
 const onNextSong = async () => {
   let currentMusic: Song
-  const songUrl = await Songs.playSong(nextItem.value?._id)
+  try {
+    const songUrl = await Songs.playSong(nextItem.value?._id)
 
-  currentMusic = {
-    _id: nextItem.value?._id,
-    title: nextItem.value?.name || nextItem.value?.title,
-    artist: nextItem.value?.artists?.at(0) || nextItem.value?.artist,
-    pic: nextItem.value?.cover_src || '',
-    src: songUrl.data?.url || previousItem.value?.src,
-    is_liked: nextItem.value?.is_liked,
-  } as Song
+    currentMusic = {
+      _id: nextItem.value?._id,
+      title: nextItem.value?.name || nextItem.value?.title,
+      artist: nextItem.value?.artists?.at(0) || nextItem.value?.artist,
+      pic: nextItem.value?.cover_src || '',
+      src: songUrl.data?.url || nextItem.value?.src,
+      is_liked: nextItem.value?.is_liked,
+    } as Song
+  } catch (error: unknown) {
+    console.error(error)
+
+    currentMusic = {
+      _id: nextItem.value?._id,
+      title: nextItem.value?.name || nextItem.value?.title,
+      artist: nextItem.value?.artists?.at(0) || nextItem.value?.artist,
+      pic: nextItem.value?.cover_src || '',
+      src: nextItem.value?.src,
+      is_liked: nextItem.value?.is_liked,
+    } as Song
+  }
 
   data.internalMusic = currentMusic
   playerStore.setMusic(currentMusic, 0)
@@ -633,12 +660,12 @@ const onAudioEnded = () => {
     ) {
       data.shuffledList = getShuffledList()
     }
-    playIndex.value++
+    onNextSong()
     thenPlay()
   } else if (repeatMode.value === REPEAT.REPEAT_ONE) {
     thenPlay()
   } else {
-    playIndex.value++
+    onNextSong()
     if (playIndex.value !== 0) {
       thenPlay()
     } else if (data.shuffledList.length === 1) {
