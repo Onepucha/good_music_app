@@ -217,10 +217,11 @@ const onSaveArtists = async () => {
     await artistStore.saveFollowArtist(true, data.followArtistList)
 
     data.isLoading = false
-    router.push('/')
+    await router.push('/')
   } catch (error: unknown) {
     console.error(error)
     data.isLoading = false
+    await router.push('/')
     if (error instanceof Error) {
       alertStore.error(error.message)
     }
