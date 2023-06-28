@@ -43,14 +43,12 @@ interface Data {
   song: Song | undefined
   artistSong: Array<Song>
   songPlaylist: Song | undefined
-  durationSong: string | undefined
 }
 
 const data: Data = reactive({
   song: undefined,
   artistSong: [],
   songPlaylist: undefined,
-  durationSong: undefined,
 })
 
 useMeta(() => {
@@ -219,9 +217,13 @@ const editPlaylist = async (playlist: Playlists) => {
 
     await PlaylistsApi.editPlaylist(playlist._id, payload)
     dialog.value = false
+    alertStore.success(t('success'))
   } catch (error: unknown) {
     dialog.value = false
     console.error(error)
+    if (error instanceof Error) {
+      alertStore.error(error.message)
+    }
   }
 }
 
@@ -229,27 +231,9 @@ const dontPlayThis = (song: Song) => {
   console.log(song)
 }
 
-const getCurrentSong = async () => {
-  if (data.song?._id) {
-    const response = await Songs.playSong(data.song?._id)
-    console.log(response.data)
-
-    const audioFile = new Audio(response.data?.url)
-
-    audioFile.addEventListener('loadedmetadata', () => {
-      const date = new Date(audioFile.duration * 1000)
-      const minutes = date.getMinutes().toString().padStart(2, '0')
-      const seconds = date.getSeconds().toString().padStart(2, '0')
-
-      data.durationSong = `${minutes}:${seconds} mins`
-    })
-  }
-}
-
 onMounted(async () => {
   await getSong()
   await getArtistSongs()
-  await getCurrentSong()
 
   isLoading.value = false
 })

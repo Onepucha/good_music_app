@@ -8,9 +8,9 @@ export interface Artist {
   monthlyListeners?: string
   code: string
   is_verified?: boolean
+  album?: Array<Album> | Array<string> | undefined
   song?: Array<string> | undefined
   genre?: Array<string> | undefined
-  album?: Array<string> | undefined
   songs: Array<string>
   is_liked?: boolean
 }
@@ -62,7 +62,7 @@ export interface Song {
   artist?: Artist
   src?: string
   is_liked?: boolean
-  duration?: number | null
+  duration?: number | null | undefined
 }
 
 export interface Genre {

@@ -15,10 +15,12 @@ import { useRoute, useRouter } from 'vue-router'
 import Albums from '@/services/albums'
 import PlaylistsApi from '@/services/playlists'
 import { useMeta } from 'quasar'
+import { useAlertStore } from '@/stores'
 
 const route = useRoute()
 const router = useRouter()
 const { t } = useTranslation()
+const alertStore = useAlertStore()
 
 defineComponent({
   components: {
@@ -105,9 +107,13 @@ const editPlaylist = async (playlist: Playlists) => {
 
     await PlaylistsApi.editPlaylist(playlist._id, payload)
     dialog.value = false
+    alertStore.success(t('success'))
   } catch (error: unknown) {
     dialog.value = false
     console.error(error)
+    if (error instanceof Error) {
+      alertStore.error(error.message)
+    }
   }
 }
 

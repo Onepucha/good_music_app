@@ -44,19 +44,22 @@ interface Data {
 const props = defineProps<{
   song?: Song | undefined
   artist: Artist
-  durationSong?: string | undefined
 }>()
 
 const data: Data = reactive({
   menuTheme: usersStore.menuTheme,
 })
 
-const infoLength = computed<boolean>(() => {
-  return props.song?.info ? props.song?.info?.length > 0 : false
-})
+const duration = computed<string>(() => {
+  if (props.song && props.song.duration !== null) {
+    const date = new Date(props.song.duration || 1000)
+    const minutes = date.getMinutes().toString().padStart(2, '0')
+    const seconds = date.getSeconds().toString().padStart(2, '0')
 
-const duration = computed<boolean>(() => {
-  return typeof props.durationSong !== 'undefined'
+    return `${minutes}:${seconds} ${t('gMusicSong.mins')}`
+  }
+
+  return ''
 })
 
 const allGenres = computed<string>(() => {
@@ -138,7 +141,7 @@ const dontPlayThis = () => {
 
       <div class="g-song-info__info">
         <span>Songs</span>
-        <span v-if="duration">{{ props.durationSong }}</span>
+        <span v-if="duration">{{ duration }}</span>
         <span v-else>
           <q-skeleton animation="fade" style="width: 100px" />
         </span>

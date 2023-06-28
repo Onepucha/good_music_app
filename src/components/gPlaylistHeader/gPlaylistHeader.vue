@@ -58,6 +58,14 @@ const playOrPauseBtnLabel = computed<string>(() => {
   return playerStore.playing ? t('pause') : t('play')
 })
 
+const imagePlaylist = computed<string>(() => {
+  if (!props.playlist?.cover_src && !props.song?.cover_src) {
+    return ''
+  } else {
+    return props.playlist?.cover_src || props.song?.cover_src || ''
+  }
+})
+
 const onAudioToggle = (song: Song, index: number | string) => {
   emit('toggleplay', { song, index })
 }
@@ -99,14 +107,13 @@ const removePlaylist = () => {
         <div
           class="g-playlist-header__aside-picture"
           :class="{
-            'g-playlist-header__aside-picture-default':
-              !props.playlist?.cover_src,
+            'g-playlist-header__aside-picture-default': imagePlaylist,
           }"
         >
           <img
-            v-if="props.playlist?.cover_src"
+            v-if="imagePlaylist"
             :alt="props.playlist.name"
-            :src="props.playlist?.cover_src"
+            :src="imagePlaylist"
           />
         </div>
       </div>

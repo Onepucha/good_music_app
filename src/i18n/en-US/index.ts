@@ -410,6 +410,7 @@ export default {
     viewArtist: 'View Artist',
     gotoAlbum: 'Go to Album',
     share: 'Share',
+    mins: 'mins',
   },
   gMusicGenericArtist: {
     addToPlaylist: 'Add to Playlist',

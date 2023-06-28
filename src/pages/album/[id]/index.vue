@@ -229,9 +229,13 @@ const editPlaylist = async (playlist: Playlists) => {
 
     await PlaylistsApi.editPlaylist(playlist._id, payload)
     dialog.value = false
+    alertStore.success(t('success'))
   } catch (error: unknown) {
     dialog.value = false
     console.error(error)
+    if (error instanceof Error) {
+      alertStore.error(error.message)
+    }
   }
 }
 
