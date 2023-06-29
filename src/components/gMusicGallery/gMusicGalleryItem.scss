@@ -14,18 +14,27 @@
     align-items: center;
     text-align: center;
 
-    .g-music-gallery-item__picture,
-    .g-music-gallery-item__gradient {
+    .g-music-gallery-item__picture {
       border-radius: 50%;
-      height: 100%;
+      height: auto;
       width: 100%;
       object-fit: cover;
+
+      &-default {
+        &::before {
+          content: '';
+          display: block;
+          padding-top: 100%;
+        }
+      }
     }
 
     .g-music-gallery-item__gradient {
       height: auto;
       width: 100%;
       padding: 5px;
+      border-radius: 50%;
+      object-fit: cover;
     }
   }
 
@@ -154,6 +163,9 @@
     overflow: hidden;
     transition: $animate-delay;
     cursor: pointer;
+    height: auto;
+    width: 100%;
+    object-fit: cover;
 
     img {
       width: 100%;
@@ -164,6 +176,16 @@
     &-loading {
       opacity: 0.5;
     }
+
+    &-default {
+      height: 100%;
+
+      &::before {
+        display: block;
+        content: '';
+        padding-top: 75%;
+      }
+    }
   }
 
   &__gradient {
@@ -172,7 +194,7 @@
     align-items: center;
     justify-content: center;
     width: 100%;
-    height: 100%;
+    height: auto;
     border-radius: 16px;
     background:
       linear-gradient(

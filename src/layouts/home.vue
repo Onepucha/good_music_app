@@ -215,7 +215,7 @@ onUnmounted(() => {
         </div>
 
         <q-btn
-          v-if="isAuth"
+          v-if="isAuth && false"
           :ripple="false"
           class="q-header__ball-btn"
           unelevated

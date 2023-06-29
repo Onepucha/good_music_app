@@ -85,7 +85,10 @@ const openSearch = () => {
               </q-item-section>
             </q-item>
 
-            <q-item :to="`/library/${authStore.user?.nickname}/downloads`">
+            <q-item
+              v-if="false"
+              :to="`/library/${authStore.user?.nickname}/downloads`"
+            >
               <q-item-section avatar>
                 <DynamicIcon :size="28" name="downloads" />
               </q-item-section>

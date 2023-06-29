@@ -134,7 +134,7 @@ const onBlur = (val: boolean) => {
         {{ t('pages.login.buttonForgotPassword') }}
       </router-link>
 
-      <g-social class="g-login__social" />
+      <g-social v-if="false" class="g-login__social" />
 
       <div class="g-login__signup">
         {{ t('pages.login.signUpDescription') }}

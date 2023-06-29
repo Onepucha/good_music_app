@@ -45,6 +45,10 @@ const setUserLocale = async (item: {
   let lang = item.value || 'en'
 
   try {
+    if (authStore.user?.language_descriptor === lang) {
+      return false
+    }
+
     await authStore.setProfile({ language_descriptor: lang })
     authStore.setLocale(lang)
     alertStore.success(t('success'))

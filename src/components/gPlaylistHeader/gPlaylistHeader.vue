@@ -107,7 +107,7 @@ const removePlaylist = () => {
         <div
           class="g-playlist-header__aside-picture"
           :class="{
-            'g-playlist-header__aside-picture-default': imagePlaylist,
+            'g-playlist-header__aside-picture-default': !imagePlaylist,
           }"
         >
           <img

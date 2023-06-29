@@ -41,6 +41,14 @@ const songsLength = computed<boolean>(() => {
   return props.item?.songs ? props.item?.songs?.length > 0 : false
 })
 
+const imagePlaylist = computed<string>(() => {
+  if (!props.item?.cover_src && !props.song?.cover_src) {
+    return ''
+  } else {
+    return props.item?.cover_src || props.song?.cover_src || ''
+  }
+})
+
 const hasAddTrack = computed<boolean>(() => {
   const trackId: string | undefined = props.song?._id
 
@@ -50,7 +58,7 @@ const hasAddTrack = computed<boolean>(() => {
           if (typeof song === 'string') {
             return song
           } else {
-            return song._id
+            return song?._id
           }
         })
       : []
@@ -87,11 +95,11 @@ const removePlaylist = () => {
       <div
         class="g-music-playlist-item__cover"
         :class="{
-          'g-music-playlist-item__cover-default': !props.item?.imageUrl,
+          'g-music-playlist-item__cover-default': !imagePlaylist,
         }"
       >
-        <template v-if="props.item?.imageUrl">
-          <img :alt="props.item.name" :src="props.item?.imageUrl" />
+        <template v-if="imagePlaylist">
+          <img :alt="props.item.name" :src="imagePlaylist" />
         </template>
 
         <DynamicIcon
@@ -121,7 +129,11 @@ const removePlaylist = () => {
     </div>
 
     <div v-if="songsLength" class="g-music-playlist-item__action">
-      <i class="g-icon g-icon-dots" @click.prevent.stop="">
+      <i
+        v-if="props.item?._id !== 2"
+        class="g-icon g-icon-dots"
+        @click.prevent.stop=""
+      >
         <span></span>
 
         <q-menu

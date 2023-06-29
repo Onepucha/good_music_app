@@ -6,20 +6,20 @@ import messages from 'src/i18n'
 export const allLocales = [
   { title: 'Suggested' },
   { label: 'English (US)', value: 'en-US' },
-  { title: 'Others' },
-  { label: 'Mandarin', value: 'zh-Hant' },
-  { label: 'Hindi', value: 'hi' },
-  { label: 'Spanish', value: 'es-ES' },
-  { label: 'French', value: 'fs' },
-  { label: 'Arabic', value: 'ar' },
-  { label: 'Bengali', value: 'bn' },
-  { label: 'Russian', value: 'ru' },
-  { label: 'Indonesia', value: 'id' },
+  // { title: 'Others' },
+  // { label: 'Mandarin', value: 'zh-Hant' },
+  // { label: 'Hindi', value: 'hi' },
+  // { label: 'Spanish', value: 'es-ES' },
+  // { label: 'French', value: 'fs' },
+  // { label: 'Arabic', value: 'ar' },
+  // { label: 'Bengali', value: 'bn' },
+  // { label: 'Russian', value: 'ru' },
+  // { label: 'Indonesia', value: 'id' },
 ]
 
 export type MessageLanguages = keyof typeof messages
 // Type-define 'en-US' as the master schema for the resource
-export type MessageSchema = (typeof messages)['en-US']
+export type MessageSchema = typeof messages['en-US']
 
 // See https://vue-i18n.intlify.dev/guide/advanced/typescript.html#global-resource-schema-type-definition
 /* eslint-disable @typescript-eslint/no-empty-interface */

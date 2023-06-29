@@ -312,7 +312,7 @@ onMounted(() => {
             @click.prevent="onSubmit"
           />
 
-          <g-social class="g-register__social" />
+          <g-social v-if="false" class="g-register__social" />
 
           <div class="g-register__login">
             {{ t('pages.register.loginDescription') }}

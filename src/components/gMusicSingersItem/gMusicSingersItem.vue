@@ -136,7 +136,7 @@ const setShare = () => {
             </q-item>
 
             <q-item
-              v-if="authStore.user && props.album?.songs.length"
+              v-if="authStore.user && props.album?.songs?.length"
               v-close-popup
               clickable
               @click.prevent="downloadSong"

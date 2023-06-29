@@ -155,7 +155,7 @@ const logout = async () => {
                   </q-item-section>
                 </q-item>
 
-                <q-item to="/profile/notification">
+                <q-item v-if="false" to="/profile/notification">
                   <q-item-section avatar>
                     <DynamicIcon :size="28" name="notification" />
                   </q-item-section>
@@ -169,7 +169,7 @@ const logout = async () => {
                   </q-item-section>
                 </q-item>
 
-                <q-item to="/profile/security">
+                <q-item v-if="false" to="/profile/security">
                   <q-item-section avatar>
                     <DynamicIcon :size="28" name="security" />
                   </q-item-section>
