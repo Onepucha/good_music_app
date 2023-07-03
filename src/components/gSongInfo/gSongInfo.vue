@@ -90,6 +90,10 @@ const setLiked = () => {
 }
 
 const onAudioToggle = () => {
+  if (!authStore.user) {
+    alertStore.error(t('notPlayingAuth'))
+    return false
+  }
   emit('toggleplay', { song: props.song, index: playerStore.getMusicIndex })
 }
 

@@ -20,6 +20,12 @@
       width: 100%;
       object-fit: cover;
 
+      &:hover {
+        img {
+          transform: scale(1.1);
+        }
+      }
+
       &-default {
         &::before {
           content: '';
@@ -52,6 +58,12 @@
     overflow: hidden;
     transition: $animate-delay;
     animation: fade-in 0.3s;
+
+    &:hover {
+      & ~ img {
+        filter: blur(2px);
+      }
+    }
 
     @keyframes fade-in {
       from {
@@ -167,10 +179,19 @@
     width: 100%;
     object-fit: cover;
 
+    &:hover {
+      & ~ .g-music-gallery-item__description {
+        .g-music-gallery-item__description-title {
+          color: $primary;
+        }
+      }
+    }
+
     img {
       width: 100%;
       user-select: none;
       aspect-ratio: 1/1;
+      transition: $animate-delay;
     }
 
     &-loading {
@@ -267,6 +288,11 @@
       font-weight: 700;
       line-height: $lh-25;
       color: $greyscale900;
+      transition: $animate-delay;
+
+      &:hover {
+        color: $primary;
+      }
     }
 
     &-info {

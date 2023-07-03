@@ -22,14 +22,17 @@ import {
 import ColorThief from 'color-thief-ts'
 import Hls from 'hls.js'
 import { Song } from '@/types/artist'
-import { useAlertStore, usePlayerStore } from '@/stores/'
+import { useAlertStore, useAuthStore, usePlayerStore } from '@/stores/'
 import { useQuasar } from 'quasar'
 import Songs from '@/services/songs'
 import GControllerBottom from '@/components/gPlayer/gControllerBottom.vue'
+import { useTranslation } from '@/composables/lang'
 
 const $q = useQuasar()
 // mutex playing instance
 let activeMutex: { pause: () => void } | null | undefined = null
+const { t } = useTranslation()
+const authStore = useAuthStore()
 const playerStore = usePlayerStore()
 const alertStore = useAlertStore()
 
@@ -422,6 +425,11 @@ const pause = () => {
 }
 
 const toggle = () => {
+  if (!authStore.user) {
+    alertStore.error(t('notPlayingAuth'))
+    return false
+  }
+
   if (!audio.value?.paused) {
     pause()
   } else {
@@ -518,6 +526,11 @@ const getShuffledList = () => {
 }
 
 const onPrevSong = async () => {
+  if (!authStore.user) {
+    alertStore.error(t('notPlayingAuth'))
+    return false
+  }
+
   let currentMusic: Song
   try {
     const songUrl = await Songs.playSong(previousItem.value?._id)
@@ -549,6 +562,11 @@ const onPrevSong = async () => {
 }
 
 const onNextSong = async () => {
+  if (!authStore.user) {
+    alertStore.error(t('notPlayingAuth'))
+    return false
+  }
+
   let currentMusic: Song
   try {
     const songUrl = await Songs.playSong(nextItem.value?._id)
@@ -580,10 +598,20 @@ const onNextSong = async () => {
 }
 
 const onRewindPrev = () => {
+  if (!authStore.user) {
+    alertStore.error(t('notPlayingAuth'))
+    return false
+  }
+
   audio.value.currentTime -= 10
 }
 
 const onRewindNext = () => {
+  if (!authStore.user) {
+    alertStore.error(t('notPlayingAuth'))
+    return false
+  }
+
   audio.value.currentTime += 10
 }
 

@@ -5,7 +5,7 @@ import { useQuasar } from 'quasar'
 import gPlayBtn from '@/components/gPlayBtn/gPlayBtn.vue'
 import DynamicIcon from '@/components/DynamicIcon.vue'
 import { Album, Song } from '@/types/artist'
-import { useAuthStore, usePlayerStore } from '@/stores'
+import { useAlertStore, useAuthStore, usePlayerStore } from '@/stores'
 import { useTranslation } from '@/composables/lang'
 
 const { t } = useTranslation()
@@ -13,6 +13,7 @@ const router = useRouter()
 const $q = useQuasar()
 const authStore = useAuthStore()
 const playerStore = usePlayerStore()
+const alertStore = useAlertStore()
 
 defineComponent({
   components: {
@@ -95,6 +96,10 @@ const handleClick = () => {
 }
 
 const onAudioToggle = () => {
+  if (!authStore.user) {
+    alertStore.error(t('notPlayingAuth'))
+    return false
+  }
   emit('toggleplay', props.item)
 }
 

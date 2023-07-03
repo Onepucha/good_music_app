@@ -5,6 +5,8 @@ export default {
   successLiked: 'Success Liked!',
   successNotLiked: 'Do not like.',
   error: 'Error',
+  notPlayingAuth: 'To listen, please log in.',
+  playingOneSong: 'For this listening you need a subscription gooduser.',
   layouts: {
     navs: {
       home: 'Home',

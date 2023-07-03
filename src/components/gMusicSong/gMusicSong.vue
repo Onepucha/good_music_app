@@ -61,6 +61,10 @@ const emit = defineEmits([
 ])
 
 const onAudioToggle = () => {
+  if (!authStore.user) {
+    alertStore.error(t('notPlayingAuth'))
+    return false
+  }
   emit('toggleplay', props.song)
 }
 

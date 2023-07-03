@@ -214,9 +214,13 @@ const onAudioToggle = (item: { song: Song; index: number }) => {
 const onAudioPlay = async (item: { song: Song; index: number }) => {
   try {
     if (item && item.song && item.song.songs && item.song.songs.length > 0) {
+      const artist: Artist = item.song?.artists?.at(0) as Artist
       const songUrl = await Songs.playSong(item.song.songs[0])
+      const songList = await Songs.getAll({
+        id: artist?._id,
+      })
 
-      playerStore.setMusicList(data?.newReleases || [])
+      playerStore.setMusicList(songList.data.songs || [])
 
       playerStore.setMusic(
         {
