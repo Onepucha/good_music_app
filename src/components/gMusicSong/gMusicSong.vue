@@ -89,7 +89,7 @@ const goToAlbum = () => {
 
 const setShare = () => {
   copyToClipboard(
-    `${import.meta.env.VITE_API_URL}/artist/${findArtist.value._id}/track/${
+    `${import.meta.env.VITE_API_URL}/artist/${findArtist.value?._id}/track/${
       props.song._id
     }`
   )
@@ -102,7 +102,7 @@ const setShare = () => {
 }
 
 const viewArtist = () => {
-  emit('view-artist', findArtist.value._id)
+  emit('view-artist', findArtist.value?._id)
 }
 
 const parentRouteName = computed(() => {

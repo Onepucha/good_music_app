@@ -3,7 +3,7 @@
   background: linear-gradient(286.17deg, #cb4800 0%, #ff7b33 100%);
   box-shadow: 4px 8px 24px rgb(255 90 0 / 25%);
   border-radius: 16px;
-  padding: 30px 24px;
+  padding: 30px 29px 31px 24px;
   overflow: hidden;
 
   &::before {
@@ -24,8 +24,8 @@
     right: 0;
     bottom: 0;
     content: '';
-    width: 138px;
-    height: 161px;
+    width: 98px;
+    height: 178px;
     background-image: url('src/assets/images/bg-card.png');
     background-repeat: no-repeat;
     background-size: cover;
@@ -38,10 +38,16 @@
     gap: 12px;
     padding: 0;
     z-index: 1;
+
+    .q-btn {
+      max-width: 116px;
+      padding: 6px;
+    }
   }
 
   h4,
   p {
     color: $white;
+    margin: 0;
   }
 }

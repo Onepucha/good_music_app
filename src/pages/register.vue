@@ -35,6 +35,7 @@ defineComponent({
 })
 
 const dense = ref<boolean>(false)
+const focus = ref<boolean>(false)
 // const gender = ref<string | null>(null)
 const step = ref(0)
 const qDateProxy = ref<any>(null)
@@ -163,6 +164,14 @@ const onSubmit = async () => {
   }
 }
 
+const onFocus = (val: boolean) => {
+  focus.value = val
+}
+
+const onBlur = (val: boolean) => {
+  focus.value = val
+}
+
 const onSaveProfile = async () => {
   const authStore = useAuthStore()
   const alertStore = useAlertStore()
@@ -289,6 +298,8 @@ onMounted(() => {
               class="g-register__inputs-label"
               password
               standout
+              @focus="onFocus"
+              @blur="onBlur"
             />
           </div>
 
@@ -474,6 +485,9 @@ onMounted(() => {
       </div>
     </form>
 
-    <div class="g-register__illustration" />
+    <div
+      class="g-register__illustration"
+      :class="{ 'hidden-password': focus && data.password.length > 0 }"
+    />
   </div>
 </template>

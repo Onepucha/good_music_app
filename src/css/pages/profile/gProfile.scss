@@ -22,6 +22,14 @@
         flex-basis: 100%;
       }
     }
+
+    .q-card {
+      padding: 30px 164px 31px 24px;
+
+      @media #{$mobile} {
+        padding: 30px 74px 31px 24px;
+      }
+    }
   }
 
   &__account {
@@ -64,7 +72,7 @@
   }
 
   &__nav {
-    width: 50%;
+    width: calc(50% - 24px);
     margin: 24px 0 0;
 
     @media #{$mobile} {

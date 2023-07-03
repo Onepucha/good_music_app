@@ -55,10 +55,18 @@
 
   &__illustration {
     flex: 1 1 0;
-    background-color: $greyscale900;
-    background-image: url('@/assets/images/illustration.png');
+    background-color: $greyscale50;
+    background-image: url('@/assets/images/monkey-3.png');
     background-repeat: no-repeat;
     background-position: left center;
+    background-size: contain;
+    background-origin: content-box;
+    transition: $animate-delay;
+    padding: 91px 9px 91px 0;
+
+    &.hidden-password {
+      background-image: url('src/assets/images/monkey-4.png');
+    }
 
     @media #{$tablet} {
       display: none;
