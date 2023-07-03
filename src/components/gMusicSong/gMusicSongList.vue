@@ -4,6 +4,12 @@ import { Artist, Song } from '@/types/artist'
 
 import gMusicSong from '@/components/gMusicSong/gMusicSong.vue'
 import gMusicSongListNotFound from '@/components/gMusicSong/gMusicSongListNotFound.vue'
+import { useTranslation } from '@/composables/lang'
+import { useAlertStore, useAuthStore } from '@/stores'
+
+const { t } = useTranslation()
+const authStore = useAuthStore()
+const alertStore = useAlertStore()
 
 defineComponent({
   components: {
@@ -38,8 +44,13 @@ const emit = defineEmits([
   'dont-play-this',
 ])
 
-const onAudioToggle = (song: Song, index: number | string) => {
-  emit('toggleplay', { song, index })
+const onAudioToggle = (song: Song, id: number | string, index: number) => {
+  if (index >= 0 && authStore.user?.status === 'not-gooduser') {
+    alertStore.error(t('playingOneSong'))
+    return false
+  }
+
+  emit('toggleplay', { song, id })
 }
 
 const setLiked = (
@@ -91,12 +102,12 @@ const dontPlayThis = (song: Song) => {
       <div class="g-music-song-list__body">
         <template v-if="list.length">
           <g-music-song
-            v-for="item of list"
+            v-for="(item, index) of list"
             :key="item._id"
             :artist="artist"
             :artist-id="artistId"
             :song="item"
-            @toggleplay="onAudioToggle(item, item._id)"
+            @toggleplay="onAudioToggle(item, item._id, index)"
             @set-liked="setLiked"
             @download="downloadSong"
             @view-artist="viewArtist"
