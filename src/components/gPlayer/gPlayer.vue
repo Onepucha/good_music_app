@@ -526,8 +526,15 @@ const getShuffledList = () => {
 }
 
 const onPrevSong = async () => {
+  const index = data.internalList?.findIndex(
+    (song) => song._id === nextItem.value._id
+  )
+
   if (!authStore.user) {
     alertStore.error(t('notPlayingAuth'))
+    return false
+  } else if (index <= 1 && authStore.user.status === 'not-gooduser') {
+    alertStore.error(t('playingOneSong'))
     return false
   }
 
@@ -562,8 +569,15 @@ const onPrevSong = async () => {
 }
 
 const onNextSong = async () => {
+  const index = data.internalList?.findIndex(
+    (song) => song._id === nextItem.value._id
+  )
+
   if (!authStore.user) {
     alertStore.error(t('notPlayingAuth'))
+    return false
+  } else if (index >= 1 && authStore.user.status === 'not-gooduser') {
+    alertStore.error(t('playingOneSong'))
     return false
   }
 
