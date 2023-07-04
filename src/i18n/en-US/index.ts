@@ -501,6 +501,7 @@ export default {
     titleNotFound: 'Not Found',
     descriptionNotFound:
       'Sorry, the keyword you entered cannot be found, please check again or search with another keyword.',
+    descriptionRequested: 'Type your request and press enter on your device.',
     filters: {
       songs: 'Songs',
       artists: 'Artists',

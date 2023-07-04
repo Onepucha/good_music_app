@@ -259,7 +259,7 @@ const goToAlbum = (url: string) => {
   router.push(`/album/${url}`)
 }
 
-const downloadSongs = async (id: string) => {
+const downloadSongs = async (id: string, album: Album | undefined) => {
   if (authStore.user?.status === 'not-gooduser') {
     alertStore.error(t('downloadSong'))
     return false
@@ -276,6 +276,13 @@ const downloadSongs = async (id: string) => {
       const songData = songResponse.data
       const blob = new Blob([songData], { type: 'audio/mpeg' })
       zip.file(`${song.name}.mp3`, blob)
+    }
+
+    // Добавим картинку альбома в архив
+    if (album && album.cover_src) {
+      const response = await fetch(album.cover_src)
+      const blob = await response.blob()
+      zip.file(`${album.name}.jpg`, blob)
     }
 
     // Сгенерируем архив и скачаем его

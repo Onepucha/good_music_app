@@ -82,7 +82,7 @@ const downloadSong = () => {
 }
 
 const downloadSongs = () => {
-  emit('download-songs', props.album?._id)
+  emit('download-songs', props.album?._id, props.album)
 }
 
 const addPlayList = () => {

@@ -481,19 +481,27 @@ onMounted(() => {
           </div>
           <g-loader v-if="isLoading" />
           <div
-            v-else-if="searchResults?.length === 0 && showNotFound"
+            v-else-if="searchResults?.length === 0"
             class="g-music-search__not-found"
           >
-            <div class="g-music-search__not-found-images">
-              <img src="/images/not-found-songs.svg" alt="not-found-songs" />
-            </div>
-            <h4 class="g-music-search__not-found-title">
-              {{ t('gMusicSearch.titleNotFound') }}
-            </h4>
-            <p
-              class="g-music-search__not-found-description"
-              v-html="t('gMusicSearch.descriptionNotFound')"
-            ></p>
+            <template v-if="showNotFound">
+              <div class="g-music-search__not-found-images">
+                <img src="/images/not-found-songs.svg" alt="not-found-songs" />
+              </div>
+              <h4 class="g-music-search__not-found-title">
+                {{ t('gMusicSearch.titleNotFound') }}
+              </h4>
+              <p
+                class="g-music-search__not-found-description"
+                v-html="t('gMusicSearch.descriptionNotFound')"
+              ></p>
+            </template>
+            <template v-else>
+              <p
+                class="g-music-search__not-found-requested"
+                v-html="t('gMusicSearch.descriptionRequested')"
+              ></p>
+            </template>
           </div>
         </div>
       </div>

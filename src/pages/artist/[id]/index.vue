@@ -238,7 +238,12 @@ const dontPlayThis = (song: Song) => {
   console.log(song)
 }
 
-const downloadSongs = async (id: string) => {
+const downloadSongs = async (id: string, artist: Artist | undefined) => {
+  if (authStore.user?.status === 'not-gooduser') {
+    alertStore.error(t('downloadSong'))
+    return false
+  }
+
   const zip = new JSZip()
   try {
     const response = await Songs.getAll({ id: id })
@@ -250,6 +255,13 @@ const downloadSongs = async (id: string) => {
       const songData = songResponse.data
       const blob = new Blob([songData], { type: 'audio/mpeg' })
       zip.file(`${song.name}.mp3`, blob)
+    }
+
+    // Добавим картинку артиста в архив
+    if (artist && artist.cover_src) {
+      const response = await fetch(artist.cover_src)
+      const blob = await response.blob()
+      zip.file(`${artist.name}.jpg`, blob)
     }
 
     // Сгенерируем архив и скачаем его

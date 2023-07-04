@@ -82,7 +82,7 @@ const setShare = () => {
 }
 
 const downloadSongs = () => {
-  emit('download-songs', props.artist?._id)
+  emit('download-songs', props.artist?._id, props.artist)
 }
 
 const addPlayList = () => {
