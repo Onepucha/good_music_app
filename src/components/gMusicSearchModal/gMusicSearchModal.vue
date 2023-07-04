@@ -66,6 +66,7 @@ const maximizedToggle = ref<boolean>(true)
 const dialogAddModal = ref<boolean>(false)
 const recentSearches = ref<string[]>([])
 const recentSearchesVisible = ref<boolean>(true)
+const showNotFound = ref<boolean>(false)
 const isLoading = ref<boolean>(false)
 
 const categoryName = ref<string>('song')
@@ -143,6 +144,7 @@ const search = async () => {
   }, 500)
 
   fetchSearch()
+  showNotFound.value = true
 }
 
 const toggleFilter = (categoryId: string, type: string) => {
@@ -157,6 +159,7 @@ const clearSearch = () => {
   searchQuery.value = ''
   searchResults.value = []
   recentSearchesVisible.value = true
+  showNotFound.value = false
 }
 
 const recentSearchClick = (recentSearch: any) => {
@@ -173,6 +176,7 @@ const removeRecentSearch = (index: number) => {
 
 const clearRecentSearches = () => {
   recentSearches.value = []
+  showNotFound.value = false
   // Update stored recent searches
   localStorage.setItem('recentSearches', JSON.stringify(recentSearches.value))
 }
@@ -477,7 +481,7 @@ onMounted(() => {
           </div>
           <g-loader v-if="isLoading" />
           <div
-            v-else-if="searchResults?.length === 0"
+            v-else-if="searchResults?.length === 0 && showNotFound"
             class="g-music-search__not-found"
           >
             <div class="g-music-search__not-found-images">
