@@ -84,6 +84,11 @@ const dontPlayThis = () => {
 }
 
 const downloadSong = () => {
+  if (authStore.user?.status === 'not-gooduser') {
+    alertStore.error(t('downloadSong'))
+    return false
+  }
+
   emit('download', props.song._id, props.song.name)
 }
 

@@ -3,6 +3,12 @@ import { computed, defineComponent } from 'vue'
 import { Song } from '@/types/artist'
 
 import gMusicGalleryItem from '@/components/gMusicGallery/gMusicGalleryItem.vue'
+import { useTranslation } from '@/composables/lang'
+import { useAlertStore, useAuthStore } from '@/stores'
+
+const { t } = useTranslation()
+const authStore = useAuthStore()
+const alertStore = useAlertStore()
 
 defineComponent({
   components: {

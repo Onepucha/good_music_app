@@ -62,14 +62,14 @@ const router = useRouter()
 
 interface Data {
   artist: Artist | undefined
-  album: Album | undefined
+  album: Album
   albumSong: Array<Song>
   songPlaylist: Song | undefined
 }
 
 const data: Data = reactive({
   artist: {} as Artist,
-  album: undefined,
+  album: {} as Album,
   albumSong: [],
   songPlaylist: undefined,
 })
@@ -260,6 +260,11 @@ const goToAlbum = (url: string) => {
 }
 
 const downloadSongs = async (id: string) => {
+  if (authStore.user?.status === 'not-gooduser') {
+    alertStore.error(t('downloadSong'))
+    return false
+  }
+
   const zip = new JSZip()
   try {
     const response = await Songs.getAlbumSongs({ id: id })

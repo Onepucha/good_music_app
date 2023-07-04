@@ -94,7 +94,6 @@ const getArtistSongs = async () => {
 
 const addFollow = async (object: { follow: boolean; artist: Artist }) => {
   const artistStore = useArtistsStore()
-  const alertStore = useAlertStore()
 
   try {
     data.isLoading = true

@@ -6,7 +6,8 @@ export default {
   successNotLiked: 'Do not like.',
   error: 'Error',
   notPlayingAuth: 'To listen, please log in.',
-  playingOneSong: 'For this listening you need a subscription gooduser.',
+  playingOneSong: 'For this listening you need a subscription GoodUser.',
+  downloadSong: 'Downloading is possible only in the status of GoodUser.',
   layouts: {
     navs: {
       home: 'Home',
