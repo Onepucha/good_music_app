@@ -41,8 +41,8 @@ const typeRoutes = computed<string>(() => {
   return props.type === 'new-releases' ? 'album' : props.type
 })
 
-const onAudioToggle = (song: Song, index: number | string) => {
-  emit('toggleplay', { song, index })
+const onAudioToggle = (song: Song, id: number | string, index: number) => {
+  emit('toggleplay', { song, id, index })
 }
 
 const setLiked = (
@@ -79,13 +79,13 @@ const setLiked = (
         class="g-music-gallery-list__body"
       >
         <g-music-gallery-item
-          v-for="item of list"
+          v-for="(item, index) of list"
           :key="item._id"
           :item="item"
           :size="props.size"
           :type="typeRoutes"
           :click-to-play="clickToPlay"
-          @toggleplay="onAudioToggle(item, item._id)"
+          @toggleplay="onAudioToggle(item, item._id, index)"
           @set-liked="setLiked"
         />
       </div>

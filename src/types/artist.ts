@@ -11,7 +11,7 @@ export interface Artist {
   album?: Array<Album> | Array<string> | undefined
   song?: Array<string> | undefined
   genre?: Array<string> | undefined
-  songs: Array<string>
+  songs?: Array<Song> | Array<string> | undefined
   is_liked?: boolean
 }
 
@@ -53,7 +53,7 @@ export interface Song {
   song?: Array<string>
   description?: Array<string>
   artists?: Array<Artist> | Array<string> | undefined
-  songs: Array<string>
+  songs?: Array<Song> | Array<string> | undefined
   is_verified?: boolean
   url?: string
   release_data?: string

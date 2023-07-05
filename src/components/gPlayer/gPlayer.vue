@@ -376,29 +376,37 @@ const play = () => {
       activeMutex.pause()
     }
   }
-  // handle .play() Promise
-  const audioPlayPromise = audio.value
-    .play()
-    .then(() => updateMetadata())
-    .catch((error: unknown) => {
-      console.error(error)
 
-      if (error instanceof Error) {
-        alertStore.error(error.message)
-      }
+  // Wait for the audio file to be loaded before calling play()
+  if (audio.value.readyState >= 4) {
+    const audioPlayPromise = audio.value
+      .play()
+      .then(() => updateMetadata())
+      .catch((error: unknown) => {
+        console.error(error)
+
+        if (error instanceof Error) {
+          alertStore.error(error.message)
+        }
+      })
+
+    if (audioPlayPromise) {
+      return (data.audioPlayPromise = new Promise((resolve, reject) => {
+        // rejectPlayPromise is to force reject audioPlayPromise if it's still pending when pause() is called
+        data.rejectPlayPromise = reject
+        audioPlayPromise
+          .then((res: any) => {
+            data.rejectPlayPromise = null
+            resolve(res)
+          })
+          .catch((error: unknown) => console.error(error))
+      }))
+    }
+  } else {
+    // Wait for the canplaythrough event before calling play()
+    audio.value.addEventListener('canplaythrough', () => {
+      play()
     })
-
-  if (audioPlayPromise) {
-    return (data.audioPlayPromise = new Promise((resolve, reject) => {
-      // rejectPlayPromise is to force reject audioPlayPromise if it's still pending when pause() is called
-      data.rejectPlayPromise = reject
-      audioPlayPromise
-        .then((res: any) => {
-          data.rejectPlayPromise = null
-          resolve(res)
-        })
-        .catch((error: unknown) => console.error(error))
-    }))
   }
 }
 

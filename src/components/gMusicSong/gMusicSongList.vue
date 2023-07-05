@@ -50,7 +50,7 @@ const onAudioToggle = (song: Song, id: number | string, index: number) => {
     return false
   }
 
-  emit('toggleplay', { song, id })
+  emit('toggleplay', { song, id, index })
 }
 
 const setLiked = (

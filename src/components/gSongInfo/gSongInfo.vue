@@ -94,7 +94,11 @@ const onAudioToggle = () => {
     alertStore.error(t('notPlayingAuth'))
     return false
   }
-  emit('toggleplay', { song: props.song, index: playerStore.getMusicIndex })
+  emit('toggleplay', {
+    song: props.song,
+    id: playerStore.getMusicIndex,
+    index: 0,
+  })
 }
 
 const downloadSong = () => {

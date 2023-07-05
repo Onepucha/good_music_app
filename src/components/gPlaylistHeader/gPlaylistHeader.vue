@@ -66,8 +66,8 @@ const imagePlaylist = computed<string>(() => {
   }
 })
 
-const onAudioToggle = (song: Song, index: number | string) => {
-  emit('toggleplay', { song, index })
+const onAudioToggle = (song: Song, id: number | string, index: number) => {
+  emit('toggleplay', { song, id, index })
 }
 
 const onShuffle = () => {
@@ -206,7 +206,7 @@ const removePlaylist = () => {
         rounded
         text-color="''"
         unelevated
-        @click.prevent="onAudioToggle(props.song, playerStore.getMusicIndex)"
+        @click.prevent="onAudioToggle(props.song, playerStore.getMusicIndex, 0)"
       >
         <DynamicIcon
           v-if="playerStore.playing"

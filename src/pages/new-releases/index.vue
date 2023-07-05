@@ -90,13 +90,17 @@ const openSearch = () => {
   authStore.searchModal = true
 }
 
-const onAudioToggle = (item: { song: Song; index: number }) => {
-  if (playerStore.playing && playerStore.getMusicIndex === item.index) {
+const onAudioToggle = (item: {
+  song: Song
+  id: number | string
+  index: number
+}) => {
+  if (playerStore.playing && playerStore.getMusicIndex === item.id) {
     onAudioPause()
   } else {
     if (
       playerStore.getMusicIndex !== null &&
-      playerStore.getMusicIndex === item.index
+      playerStore.getMusicIndex === item.id
     ) {
       playerStore.setPlaying(true)
 
@@ -104,29 +108,40 @@ const onAudioToggle = (item: { song: Song; index: number }) => {
         playerStore.player.play()
       })
     } else {
-      onAudioPlay({ song: item.song, index: item.index })
+      onAudioPlay({ song: item.song, id: item.id, index: item.index })
     }
   }
 }
 
-const onAudioPlay = async (item: { song: Song; index: number }) => {
+const onAudioPlay = async (item: {
+  song: Song
+  id: number | string
+  index: number
+}) => {
+  console.log(item)
   try {
     if (item && item.song && item.song.songs && item.song.songs.length > 0) {
-      const songUrl = await Songs.playSong(item.song.songs[0])
+      const artist: Artist = item.song?.artists?.at(0) as Artist
+      const song: Song = item.song?.songs?.at(0) as Song
 
-      playerStore.setMusicList(data?.newReleases || [])
+      const songUrl = await Songs.playSong(song?._id)
+      const songList = await Songs.getAll({
+        id: artist?._id,
+      })
+
+      playerStore.setMusicList(songList.data.songs || [])
 
       playerStore.setMusic(
         {
-          _id: item.song.songs[0],
-          title: item.song?.name,
-          artist: item.song?.artists?.at(0),
+          _id: song?._id,
+          title: song?.name,
+          artist: artist,
           src: songUrl.data?.url,
-          pic: item.song?.cover_src,
-          is_liked: item.song?.is_liked,
-          genres: item.song?.genres,
+          pic: song?.cover_src,
+          is_liked: song?.is_liked,
+          genres: song?.genres,
         } as Song,
-        item.index as number
+        item.id as number
       )
       playerStore.setPlaying(true)
 

@@ -200,13 +200,17 @@ const addRecentSearch = () => {
   }
 }
 
-const onAudioToggle = (item: { song: Song; index: number }) => {
-  if (playerStore.playing && playerStore.getMusicIndex === item.index) {
+const onAudioToggle = (item: {
+  song: Song
+  id: number | string
+  index: number
+}) => {
+  if (playerStore.playing && playerStore.getMusicIndex === item.id) {
     onAudioPause()
   } else {
     if (
       playerStore.getMusicIndex !== null &&
-      playerStore.getMusicIndex === item.index
+      playerStore.getMusicIndex === item.id
     ) {
       playerStore.setPlaying(true)
 
@@ -214,12 +218,16 @@ const onAudioToggle = (item: { song: Song; index: number }) => {
         playerStore.player.play()
       })
     } else {
-      onAudioPlay({ song: item.song, index: item.index })
+      onAudioPlay({ song: item.song, id: item.id, index: item.index })
     }
   }
 }
 
-const onAudioPlay = async (item: { song: Song; index: number }) => {
+const onAudioPlay = async (item: {
+  song: Song
+  id: number | string
+  index: number
+}) => {
   try {
     const songUrl = await Songs.playSong(item.song._id)
 
@@ -235,7 +243,7 @@ const onAudioPlay = async (item: { song: Song; index: number }) => {
         is_liked: item.song?.is_liked,
         genres: item.song?.genres,
       } as Song,
-      item.index as number
+      item.id as number
     )
     playerStore.setPlaying(true)
 
@@ -443,7 +451,7 @@ onMounted(() => {
           </div>
 
           <div v-if="searchResults?.length > 0" :class="listClass">
-            <template v-for="result in searchResults" :key="result.id">
+            <template v-for="(result, index) in searchResults" :key="result.id">
               <template v-if="result.type === 'song'">
                 <g-music-song
                   :key="result.data._id"
@@ -451,7 +459,11 @@ onMounted(() => {
                   :artist-id="result.data?.artists?.at(0)?._id"
                   :song="result.data"
                   @toggleplay="
-                    onAudioToggle({ song: result.data, index: result.data._id })
+                    onAudioToggle({
+                      song: result.data,
+                      id: result.data._id,
+                      index: index,
+                    })
                   "
                   @set-liked="setLiked"
                   @download="downloadSong"
