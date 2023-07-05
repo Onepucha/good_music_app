@@ -179,6 +179,9 @@ const setShare = () => {
 
         <div class="g-music-playlist-info__main-side-actions">
           <g-play-btn
+            :loading="
+              playerStore.loading && playerStore.musicId === props.song?._id
+            "
             :playing="props.playing"
             @click.prevent="$emit('toggleplay')"
           />

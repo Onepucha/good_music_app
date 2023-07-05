@@ -21,4 +21,17 @@
   @include hover-supported {
     transform: scale(0.94);
   }
+
+  .g-icon {
+    &-loading {
+      transition: $animate-delay;
+      animation: rotate 1s linear infinite;
+
+      @keyframes rotate {
+        from {
+          transform: rotate(360deg);
+        }
+      }
+    }
+  }
 }

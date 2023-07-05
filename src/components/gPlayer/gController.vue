@@ -30,6 +30,7 @@ const props = defineProps<{
   theme?: string
   hasControls?: boolean
   playing?: boolean
+  loading?: boolean
 }>()
 
 const loadProgress = computed<number>(() => {
@@ -82,6 +83,7 @@ const secondToTime = (second: number) => {
 
         <g-play-btn
           :class="props.playing ? 'g-player-icon-pause' : 'g-player-icon-play'"
+          :loading="props.loading"
           :playing="props.playing"
           @click.prevent="$emit('toggleplay')"
         />

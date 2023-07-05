@@ -6,6 +6,7 @@ export const usePlayerStore = defineStore('player', () => {
   // initial state
   const player = ref<any>(null)
   const playing = ref<boolean>(false)
+  const loading = ref<boolean>(false)
   const artist = ref<Artist | undefined>(undefined)
   const music = ref<null | Song>(null)
   const musicIndex = ref<number | null>(null)
@@ -18,6 +19,10 @@ export const usePlayerStore = defineStore('player', () => {
 
   const setPlaying = (isPlaying: boolean) => {
     playing.value = isPlaying
+  }
+
+  const setLoading = (isLoading: boolean) => {
+    loading.value = isLoading
   }
 
   const setMusic = (currentMusic: Song, index: number) => {
@@ -48,6 +53,7 @@ export const usePlayerStore = defineStore('player', () => {
     artist,
     player,
     playing,
+    loading,
     music,
     musicIndex,
     list,
@@ -55,6 +61,7 @@ export const usePlayerStore = defineStore('player', () => {
     artistId,
     setArtistName,
     setPlaying,
+    setLoading,
     setMusic,
     setMusicList,
     getMusicIndex,

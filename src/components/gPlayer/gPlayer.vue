@@ -381,9 +381,13 @@ const play = () => {
   if (audio.value.readyState >= 4) {
     const audioPlayPromise = audio.value
       .play()
-      .then(() => updateMetadata())
+      .then(() => {
+        playerStore.setLoading(false)
+        updateMetadata()
+      })
       .catch((error: unknown) => {
         console.error(error)
+        playerStore.setLoading(false)
 
         if (error instanceof Error) {
           alertStore.error(error.message)
@@ -1066,6 +1070,7 @@ defineExpose({ data, play, pause, toggle })
             :theme="currentTheme"
             :has-controls="data.internalList.length > 0"
             :playing="playerStore.playing"
+            :loading="playerStore.loading"
             :music-list="musicList"
             @toggleplay="toggle"
             @dragbegin="onProgressDragBegin"

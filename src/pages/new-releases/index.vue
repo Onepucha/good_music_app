@@ -118,9 +118,9 @@ const onAudioPlay = async (item: {
   id: number | string
   index: number
 }) => {
-  console.log(item)
   try {
     if (item && item.song && item.song.songs && item.song.songs.length > 0) {
+      playerStore.setLoading(true)
       const artist: Artist = item.song?.artists?.at(0) as Artist
       const song: Song = item.song?.songs?.at(0) as Song
 

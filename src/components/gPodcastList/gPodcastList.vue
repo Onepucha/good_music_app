@@ -153,6 +153,9 @@ const emit = defineEmits(['like', 'add-playlist', 'download', 'toggleplay'])
 
         <div class="g-podcast-list__main-side-actions">
           <g-play-btn
+            :loading="
+              playerStore.loading && playerStore.musicId === props.song?._id
+            "
             :playing="props.playing"
             @click.prevent="$emit('toggleplay')"
           />

@@ -160,6 +160,9 @@ const findAlbumPath = computed<boolean>(() => {
 
     <div class="g-music-song__action">
       <g-play-btn
+        :loading="
+          playerStore.loading && playerStore.musicId === props.song?._id
+        "
         :playing="
           playerStore.playing && playerStore.musicId === props.song?._id
         "

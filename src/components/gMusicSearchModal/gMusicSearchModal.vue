@@ -229,6 +229,7 @@ const onAudioPlay = async (item: {
   index: number
 }) => {
   try {
+    playerStore.setLoading(true)
     const songUrl = await Songs.playSong(item.song._id)
 
     playerStore.setMusicList(data.songPlaylist || [])

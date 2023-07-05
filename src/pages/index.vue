@@ -222,6 +222,7 @@ const onAudioPlay = async (item: {
 }) => {
   try {
     if (item && item.song && item.song.songs && item.song.songs.length > 0) {
+      playerStore.setLoading(true)
       const artist: Artist = item.song?.artists?.at(0) as Artist
       const songUrl = await Songs.playSong(item.song.songs[0])
       const songList = await Songs.getAll({

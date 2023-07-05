@@ -10,15 +10,23 @@ defineComponent({
 
 interface Props {
   playing: boolean
+  loading?: boolean
 }
 
 const props = withDefaults(defineProps<Props>(), {
   playing: false,
+  loading: false,
 })
 
-const iconPlayOrPause = computed<string>(() =>
-  props.playing ? 'pause' : 'play'
-)
+const iconPlayOrPause = computed<string>(() => {
+  if (props.loading) {
+    return 'loading'
+  } else if (props.playing) {
+    return 'pause'
+  } else {
+    return 'play'
+  }
+})
 </script>
 
 <template>

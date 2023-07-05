@@ -137,6 +137,9 @@ const setLiked = () => {
         class="g-music-gallery-item__shade"
       >
         <g-play-btn
+          :loading="
+            playerStore.loading && playerStore.musicId === props.song?._id
+          "
           :playing="playerStore.playing && playerStore.musicId === songId"
           @click.prevent="onAudioToggle"
         />
