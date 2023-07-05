@@ -133,13 +133,20 @@ const setLiked = async (
   }
 }
 
-const onAudioToggle = (item: { song: Song; index: number }) => {
-  if (playerStore.playing && playerStore.getMusicIndex === item.index) {
+const onAudioToggle = (item: {
+  song: Song
+  id: string | number
+  index: number
+}) => {
+  console.log('playerStore.getMusicIndex', playerStore.getMusicIndex)
+  console.log('item.id', item.id)
+  if (playerStore.playing && playerStore.getMusicIndex === item.id) {
+    console.log(231)
     onAudioPause()
   } else {
     if (
       playerStore.getMusicIndex !== null &&
-      playerStore.getMusicIndex === item.index
+      playerStore.getMusicIndex === item.id
     ) {
       playerStore.setPlaying(true)
 
@@ -147,12 +154,16 @@ const onAudioToggle = (item: { song: Song; index: number }) => {
         playerStore.player.play()
       })
     } else {
-      onAudioPlay({ song: item.song, index: item.index })
+      onAudioPlay({ song: item.song, id: item.id, index: item.index })
     }
   }
 }
 
-const onAudioPlay = async (item: { song: Song; index: number }) => {
+const onAudioPlay = async (item: {
+  song: Song
+  id: string | number
+  index: number
+}) => {
   try {
     const songUrl = await Songs.playSong(item.song._id)
 
@@ -167,8 +178,9 @@ const onAudioPlay = async (item: { song: Song; index: number }) => {
         pic: item.song?.cover_src,
         is_liked: item.song?.is_liked,
         genres: item.song?.genres,
+        howl: null,
       } as Song,
-      item.index as number
+      item.id as number
     )
     playerStore.setPlaying(true)
 

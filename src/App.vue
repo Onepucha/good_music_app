@@ -129,6 +129,7 @@ onMounted(() => {
       artist: data.music?.artists?.at(0),
       src: data.music?.src,
       pic: data.music?.pic,
+      howl: null,
     } as Song,
     0
   )

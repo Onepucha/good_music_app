@@ -37,6 +37,7 @@ export interface Album {
 }
 
 export interface Song {
+  howl: any
   _id: string
   __v?: string | number
   cover_src?: string

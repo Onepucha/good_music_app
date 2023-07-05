@@ -157,6 +157,7 @@ const onAudioPlay = async (item: { song: Song; index: number }) => {
         pic: item.song?.cover_src,
         is_liked: item.song?.is_liked,
         genres: item.song?.genres,
+        howl: null,
       } as Song,
       item.index as number
     )
@@ -199,6 +200,7 @@ const shufflePlay = () => {
       pic: shuffledSongs.at(0)?.cover_src,
       is_liked: shuffledSongs.at(0)?.is_liked,
       genres: shuffledSongs.at(0)?.genres,
+      howl: null,
     } as Song,
     0
   )

@@ -3,7 +3,7 @@
     <div class="row">
       <div class="col-12 col-md-12">
         <g-music-gallery-list
-          v-if="data.newReleases.length"
+          v-if="data.newReleases?.length"
           :list="data.newReleases"
           :sub-title="t('pages.home.galleryListReleases.subTitle')"
           :title="t('pages.home.galleryListReleases.title')"
@@ -231,6 +231,7 @@ const onAudioPlay = async (item: { song: Song; index: number }) => {
           pic: item.song?.cover_src,
           is_liked: item.song?.is_liked,
           genres: item.song?.genres,
+          howl: null,
         } as Song,
         item.index as number
       )

@@ -234,6 +234,7 @@ const onAudioPlay = async (item: { song: Song; index: number }) => {
         pic: item.song?.cover_src,
         is_liked: item.song?.is_liked,
         genres: item.song?.genres,
+        howl: null,
       } as Song,
       item.index as number
     )

@@ -38,6 +38,9 @@ dependencies:
   hls.js:
     specifier: 1.3.2-0.canary.8897
     version: 1.3.2-0.canary.8897
+  howler:
+    specifier: ^2.2.3
+    version: 2.2.3
   jszip:
     specifier: ^3.10.1
     version: 3.10.1
@@ -6720,6 +6723,10 @@ packages:
     dependencies:
       lru-cache: 6.0.0
     dev: true
+
+  /howler@2.2.3:
+    resolution: {integrity: sha512-QM0FFkw0LRX1PR8pNzJVAY25JhIWvbKMBFM4gqk+QdV+kPXOhleWGCB6AiAF/goGjIHK2e/nIElplvjQwhr0jg==}
+    dev: false
 
   /html-minifier@4.0.0:
     resolution: {integrity: sha512-aoGxanpFPLg7MkIl/DDFYtb0iWz7jMFGqFhvEDZga6/4QTjneiD8I/NXL1x5aaoCp7FSIT6h/OhykDdPsbtMig==}

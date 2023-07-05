@@ -10,7 +10,6 @@ import gSongPlay from './gSongPlay.vue'
 
 import {
   computed,
-  CSSProperties,
   defineComponent,
   nextTick,
   onMounted,
@@ -19,14 +18,13 @@ import {
   ref,
   watch,
 } from 'vue'
-import ColorThief from 'color-thief-ts'
-import Hls from 'hls.js'
 import { Song } from '@/types/artist'
 import { useAlertStore, useAuthStore, usePlayerStore } from '@/stores/'
 import { useQuasar } from 'quasar'
 import Songs from '@/services/songs'
 import GControllerBottom from '@/components/gPlayer/gControllerBottom.vue'
 import { useTranslation } from '@/composables/lang'
+import { Howl } from 'howler'
 
 const $q = useQuasar()
 // mutex playing instance
@@ -214,10 +212,10 @@ const isFloatMode = computed<boolean>(() => {
   return props.float && !data.isMobile
 })
 
-const shouldAutoplay = computed<boolean>(() => {
-  if (data.isMobile) return false
-  return props.autoplay
-})
+// const shouldAutoplay = computed<boolean>(() => {
+//   if (data.isMobile) return false
+//   return props.autoplay
+// })
 
 const musicList = computed<any>({
   get() {
@@ -228,30 +226,30 @@ const musicList = computed<any>({
   },
 })
 
-const shouldShowNativeControls = computed<boolean>(() => {
-  return (
-    import.meta.env.VITE_STAGE !== 'production' && props.controls && !props.mini
-  )
-})
+// const shouldShowNativeControls = computed<boolean>(() => {
+//   return (
+//     import.meta.env.VITE_STAGE !== 'production' && props.controls && !props.mini
+//   )
+// })
 
-const currentPicStyleObj = computed<CSSProperties>(() => {
-  if (currentMusic.value && currentMusic.value.pic) {
-    return {
-      backgroundImage: `url(${currentMusic.value.pic})`,
-    }
-  }
-  return {}
-})
+// const currentPicStyleObj = computed<CSSProperties>(() => {
+//   if (currentMusic.value && currentMusic.value.pic) {
+//     return {
+//       backgroundImage: `url(${currentMusic.value.pic})`,
+//     }
+//   }
+//   return {}
+// })
 
-const loadProgress = computed<number>(() => {
-  if (data.playStat.duration === 0) return 0
-  return data.playStat.loadedTime / data.playStat.duration
-})
-
-const playProgress = computed<number>(() => {
-  if (data.playStat.duration === 0) return 0
-  return data.playStat.playedTime / data.playStat.duration
-})
+// const loadProgress = computed<number>(() => {
+//   if (data.playStat.duration === 0) return 0
+//   return data.playStat.loadedTime / data.playStat.duration
+// })
+//
+// const playProgress = computed<number>(() => {
+//   if (data.playStat.duration === 0) return 0
+//   return data.playStat.playedTime / data.playStat.duration
+// })
 
 const playIndex = computed<any>({
   get() {
@@ -262,9 +260,9 @@ const playIndex = computed<any>({
   },
 })
 
-const shouldRepeat = computed<boolean>(() => {
-  return repeatMode.value !== REPEAT.NO_REPEAT
-})
+// const shouldRepeat = computed<boolean>(() => {
+//   return repeatMode.value !== REPEAT.NO_REPEAT
+// })
 
 const isAudioMuted = computed<boolean>({
   get() {
@@ -316,11 +314,11 @@ const repeatMode = computed<string>({
   },
 })
 
-const currentIndex = computed(() => {
-  return data.internalList.findIndex(
-    (item) => item._id === currentMusic.value._id
-  )
-})
+// const currentIndex = computed(() => {
+//   return data.internalList.findIndex(
+//     (item) => item._id === currentMusic.value._id
+//   )
+// })
 
 const previousItem = computed(() => {
   const currentIndex = data.internalList.findIndex(
@@ -370,59 +368,341 @@ const setNextMode = () => {
   }
 }
 
+// const play = () => {
+//   if (props.mutex) {
+//     if (activeMutex) {
+//       activeMutex.pause()
+//     }
+//   }
+//   // handle .play() Promise
+//   const audioPlayPromise = audio.value
+//     .play()
+//     .then(() => updateMetadata())
+//     .catch((error: unknown) => {
+//       console.error(error)
+//
+//       if (error instanceof Error) {
+//         alertStore.error(error.message)
+//       }
+//     })
+//
+//   if (audioPlayPromise) {
+//     return (data.audioPlayPromise = new Promise((resolve, reject) => {
+//       // rejectPlayPromise is to force reject audioPlayPromise if it's still pending when pause() is called
+//       data.rejectPlayPromise = reject
+//       audioPlayPromise
+//         .then((res: any) => {
+//           data.rejectPlayPromise = null
+//           resolve(res)
+//         })
+//         .catch((error: unknown) => console.error(error))
+//     }))
+//   }
+// }
+
+const step = ref(0)
+const nextButton = ref(true)
+const prevButton = ref(true)
+const random = ref(false)
+const index = ref(0)
+const duration = ref('00:00')
+const timer = ref('00:00')
+const pauseTrack = ref(false)
+const progress = ref<HTMLElement | null>(null)
+const volBar = ref<number | null>(null)
+const sliderBtn = ref(0)
+const sliderBtnVol = ref<number | null>(null)
+const volumeProgress = ref(90)
+const mutePlayer = ref(false)
+
+const formatTime = (secs: number) => {
+  var minutes = Math.floor(secs / 60) || 0
+  var seconds = Math.floor(secs - minutes * 60) || 0
+
+  return (
+    (minutes < 10 ? '0' : '') +
+    minutes +
+    ':' +
+    (seconds < 10 ? '0' : '') +
+    seconds
+  )
+}
+
+const stepFunction = () => {
+  if (progress.value == null) {
+    return
+  }
+
+  let sound = data.internalList[index.value].howl
+  let seek = sound.seek()
+  timer.value = formatTime(Math.round(seek))
+  step.value = (seek * 100) / sound.duration()
+
+  sliderBtn.value =
+    progress.value.offsetWidth * (step.value / 100) +
+    progress.value.offsetWidth * 0.05 -
+    25
+
+  if (sound.playing()) {
+    window.requestAnimationFrame(stepFunction.bind(this))
+  }
+}
+
 const play = () => {
-  if (props.mutex) {
-    if (activeMutex) {
-      activeMutex.pause()
-    }
-  }
-  // handle .play() Promise
-  const audioPlayPromise = audio.value
-    .play()
-    .then(() => updateMetadata())
-    .catch((error: unknown) => {
-      console.error(error)
+  let sound: { duration: () => any; play: () => void }
 
-      if (error instanceof Error) {
-        alertStore.error(error.message)
-      }
+  let audio = data.internalList[index.value]
+
+  if (audio.howl) {
+    sound = audio.howl
+  } else {
+    sound = audio.howl = new Howl({
+      src: [currentMusic.value.src],
+      html5: true, // A live stream can only be played through HTML5 Audio.
+      format: ['mp3', 'aac'],
+      onplay() {
+        pauseTrack.value = true
+        nextButton.value = true
+        prevButton.value = true
+        duration.value = formatTime(sound.duration())
+        requestAnimationFrame(stepFunction.bind(this))
+      },
+      onpause() {
+        pauseTrack.value = false
+        playerStore.setPlaying(false)
+      },
+      onend() {
+        next()
+      },
+      onseek() {
+        window.requestAnimationFrame(stepFunction.bind(this))
+      },
     })
-
-  if (audioPlayPromise) {
-    return (data.audioPlayPromise = new Promise((resolve, reject) => {
-      // rejectPlayPromise is to force reject audioPlayPromise if it's still pending when pause() is called
-      data.rejectPlayPromise = reject
-      audioPlayPromise
-        .then((res: any) => {
-          data.rejectPlayPromise = null
-          resolve(res)
-        })
-        .catch((error: unknown) => console.error(error))
-    }))
   }
+
+  sound.play()
+
+  playerStore.setPlaying(true)
 }
 
 const pause = () => {
-  navigator.mediaSession.setActionHandler('pause', () => {
-    audio.value.pause()
-  })
+  let audio = data.internalList[index.value].howl
 
-  data.audioPlayPromise
-    .then(() => {
-      audio.value.pause()
-    })
-    // Avoid force rejection throws Uncaught
-    .catch(() => {
-      audio.value.pause()
-    })
-
-  // audioPlayPromise is still pending
-  if (data.rejectPlayPromise) {
-    // force reject playPromise
-    data.rejectPlayPromise()
-    data.rejectPlayPromise = null
+  if (audio) {
+    audio.pause()
+    pauseTrack.value = false
+    playerStore.setPlaying(false)
   }
 }
+
+const seek = (event: { offsetX: number }) => {
+  if (progress.value == null) {
+    return
+  }
+
+  let per = event.offsetX / progress.value.clientWidth
+
+  let sound = data.internalList[index.value].howl
+
+  if (sound) {
+    if (sound.playing()) {
+      sound.pause()
+      sound.seek(sound.duration() * per)
+      let barWidth = (per * 100) / 100
+      sliderBtn.value =
+        progress.value.offsetWidth * barWidth +
+        progress.value.offsetWidth * 0.05 -
+        25
+      sound.play()
+    } else {
+      sound.seek(sound.duration() * per)
+      let barWidth = (per * 100) / 100
+      sliderBtn.value =
+        progress.value.offsetWidth * barWidth +
+        progress.value.offsetWidth * 0.05 -
+        25
+    }
+  }
+}
+
+const next = async () => {
+  const indexSong = data.internalList?.findIndex(
+    (song) => song._id === nextItem.value._id
+  )
+
+  if (!authStore.user) {
+    alertStore.error(t('notPlayingAuth'))
+    return false
+  } else if (indexSong >= 1 && authStore.user.status === 'not-gooduser') {
+    alertStore.error(t('playingOneSong'))
+    return false
+  }
+
+  let currentMusic: Song
+  try {
+    const songUrl = await Songs.playSong(nextItem.value?._id)
+
+    currentMusic = {
+      _id: nextItem.value?._id,
+      title: nextItem.value?.name || nextItem.value?.title,
+      artist: nextItem.value?.artists?.at(0) || nextItem.value?.artist,
+      pic: nextItem.value?.cover_src || '',
+      src: songUrl.data?.url || nextItem.value?.src,
+      is_liked: nextItem.value?.is_liked,
+      howl: null,
+    } as Song
+  } catch (error: unknown) {
+    console.error(error)
+
+    currentMusic = {
+      _id: nextItem.value?._id,
+      title: nextItem.value?.name || nextItem.value?.title,
+      artist: nextItem.value?.artists?.at(0) || nextItem.value?.artist,
+      pic: nextItem.value?.cover_src || '',
+      src: nextItem.value?.src,
+      is_liked: nextItem.value?.is_liked,
+      howl: null,
+    } as Song
+  }
+
+  data.internalMusic = currentMusic
+  playerStore.setMusic(currentMusic, 0)
+
+  nextButton.value = false
+  let audio = currentMusic.howl
+
+  playerStore.setPlaying(false)
+
+  mutePlayer.value ? (mutePlayer.value = false) : ''
+  audio && audio.mute(true) ? audio.mute(false) : ''
+
+  if (audio && data.internalList.length - 1 == index.value) {
+    audio.stop()
+    if (random.value) {
+      index.value = Math.floor(Math.random() * data.internalList.length)
+    } else {
+      index.value = 0
+    }
+  } else {
+    if (audio) {
+      audio.stop()
+    }
+
+    if (random.value) {
+      index.value = Math.floor(Math.random() * data.internalList.length)
+    } else {
+      index.value++
+    }
+  }
+
+  play()
+}
+
+const previous = async () => {
+  const indexSong = data.internalList?.findIndex(
+    (song) => song._id === nextItem.value._id
+  )
+
+  if (!authStore.user) {
+    alertStore.error(t('notPlayingAuth'))
+    return false
+  } else if (indexSong <= 1 && authStore.user.status === 'not-gooduser') {
+    alertStore.error(t('playingOneSong'))
+    return false
+  }
+
+  let currentMusic: Song
+  try {
+    const songUrl = await Songs.playSong(previousItem.value?._id)
+
+    currentMusic = {
+      _id: previousItem.value?._id,
+      title: previousItem.value?.name || previousItem.value?.title,
+      artist: previousItem.value?.artists?.at(0) || previousItem.value?.artist,
+      pic: previousItem.value?.cover_src || '',
+      src: songUrl.data?.url || previousItem.value?.src,
+      is_liked: previousItem.value?.is_liked,
+    } as Song
+  } catch (error: unknown) {
+    console.error(error)
+
+    currentMusic = {
+      _id: previousItem.value?._id,
+      title: previousItem.value?.name || previousItem.value?.title,
+      artist: previousItem.value?.artists?.at(0) || previousItem.value?.artist,
+      pic: previousItem.value?.cover_src || '',
+      src: previousItem.value?.src,
+      is_liked: previousItem.value?.is_liked,
+    } as Song
+  }
+
+  data.internalMusic = currentMusic
+  playerStore.setMusic(currentMusic, 0)
+
+  let audio = currentMusic.howl
+  prevButton.value = false
+  playerStore.setPlaying(false)
+
+  mutePlayer.value ? (mutePlayer.value = false) : ''
+  audio && audio.mute(true) ? audio.mute(false) : ''
+
+  if (!audio) {
+    index.value = data.internalList.length - 1
+  } else if (audio && index.value == 0) {
+    audio.stop()
+
+    if (random.value) {
+      index.value = Math.floor(Math.random() * data.internalList.length)
+    } else {
+      index.value = data.internalList.length - 1
+    }
+  } else if (audio) {
+    audio.stop()
+
+    if (random.value) {
+      index.value = Math.floor(Math.random() * data.internalList.length)
+    } else {
+      index.value--
+    }
+  }
+
+  play()
+}
+
+const selectSound = (indexSelected: number) => {
+  let audio = data.internalList[index.value].howl
+
+  if (audio) {
+    audio.stop()
+    playerStore.setPlaying(false)
+  }
+
+  index.value = indexSelected
+
+  play()
+}
+
+// const pause = () => {
+//   navigator.mediaSession.setActionHandler('pause', () => {
+//     audio.value.pause()
+//   })
+//
+//   data.audioPlayPromise
+//     .then(() => {
+//       audio.value.pause()
+//     })
+//     // Avoid force rejection throws Uncaught
+//     .catch(() => {
+//       audio.value.pause()
+//     })
+//
+//   // audioPlayPromise is still pending
+//   if (data.rejectPlayPromise) {
+//     // force reject playPromise
+//     data.rejectPlayPromise()
+//     data.rejectPlayPromise = null
+//   }
+// }
 
 const toggle = () => {
   if (!authStore.user) {
@@ -430,10 +710,11 @@ const toggle = () => {
     return false
   }
 
-  if (!audio.value?.paused) {
+  // if (!audio.value?.paused) {
+  if (pauseTrack.value) {
     pause()
   } else {
-    play()
+    selectSound(index.value)
   }
 }
 
@@ -525,91 +806,91 @@ const getShuffledList = () => {
   return unshuffled
 }
 
-const onPrevSong = async () => {
-  const index = data.internalList?.findIndex(
-    (song) => song._id === nextItem.value._id
-  )
-
-  if (!authStore.user) {
-    alertStore.error(t('notPlayingAuth'))
-    return false
-  } else if (index <= 1 && authStore.user.status === 'not-gooduser') {
-    alertStore.error(t('playingOneSong'))
-    return false
-  }
-
-  let currentMusic: Song
-  try {
-    const songUrl = await Songs.playSong(previousItem.value?._id)
-
-    currentMusic = {
-      _id: previousItem.value?._id,
-      title: previousItem.value?.name || previousItem.value?.title,
-      artist: previousItem.value?.artists?.at(0) || previousItem.value?.artist,
-      pic: previousItem.value?.cover_src || '',
-      src: songUrl.data?.url || previousItem.value?.src,
-      is_liked: previousItem.value?.is_liked,
-    } as Song
-  } catch (error: unknown) {
-    console.error(error)
-
-    currentMusic = {
-      _id: previousItem.value?._id,
-      title: previousItem.value?.name || previousItem.value?.title,
-      artist: previousItem.value?.artists?.at(0) || previousItem.value?.artist,
-      pic: previousItem.value?.cover_src || '',
-      src: previousItem.value?.src,
-      is_liked: previousItem.value?.is_liked,
-    } as Song
-  }
-
-  data.internalMusic = currentMusic
-  playerStore.setMusic(currentMusic, 0)
-  thenPlay()
-}
-
-const onNextSong = async () => {
-  const index = data.internalList?.findIndex(
-    (song) => song._id === nextItem.value._id
-  )
-
-  if (!authStore.user) {
-    alertStore.error(t('notPlayingAuth'))
-    return false
-  } else if (index >= 1 && authStore.user.status === 'not-gooduser') {
-    alertStore.error(t('playingOneSong'))
-    return false
-  }
-
-  let currentMusic: Song
-  try {
-    const songUrl = await Songs.playSong(nextItem.value?._id)
-
-    currentMusic = {
-      _id: nextItem.value?._id,
-      title: nextItem.value?.name || nextItem.value?.title,
-      artist: nextItem.value?.artists?.at(0) || nextItem.value?.artist,
-      pic: nextItem.value?.cover_src || '',
-      src: songUrl.data?.url || nextItem.value?.src,
-      is_liked: nextItem.value?.is_liked,
-    } as Song
-  } catch (error: unknown) {
-    console.error(error)
-
-    currentMusic = {
-      _id: nextItem.value?._id,
-      title: nextItem.value?.name || nextItem.value?.title,
-      artist: nextItem.value?.artists?.at(0) || nextItem.value?.artist,
-      pic: nextItem.value?.cover_src || '',
-      src: nextItem.value?.src,
-      is_liked: nextItem.value?.is_liked,
-    } as Song
-  }
-
-  data.internalMusic = currentMusic
-  playerStore.setMusic(currentMusic, 0)
-  thenPlay()
-}
+// const onPrevSong = async () => {
+//   const index = data.internalList?.findIndex(
+//     (song) => song._id === nextItem.value._id
+//   )
+//
+//   if (!authStore.user) {
+//     alertStore.error(t('notPlayingAuth'))
+//     return false
+//   } else if (index <= 1 && authStore.user.status === 'not-gooduser') {
+//     alertStore.error(t('playingOneSong'))
+//     return false
+//   }
+//
+//   let currentMusic: Song
+//   try {
+//     const songUrl = await Songs.playSong(previousItem.value?._id)
+//
+//     currentMusic = {
+//       _id: previousItem.value?._id,
+//       title: previousItem.value?.name || previousItem.value?.title,
+//       artist: previousItem.value?.artists?.at(0) || previousItem.value?.artist,
+//       pic: previousItem.value?.cover_src || '',
+//       src: songUrl.data?.url || previousItem.value?.src,
+//       is_liked: previousItem.value?.is_liked,
+//     } as Song
+//   } catch (error: unknown) {
+//     console.error(error)
+//
+//     currentMusic = {
+//       _id: previousItem.value?._id,
+//       title: previousItem.value?.name || previousItem.value?.title,
+//       artist: previousItem.value?.artists?.at(0) || previousItem.value?.artist,
+//       pic: previousItem.value?.cover_src || '',
+//       src: previousItem.value?.src,
+//       is_liked: previousItem.value?.is_liked,
+//     } as Song
+//   }
+//
+//   data.internalMusic = currentMusic
+//   playerStore.setMusic(currentMusic, 0)
+//   thenPlay()
+// }
+//
+// const onNextSong = async () => {
+//   const index = data.internalList?.findIndex(
+//     (song) => song._id === nextItem.value._id
+//   )
+//
+//   if (!authStore.user) {
+//     alertStore.error(t('notPlayingAuth'))
+//     return false
+//   } else if (index >= 1 && authStore.user.status === 'not-gooduser') {
+//     alertStore.error(t('playingOneSong'))
+//     return false
+//   }
+//
+//   let currentMusic: Song
+//   try {
+//     const songUrl = await Songs.playSong(nextItem.value?._id)
+//
+//     currentMusic = {
+//       _id: nextItem.value?._id,
+//       title: nextItem.value?.name || nextItem.value?.title,
+//       artist: nextItem.value?.artists?.at(0) || nextItem.value?.artist,
+//       pic: nextItem.value?.cover_src || '',
+//       src: songUrl.data?.url || nextItem.value?.src,
+//       is_liked: nextItem.value?.is_liked,
+//     } as Song
+//   } catch (error: unknown) {
+//     console.error(error)
+//
+//     currentMusic = {
+//       _id: nextItem.value?._id,
+//       title: nextItem.value?.name || nextItem.value?.title,
+//       artist: nextItem.value?.artists?.at(0) || nextItem.value?.artist,
+//       pic: nextItem.value?.cover_src || '',
+//       src: nextItem.value?.src,
+//       is_liked: nextItem.value?.is_liked,
+//     } as Song
+//   }
+//
+//   data.internalMusic = currentMusic
+//   playerStore.setMusic(currentMusic, 0)
+//   thenPlay()
+// }
 
 const onRewindPrev = () => {
   if (!authStore.user) {
@@ -638,195 +919,195 @@ const onSelectSong = (song: any) => {
   }
 }
 
-const onAudioPlay = () => {
-  if ('mediaSession' in navigator) {
-    navigator.mediaSession.playbackState = 'playing'
-  }
-  playerStore.setPlaying(true)
-}
+// const onAudioPlay = () => {
+//   if ('mediaSession' in navigator) {
+//     navigator.mediaSession.playbackState = 'playing'
+//   }
+//   playerStore.setPlaying(true)
+// }
 
-const onAudioPause = () => {
-  if ('mediaSession' in navigator) {
-    navigator.mediaSession.playbackState = 'paused'
-  }
-  playerStore.setPlaying(false)
-}
+// const onAudioPause = () => {
+//   if ('mediaSession' in navigator) {
+//     navigator.mediaSession.playbackState = 'paused'
+//   }
+//   playerStore.setPlaying(false)
+// }
 
-const onAudioWaiting = () => {
-  data.isLoading = true
-}
+// const onAudioWaiting = () => {
+//   data.isLoading = true
+// }
+//
+// const onAudioCanplay = () => {
+//   data.isLoading = false
+// }
 
-const onAudioCanplay = () => {
-  data.isLoading = false
-}
+// const onAudioDurationChange = () => {
+//   if (audio.value.duration !== 1) {
+//     data.playStat.duration = audio.value.duration
+//   }
+// }
 
-const onAudioDurationChange = () => {
-  if (audio.value.duration !== 1) {
-    data.playStat.duration = audio.value.duration
-  }
-}
+// const onAudioProgress = () => {
+//   if (audio.value?.buffered.length) {
+//     data.playStat.loadedTime = audio.value.buffered.end(
+//       audio.value.buffered.length - 1
+//     )
+//   } else {
+//     data.playStat.loadedTime = 0
+//   }
+// }
 
-const onAudioProgress = () => {
-  if (audio.value?.buffered.length) {
-    data.playStat.loadedTime = audio.value.buffered.end(
-      audio.value.buffered.length - 1
-    )
-  } else {
-    data.playStat.loadedTime = 0
-  }
-}
+// const onAudioTimeUpdate = () => {
+//   data.playStat.playedTime = audio.value.currentTime
+// }
+//
+// const onAudioSeeking = () => {
+//   data.playStat.playedTime = audio.value.currentTime
+// }
+//
+// const onAudioSeeked = () => {
+//   data.playStat.playedTime = audio.value.currentTime
+// }
+//
+// const onAudioVolumeChange = () => {
+//   audioVolume.value = audio.value.volume
+//   isAudioMuted.value = audio.value.muted
+// }
 
-const onAudioTimeUpdate = () => {
-  data.playStat.playedTime = audio.value.currentTime
-}
+// const onAudioEnded = () => {
+//   // determine next song according to shuffle and repeat
+//   if (repeatMode.value === REPEAT.REPEAT_ALL) {
+//     if (
+//       shouldShuffle.value &&
+//       playIndex.value === data.shuffledList.length - 1
+//     ) {
+//       data.shuffledList = getShuffledList()
+//     }
+//     onNextSong()
+//     thenPlay()
+//   } else if (repeatMode.value === REPEAT.REPEAT_ONE) {
+//     thenPlay()
+//   } else {
+//     onNextSong()
+//     if (playIndex.value !== 0) {
+//       thenPlay()
+//     } else if (data.shuffledList.length === 1) {
+//       audio.value.currentTime = 0
+//     }
+//   }
+// }
 
-const onAudioSeeking = () => {
-  data.playStat.playedTime = audio.value.currentTime
-}
+// const initAudio = () => {
+//   audio.value.controls = shouldShowNativeControls.value
+//   audio.value.muted = props.muted
+//   audio.value.preload = props.preload
+//   audio.value.volume = props.volume
+//
+//   const mediaEvents = [
+//     'abort',
+//     'canplay',
+//     'canplaythrough',
+//     'durationchange',
+//     'emptied',
+//     'encrypted',
+//     'ended',
+//     'error',
+//     'interruptbegin',
+//     'interruptend',
+//     'loadeddata',
+//     'loadedmetadata',
+//     'loadstart',
+//     'mozaudioavailable',
+//     'pause',
+//     'play',
+//     'playing',
+//     'progress',
+//     'ratechange',
+//     'seeked',
+//     'seeking',
+//     'stalled',
+//     'suspend',
+//     'timeupdate',
+//     'volumechange',
+//     'waiting',
+//   ]
+//   mediaEvents.forEach((event: any) => {
+//     audio.value.addEventListener(event, (e: Event) => emit(event, e))
+//   })
+//
+//   audio.value.addEventListener('play', onAudioPlay)
+//   audio.value.addEventListener('pause', onAudioPause)
+//   audio.value.addEventListener('abort', onAudioPause)
+//   audio.value.addEventListener('waiting', onAudioWaiting)
+//   audio.value.addEventListener('canplay', onAudioCanplay)
+//   audio.value.addEventListener('progress', onAudioProgress)
+//   audio.value.addEventListener('durationchange', onAudioDurationChange)
+//   audio.value.addEventListener('seeking', onAudioSeeking)
+//   audio.value.addEventListener('seeked', onAudioSeeked)
+//   audio.value.addEventListener('timeupdate', onAudioTimeUpdate)
+//   audio.value.addEventListener('volumechange', onAudioVolumeChange)
+//   audio.value.addEventListener('ended', onAudioEnded)
+//
+//   if (currentMusic.value) {
+//     audio.value.src = currentMusic.value.src
+//   }
+//
+//   updateMetadata()
+//   setUpPlaylist()
+//   setActionPlayAndPause()
+// }
 
-const onAudioSeeked = () => {
-  data.playStat.playedTime = audio.value.currentTime
-}
+// const setUpPlaylist = () => {
+//   navigator.mediaSession.setActionHandler('previoustrack', () => {
+//     onPrevSong()
+//   })
+//   navigator.mediaSession.setActionHandler('nexttrack', () => {
+//     onNextSong()
+//   })
+// }
 
-const onAudioVolumeChange = () => {
-  audioVolume.value = audio.value.volume
-  isAudioMuted.value = audio.value.muted
-}
+// const setActionPlayAndPause = () => {
+//   navigator.mediaSession.setActionHandler('play', () => {
+//     play()
+//   })
+//   navigator.mediaSession.setActionHandler('pause', () => {
+//     pause()
+//   })
+// }
 
-const onAudioEnded = () => {
-  // determine next song according to shuffle and repeat
-  if (repeatMode.value === REPEAT.REPEAT_ALL) {
-    if (
-      shouldShuffle.value &&
-      playIndex.value === data.shuffledList.length - 1
-    ) {
-      data.shuffledList = getShuffledList()
-    }
-    onNextSong()
-    thenPlay()
-  } else if (repeatMode.value === REPEAT.REPEAT_ONE) {
-    thenPlay()
-  } else {
-    onNextSong()
-    if (playIndex.value !== 0) {
-      thenPlay()
-    } else if (data.shuffledList.length === 1) {
-      audio.value.currentTime = 0
-    }
-  }
-}
+// type ColorArray = [number, number, number]
+//
+// type ColorType = 'array' | 'hex'
+//
+// interface PaletteOptions<T extends ColorType = ColorType> {
+//   quality?: number
+//   colorType?: T
+// }
 
-const initAudio = () => {
-  audio.value.controls = shouldShowNativeControls.value
-  audio.value.muted = props.muted
-  audio.value.preload = props.preload
-  audio.value.volume = props.volume
-
-  const mediaEvents = [
-    'abort',
-    'canplay',
-    'canplaythrough',
-    'durationchange',
-    'emptied',
-    'encrypted',
-    'ended',
-    'error',
-    'interruptbegin',
-    'interruptend',
-    'loadeddata',
-    'loadedmetadata',
-    'loadstart',
-    'mozaudioavailable',
-    'pause',
-    'play',
-    'playing',
-    'progress',
-    'ratechange',
-    'seeked',
-    'seeking',
-    'stalled',
-    'suspend',
-    'timeupdate',
-    'volumechange',
-    'waiting',
-  ]
-  mediaEvents.forEach((event: any) => {
-    audio.value.addEventListener(event, (e: Event) => emit(event, e))
-  })
-
-  audio.value.addEventListener('play', onAudioPlay)
-  audio.value.addEventListener('pause', onAudioPause)
-  audio.value.addEventListener('abort', onAudioPause)
-  audio.value.addEventListener('waiting', onAudioWaiting)
-  audio.value.addEventListener('canplay', onAudioCanplay)
-  audio.value.addEventListener('progress', onAudioProgress)
-  audio.value.addEventListener('durationchange', onAudioDurationChange)
-  audio.value.addEventListener('seeking', onAudioSeeking)
-  audio.value.addEventListener('seeked', onAudioSeeked)
-  audio.value.addEventListener('timeupdate', onAudioTimeUpdate)
-  audio.value.addEventListener('volumechange', onAudioVolumeChange)
-  audio.value.addEventListener('ended', onAudioEnded)
-
-  if (currentMusic.value) {
-    audio.value.src = currentMusic.value.src
-  }
-
-  updateMetadata()
-  setUpPlaylist()
-  setActionPlayAndPause()
-}
-
-const setUpPlaylist = () => {
-  navigator.mediaSession.setActionHandler('previoustrack', () => {
-    onPrevSong()
-  })
-  navigator.mediaSession.setActionHandler('nexttrack', () => {
-    onNextSong()
-  })
-}
-
-const setActionPlayAndPause = () => {
-  navigator.mediaSession.setActionHandler('play', () => {
-    play()
-  })
-  navigator.mediaSession.setActionHandler('pause', () => {
-    pause()
-  })
-}
-
-type ColorArray = [number, number, number]
-
-type ColorType = 'array' | 'hex'
-
-interface PaletteOptions<T extends ColorType = ColorType> {
-  quality?: number
-  colorType?: T
-}
-
-const setSelfAdaptingTheme = () => {
-  // auto theme according to current music cover image
-  if ((currentMusic.value?.theme || props.theme) === 'pic') {
-    const pic = currentMusic.value.pic
-
-    // use cache
-    if (picThemeCache[pic]) {
-      data.selfAdaptingTheme = picThemeCache[pic]
-    } else {
-      try {
-        const colorThief = new ColorThief()
-
-        colorThief.getColorAsync(pic).then((result) => {
-          picThemeCache[pic] = result
-          data.selfAdaptingTheme = result
-        })
-      } catch (error: unknown) {
-        console.error(error)
-      }
-    }
-  } else {
-    data.selfAdaptingTheme = null
-  }
-}
+// const setSelfAdaptingTheme = () => {
+//   // auto theme according to current music cover image
+//   if ((currentMusic.value?.theme || props.theme) === 'pic') {
+//     const pic = currentMusic.value.pic
+//
+//     // use cache
+//     if (picThemeCache[pic]) {
+//       data.selfAdaptingTheme = picThemeCache[pic]
+//     } else {
+//       try {
+//         const colorThief = new ColorThief()
+//
+//         colorThief.getColorAsync(pic).then((result) => {
+//           picThemeCache[pic] = result
+//           data.selfAdaptingTheme = result
+//         })
+//       } catch (error: unknown) {
+//         console.error(error)
+//       }
+//     }
+//   } else {
+//     data.selfAdaptingTheme = null
+//   }
+// }
 
 const showSongPlay = () => {
   showModalSongPlay.value = true
@@ -877,82 +1158,82 @@ const setLiked = async (
   }
 }
 
-watch(
-  () => props.music,
-  (music: any) => {
-    data.internalMusic = music
-  }
-)
+// watch(
+//   () => props.music,
+//   (music: any) => {
+//     data.internalMusic = music
+//   }
+// )
 
-watch(currentMusic, (music: any) => {
-  setSelfAdaptingTheme()
-
-  const src = music.src
-  let hls = null
-  // HLS support
-  if (/\.m3u8(?=(#|\?|$))/.test(src)) {
-    if (
-      audio.value.canPlayType('application/x-mpegURL') ||
-      audio.value.canPlayType('application/vnd.apple.mpegURL')
-    ) {
-      audio.value.src = src
-    } else {
-      try {
-        if (Hls.isSupported()) {
-          if (!hls) {
-            hls = new Hls()
-          }
-          hls.loadSource(src)
-          hls.attachMedia(audio.value)
-        } else {
-          audio.value.src = src
-        }
-      } catch (error: unknown) {
-        console.error(error)
-        audio.value.src = src
-      }
-    }
-  } else {
-    audio.value.src = src
-  }
-})
+// watch(currentMusic, (music: any) => {
+//   setSelfAdaptingTheme()
+//
+//   const src = music.src
+//   let hls = null
+//   // HLS support
+//   if (/\.m3u8(?=(#|\?|$))/.test(src)) {
+//     if (
+//       audio.value.canPlayType('application/x-mpegURL') ||
+//       audio.value.canPlayType('application/vnd.apple.mpegURL')
+//     ) {
+//       audio.value.src = src
+//     } else {
+//       try {
+//         if (Hls.isSupported()) {
+//           if (!hls) {
+//             hls = new Hls()
+//           }
+//           hls.loadSource(src)
+//           hls.attachMedia(audio.value)
+//         } else {
+//           audio.value.src = src
+//         }
+//       } catch (error: unknown) {
+//         console.error(error)
+//         audio.value.src = src
+//       }
+//     }
+//   } else {
+//     audio.value.src = src
+//   }
+// })
 
 // Audio / Media Session Sample
-const updateMetadata = () => {
-  if ('mediaSession' in navigator && navigator.mediaSession.metadata) {
-    navigator.mediaSession.metadata = new MediaMetadata({
-      title: currentMusic.value.title,
-      artist: currentMusic.value.artist?.name || currentMusic.value.artist,
-      album: currentMusic.value?.album,
-      artwork: [
-        { src: currentMusic.value.pic, sizes: '96x96', type: 'image/png' },
-        { src: currentMusic.value.pic, sizes: '128x128', type: 'image/png' },
-        { src: currentMusic.value.pic, sizes: '192x192', type: 'image/png' },
-        { src: currentMusic.value.pic, sizes: '256x256', type: 'image/png' },
-        { src: currentMusic.value.pic, sizes: '384x384', type: 'image/png' },
-        { src: currentMusic.value.pic, sizes: '512x512', type: 'image/png' },
-      ],
-    })
-  }
-}
+// const updateMetadata = () => {
+//   if ('mediaSession' in navigator && navigator.mediaSession.metadata) {
+//     navigator.mediaSession.metadata = new MediaMetadata({
+//       title: currentMusic.value.title,
+//       artist: currentMusic.value.artist?.name || currentMusic.value.artist,
+//       album: currentMusic.value?.album,
+//       artwork: [
+//         { src: currentMusic.value.pic, sizes: '96x96', type: 'image/png' },
+//         { src: currentMusic.value.pic, sizes: '128x128', type: 'image/png' },
+//         { src: currentMusic.value.pic, sizes: '192x192', type: 'image/png' },
+//         { src: currentMusic.value.pic, sizes: '256x256', type: 'image/png' },
+//         { src: currentMusic.value.pic, sizes: '384x384', type: 'image/png' },
+//         { src: currentMusic.value.pic, sizes: '512x512', type: 'image/png' },
+//       ],
+//     })
+//   }
+// }
 
-const updatePositionState = () => {
-  if ('setPositionState' in navigator.mediaSession) {
-    navigator.mediaSession.setPositionState({
-      duration: audio.value.duration,
-      playbackRate: audio.value.playbackRate,
-      position: audio.value.currentTime,
-    })
-  }
-}
+// const updatePositionState = () => {
+//   if ('setPositionState' in navigator.mediaSession) {
+//     navigator.mediaSession.setPositionState({
+//       duration: audio.value.duration,
+//       playbackRate: audio.value.playbackRate,
+//       position: audio.value.currentTime,
+//     })
+//   }
+// }
 
-watch(shouldShowNativeControls, (val: boolean) => {
-  audio.value.controls = val
-})
+// watch(shouldShowNativeControls, (val: boolean) => {
+//   audio.value.controls = val
+// })
 
-watch(isAudioMuted, (val: boolean) => {
-  audio.value.muted = val
-})
+// watch(isAudioMuted, (val: boolean) => {
+//   audio.value.muted = val
+// })
 
 watch(
   () => props.preload,
@@ -961,37 +1242,37 @@ watch(
   }
 )
 
-watch(audioVolume, (val: any) => {
-  audio.value.volume = val
-})
+// watch(audioVolume, (val: any) => {
+//   audio.value.volume = val
+// })
 
-watch(
-  () => props.muted,
-  (val: any) => {
-    data.internalMuted = val
-  }
-)
+// watch(
+//   () => props.muted,
+//   (val: any) => {
+//     data.internalMuted = val
+//   }
+// )
 
-watch(
-  () => props.volume,
-  (val: any) => {
-    data.internalVolume = val
-  }
-)
+// watch(
+//   () => props.volume,
+//   (val: any) => {
+//     data.internalVolume = val
+//   }
+// )
 
-watch(
-  () => props.shuffle,
-  (val: any) => {
-    data.internalShuffle = val
-  }
-)
+// watch(
+//   () => props.shuffle,
+//   (val: any) => {
+//     data.internalShuffle = val
+//   }
+// )
 
-watch(
-  () => props.repeat,
-  (val: any) => {
-    data.internalRepeat = val
-  }
-)
+// watch(
+//   () => props.repeat,
+//   (val: any) => {
+//     data.internalRepeat = val
+//   }
+// )
 
 onMounted(() => {
   if (localStorage.getItem('volume')) {
@@ -1002,8 +1283,8 @@ onMounted(() => {
     }
   }
 
-  initAudio()
-  setSelfAdaptingTheme()
+  // initAudio()
+  // setSelfAdaptingTheme()
   if (props.autoplay) play()
 })
 
@@ -1015,7 +1296,7 @@ onUnmounted(() => {
 
 data.shuffledList = getShuffledList()
 
-defineExpose({ data, play, pause, toggle })
+defineExpose({ data, play, pause, toggle, selectSound })
 </script>
 
 <template>
@@ -1063,9 +1344,9 @@ defineExpose({ data, play, pause, toggle })
             @dragbegin="onProgressDragBegin"
             @dragend="onProgressDragEnd"
             @dragging="onProgressDragging"
-            @track-prev="onPrevSong"
+            @track-prev="previous"
             @track-rewind-prev="onRewindPrev"
-            @track-next="onNextSong"
+            @track-next="next"
             @track-rewind-next="onRewindNext"
           />
         </div>
@@ -1094,7 +1375,7 @@ defineExpose({ data, play, pause, toggle })
         :listmaxheight="listMaxHeight"
         :theme="currentTheme"
         :fixed="fixed"
-        @selectsong="onSelectSong"
+        @selectsong="selectSound"
       />
     </template>
 
@@ -1114,7 +1395,7 @@ defineExpose({ data, play, pause, toggle })
           :has-controls="data.internalList.length > 0"
           :playing="playerStore.playing"
           @toggleplay="toggle"
-          @track-next="onNextSong"
+          @track-next="next"
         />
       </div>
     </template>
@@ -1138,9 +1419,9 @@ defineExpose({ data, play, pause, toggle })
           @dragbegin="onProgressDragBegin"
           @dragend="onProgressDragEnd"
           @dragging="onProgressDragging"
-          @track-prev="onPrevSong"
+          @track-prev="previous"
           @track-rewind-prev="onRewindPrev"
-          @track-next="onNextSong"
+          @track-next="next"
           @track-rewind-next="onRewindNext"
         />
 
@@ -1155,7 +1436,7 @@ defineExpose({ data, play, pause, toggle })
         :listmaxheight="listMaxHeight"
         :theme="currentTheme"
         :fixed="fixed"
-        @selectsong="onSelectSong"
+        @selectsong="selectSound"
       />
     </q-dialog>
   </div>
