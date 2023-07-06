@@ -553,9 +553,9 @@ const onPrevSong = async () => {
   }
 
   let currentMusic: Song
-  const album: Album =
-    (previousItem.value.album_code?.split('-')[1].trim() as string) ||
-    (previousItem.value?.albums?.at(0) as Album)
+  const album: Album = previousItem.value?.album_code
+    ? (previousItem.value?.album_code?.split('-')[1].trim() as string)
+    : (previousItem.value?.albums?.at(0) as Album)
 
   try {
     playerStore.setLoading(true)
@@ -603,9 +603,9 @@ const onNextSong = async () => {
   }
 
   let currentMusic: Song
-  const album: Album =
-    (nextItem.value.album_code?.split('-')[1].trim() as string) ||
-    (nextItem.value?.albums?.at(0) as Album)
+  const album: Album = nextItem.value?.album_code
+    ? (nextItem.value?.album_code?.split('-')[1].trim() as string)
+    : (nextItem.value?.albums?.at(0) as Album)
 
   try {
     playerStore.setLoading(true)
