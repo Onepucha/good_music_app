@@ -59,7 +59,7 @@ export interface Song {
   release_data?: string
   label?: string
   title?: string
-  artist?: Artist
+  artist?: Artist | Array<string> | string
   src?: string
   is_liked?: boolean
   duration?: number | null | undefined

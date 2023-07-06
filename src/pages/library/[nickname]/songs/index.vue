@@ -96,7 +96,7 @@ const onRecently = async (direction: string) => {
   data.songs = response.data.songs
 }
 
-const shufflePlay = () => {
+const shufflePlay = async () => {
   // Создаем копию массива песен
   const shuffledSongs = data.songs.slice()
 
@@ -106,27 +106,34 @@ const shufflePlay = () => {
     ;[shuffledSongs[i], shuffledSongs[j]] = [shuffledSongs[j], shuffledSongs[i]]
   }
 
-  console.log(shuffledSongs)
+  const songId = shuffledSongs?.at(0)?._id
 
-  playerStore.setMusicList(shuffledSongs)
+  if (songId) {
+    playerStore.setLoading(true)
+    const songUrl = await Songs.playSong(songId)
 
-  playerStore.setMusic(
-    {
-      _id: shuffledSongs?.at(0)?._id,
-      title: shuffledSongs.at(0)?.name,
-      artist: shuffledSongs?.at(0)?.artists?.at(0),
-      src: shuffledSongs.at(0)?.url,
-      pic: shuffledSongs.at(0)?.cover_src,
-      is_liked: shuffledSongs.at(0)?.is_liked,
-      genres: shuffledSongs.at(0)?.genres,
-    } as Song,
-    0
-  )
-  playerStore.setPlaying(true)
+    playerStore.setMusicList(shuffledSongs)
 
-  nextTick(() => {
-    playerStore.player.play()
-  })
+    playerStore.setMusic(
+      {
+        _id: shuffledSongs?.at(0)?._id,
+        title: shuffledSongs.at(0)?.name,
+        artist: shuffledSongs?.at(0)?.artists?.at(0),
+        album: shuffledSongs?.at(0)?.album_code?.split('-')[1].trim(),
+        url: songUrl.data?.url,
+        src: songUrl.data?.url,
+        pic: shuffledSongs.at(0)?.cover_src,
+        is_liked: shuffledSongs.at(0)?.is_liked,
+        genres: shuffledSongs.at(0)?.genres,
+      } as Song,
+      0
+    )
+    playerStore.setPlaying(true)
+
+    nextTick(() => {
+      playerStore.player.play()
+    })
+  }
 }
 
 const addPlayList = (song: Song) => {
@@ -206,6 +213,7 @@ const onAudioPlay = async (item: {
         _id: item.song?._id,
         title: item.song?.name,
         artist: item.song?.artists?.at(0),
+        album: item.song?.album_code?.split('-')[1].trim(),
         src: songUrl.data?.url,
         pic: item.song?.cover_src,
         is_liked: item.song?.is_liked,

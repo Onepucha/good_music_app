@@ -8,18 +8,18 @@
   border-radius: 50%;
   background: linear-gradient(286.17deg, #cb4800 0%, #ff7b33 100%);
   z-index: 2;
-  transition:
-    color 0.1s linear,
-    border-color 0.1s linear,
-    background 0.15s linear,
-    transform 0.1s linear,
-    opacity 0.15s linear,
+  transition: color 0.1s linear, border-color 0.1s linear,
+    background 0.15s linear, transform 0.1s linear, opacity 0.15s linear,
     -webkit-transform 0.1s linear;
   cursor: pointer;
   user-select: none;
 
   @include hover-supported {
     transform: scale(0.94);
+  }
+
+  &.loading {
+    pointer-events: none;
   }
 
   .g-icon {

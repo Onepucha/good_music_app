@@ -163,6 +163,7 @@ const onAudioPlay = async (item: {
         _id: item.song?._id,
         title: item.song?.name,
         artist: item.song?.artists?.at(0),
+        album: item.song?.album_code?.split('-')[1].trim(),
         src: songUrl.data?.url,
         pic: item.song?.cover_src,
         is_liked: item.song?.is_liked,

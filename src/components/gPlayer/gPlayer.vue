@@ -21,7 +21,7 @@ import {
 } from 'vue'
 import ColorThief from 'color-thief-ts'
 import Hls from 'hls.js'
-import { Song } from '@/types/artist'
+import { Album, Song } from '@/types/artist'
 import { useAlertStore, useAuthStore, usePlayerStore } from '@/stores/'
 import { useQuasar } from 'quasar'
 import Songs from '@/services/songs'
@@ -383,7 +383,9 @@ const play = () => {
       .play()
       .then(() => {
         playerStore.setLoading(false)
-        updateMetadata()
+        nextTick(() => {
+          updateMetadata()
+        })
       })
       .catch((error: unknown) => {
         console.error(error)
@@ -551,13 +553,19 @@ const onPrevSong = async () => {
   }
 
   let currentMusic: Song
+  const album: Album =
+    (previousItem.value.album_code?.split('-')[1].trim() as string) ||
+    (previousItem.value?.albums?.at(0) as Album)
+
   try {
+    playerStore.setLoading(true)
     const songUrl = await Songs.playSong(previousItem.value?._id)
 
     currentMusic = {
       _id: previousItem.value?._id,
       title: previousItem.value?.name || previousItem.value?.title,
       artist: previousItem.value?.artists?.at(0) || previousItem.value?.artist,
+      album: album?.name || album || '',
       pic: previousItem.value?.cover_src || '',
       src: songUrl.data?.url || previousItem.value?.src,
       is_liked: previousItem.value?.is_liked,
@@ -569,6 +577,7 @@ const onPrevSong = async () => {
       _id: previousItem.value?._id,
       title: previousItem.value?.name || previousItem.value?.title,
       artist: previousItem.value?.artists?.at(0) || previousItem.value?.artist,
+      album: album?.name || album || '',
       pic: previousItem.value?.cover_src || '',
       src: previousItem.value?.src,
       is_liked: previousItem.value?.is_liked,
@@ -594,13 +603,22 @@ const onNextSong = async () => {
   }
 
   let currentMusic: Song
+  const album: Album =
+    (nextItem.value.album_code?.split('-')[1].trim() as string) ||
+    (nextItem.value?.albums?.at(0) as Album)
+
   try {
+    playerStore.setLoading(true)
     const songUrl = await Songs.playSong(nextItem.value?._id)
 
     currentMusic = {
       _id: nextItem.value?._id,
       title: nextItem.value?.name || nextItem.value?.title,
-      artist: nextItem.value?.artists?.at(0) || nextItem.value?.artist,
+      artist:
+        nextItem.value?.album_code?.split('-')?.at(0)?.trim() ||
+        nextItem.value?.artists?.at(0) ||
+        nextItem.value?.artist,
+      album: album?.name || album || '',
       pic: nextItem.value?.cover_src || '',
       src: songUrl.data?.url || nextItem.value?.src,
       is_liked: nextItem.value?.is_liked,
@@ -612,6 +630,7 @@ const onNextSong = async () => {
       _id: nextItem.value?._id,
       title: nextItem.value?.name || nextItem.value?.title,
       artist: nextItem.value?.artists?.at(0) || nextItem.value?.artist,
+      album: album?.name || album || '',
       pic: nextItem.value?.cover_src || '',
       src: nextItem.value?.src,
       is_liked: nextItem.value?.is_liked,
@@ -931,7 +950,7 @@ watch(currentMusic, (music: any) => {
 
 // Audio / Media Session Sample
 const updateMetadata = () => {
-  if ('mediaSession' in navigator && navigator.mediaSession.metadata) {
+  if ('mediaSession' in navigator) {
     navigator.mediaSession.metadata = new MediaMetadata({
       title: currentMusic.value.title,
       artist: currentMusic.value.artist?.name || currentMusic.value.artist,

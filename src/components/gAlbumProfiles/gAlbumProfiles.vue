@@ -208,9 +208,7 @@ const setLiked = () => {
 
       <div v-if="props.song" class="g-album-profiles__side-actions">
         <g-play-btn
-          :loading="
-            playerStore.loading && playerStore.musicId === props.song?._id
-          "
+          :loading="playerStore.loading"
           :playing="playerStore.playing"
           @click.prevent="onAudioToggle"
         />

@@ -30,7 +30,7 @@ const iconPlayOrPause = computed<string>(() => {
 </script>
 
 <template>
-  <div class="g-play-btn">
+  <div class="g-play-btn" :class="{ loading: props.loading }">
     <DynamicIcon :size="16" :name="iconPlayOrPause" />
   </div>
 </template>

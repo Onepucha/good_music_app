@@ -160,9 +160,6 @@ const onAudioToggle = (item: {
   id: number | string
   index: number
 }) => {
-  console.log('item', item)
-  console.log('playerStore.getMusicIndex', playerStore.getMusicIndex)
-  console.log('item.index', item.id)
   if (playerStore.playing && playerStore.getMusicIndex === item.id) {
     onAudioPause()
   } else {
@@ -197,6 +194,7 @@ const onAudioPlay = async (item: {
         _id: item.song?._id,
         title: item.song?.name,
         artist: findArtist.value,
+        album: item.song?.album_code?.split('-')[1].trim(),
         src: songUrl.data?.url,
         pic: item.song?.cover_src,
         is_liked: item.song?.is_liked,

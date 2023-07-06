@@ -17,6 +17,7 @@ import { downloadSong } from '@/utils/utils'
 import { useAlertStore, useAuthStore, usePlayerStore } from '@/stores'
 import PlaylistsApi from '@/services/playlists'
 import { useMeta } from 'quasar'
+import Songs from '@/services/songs'
 
 const route = useRoute()
 const router = useRouter()
@@ -99,7 +100,7 @@ const onRecently = async (direction: string) => {
   data.albums = response.data.albums
 }
 
-const shufflePlay = (songs: Array<Song>, artist: Artist) => {
+const shufflePlay = async (songs: Array<Song>, artist: Artist) => {
   // Создаем копию массива песен
   const shuffledSongs = songs.slice()
 
@@ -112,25 +113,34 @@ const shufflePlay = (songs: Array<Song>, artist: Artist) => {
   // Обновляем массив песен
   songs = shuffledSongs
 
-  playerStore.setMusicList(songs)
+  const songId = songs?.at(0)?._id
 
-  playerStore.setMusic(
-    {
-      _id: songs?.at(0)?._id,
-      title: songs.at(0)?.name,
-      artist: artist,
-      src: songs.at(0)?.url,
-      pic: songs.at(0)?.cover_src,
-      is_liked: songs.at(0)?.is_liked,
-      genres: songs.at(0)?.genres,
-    } as Song,
-    0
-  )
-  playerStore.setPlaying(true)
+  if (songId) {
+    playerStore.setLoading(true)
+    const songUrl = await Songs.playSong(songId)
 
-  nextTick(() => {
-    playerStore.player.play()
-  })
+    playerStore.setMusicList(songs)
+
+    playerStore.setMusic(
+      {
+        _id: songs?.at(0)?._id,
+        title: songs.at(0)?.name,
+        artist: songs?.at(0)?.album_code?.split('-')[0].trim(),
+        album: songs?.at(0)?.album_code?.split('-')[1].trim(),
+        url: songUrl.data?.url,
+        src: songUrl.data?.url,
+        pic: songs.at(0)?.cover_src,
+        is_liked: songs.at(0)?.is_liked,
+        genres: songs.at(0)?.genres,
+      } as Song,
+      0
+    )
+    playerStore.setPlaying(true)
+
+    nextTick(() => {
+      playerStore.player.play()
+    })
+  }
 }
 
 const addPlayList = (tracks: Album) => {

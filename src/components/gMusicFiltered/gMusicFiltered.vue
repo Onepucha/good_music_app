@@ -92,7 +92,7 @@ const recentlyClass = computed<string>(() => {
         rounded
         text-color="''"
         unelevated
-        @click.prevent="onAudioToggle(props.song, playerStore.getMusicIndex, 0)"
+        @click.prevent="onAudioToggle(props.song, props.song._id, 0)"
       >
         <DynamicIcon
           v-if="playerStore.playing"

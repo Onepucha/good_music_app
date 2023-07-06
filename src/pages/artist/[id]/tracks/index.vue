@@ -163,6 +163,7 @@ const onAudioPlay = async (item: {
 }) => {
   try {
     playerStore.setLoading(true)
+    const album: Album = item.song?.albums?.at(0) as Album
     const songUrl = await Songs.playSong(item.song._id)
 
     playerStore.setMusicList(state.artistSong || [])
@@ -172,6 +173,9 @@ const onAudioPlay = async (item: {
         _id: item.song?._id,
         title: item.song?.name,
         artist: item.song?.artists?.at(0),
+        album: album?.name,
+        duration: item.song?.duration,
+        url: songUrl.data?.url,
         src: songUrl.data?.url,
         pic: item.song?.cover_src,
         is_liked: item.song?.is_liked,

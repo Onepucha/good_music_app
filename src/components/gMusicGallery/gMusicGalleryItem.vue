@@ -82,9 +82,9 @@ const nameAndInfoCharts = computed<{ name: string; info: string }>(() => {
   }
 })
 
-const songId = computed<string>(() => {
+const songId = computed<Song | string>(() => {
   const song = props?.item?.songs?.at(0)
-  return song ? String(song) : ''
+  return song ? song : ''
 })
 
 const handleClick = () => {
@@ -137,10 +137,8 @@ const setLiked = () => {
         class="g-music-gallery-item__shade"
       >
         <g-play-btn
-          :loading="
-            playerStore.loading && playerStore.musicId === props.song?._id
-          "
-          :playing="playerStore.playing && playerStore.musicId === songId"
+          :loading="playerStore.loading && playerStore.musicId === songId?._id"
+          :playing="playerStore.playing && playerStore.musicId === songId?._id"
           @click.prevent="onAudioToggle"
         />
 

@@ -212,9 +212,7 @@ const dontPlayThis = () => {
 
       <div v-if="props.song" class="g-music-generic-artist__side-actions">
         <g-play-btn
-          :loading="
-            playerStore.loading && playerStore.musicId === props.song?._id
-          "
+          :loading="playerStore.loading"
           :playing="playerStore.playing"
           @click.prevent="onAudioToggle"
         />

@@ -224,7 +224,8 @@ const onAudioPlay = async (item: {
     if (item && item.song && item.song.songs && item.song.songs.length > 0) {
       playerStore.setLoading(true)
       const artist: Artist = item.song?.artists?.at(0) as Artist
-      const songUrl = await Songs.playSong(item.song.songs[0])
+      const song: Song = item.song?.songs?.at(0) as Song
+      const songUrl = await Songs.playSong(song?._id)
       const songList = await Songs.getAll({
         id: artist?._id,
       })
@@ -233,9 +234,10 @@ const onAudioPlay = async (item: {
 
       playerStore.setMusic(
         {
-          _id: item.song.songs[0],
+          _id: song?._id,
           title: item.song?.name,
           artist: item.song?.artists?.at(0),
+          album: item.song?.name,
           src: songUrl.data?.url,
           pic: item.song?.cover_src,
           is_liked: item.song?.is_liked,

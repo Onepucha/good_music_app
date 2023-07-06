@@ -105,7 +105,8 @@
 
       .g-icon {
         &-play,
-        &-pause {
+        &-pause,
+        &-loading {
           svg {
             path {
               filter: invert(1);
@@ -320,7 +321,8 @@ body.body--dark {
       .g-play-btn {
         .g-icon {
           &-play,
-          &-pause {
+          &-pause,
+          &-loading {
             svg {
               path {
                 filter: invert(0);
