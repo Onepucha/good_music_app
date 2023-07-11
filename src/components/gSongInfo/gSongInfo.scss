@@ -126,10 +126,24 @@
 
   &__side-actions {
     .q-btn-play {
+      .g-icon {
+        &-loading {
+          transition: $animate-delay;
+          animation: rotate 1s linear infinite;
+
+          @keyframes rotate {
+            from {
+              transform: rotate(360deg);
+            }
+          }
+        }
+      }
+
       @include hover-supported {
         .g-icon {
           &-play,
-          &-pause {
+          &-pause,
+          &-loading {
             path {
               fill: $primary;
             }

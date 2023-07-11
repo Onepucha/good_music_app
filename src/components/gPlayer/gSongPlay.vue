@@ -70,7 +70,11 @@ const allGenres = computed<string>(() => {
           </h3>
 
           <div class="g-song-play__info-artist-name">
-            <span>{{ props.currentMusic?.artist?.name || 'Untitled' }}</span>
+            <span>{{
+              props.currentMusic?.artist?.name ||
+              props.currentMusic?.artist ||
+              'Untitled'
+            }}</span>
 
             <span v-if="allGenres.length">, {{ allGenres }} </span>
           </div>

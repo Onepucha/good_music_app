@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import gThumbnail from './gThumbnail.vue'
 import DynamicIcon from '@/components/DynamicIcon.vue'
-import { Song } from '@/types/artist'
+import { Artist, Song } from '@/types/artist'
 
-import { defineComponent } from 'vue'
+import { computed, defineComponent } from 'vue'
 import { useQuasar } from 'quasar'
 import { useAuthStore } from '@/stores'
 
@@ -39,6 +39,14 @@ const setLiked = () => {
     is_add_to_liked: !props.currentMusic?.is_liked,
   })
 }
+
+const artist = computed<Artist | string>(() => {
+  return (
+    props.currentMusic?.artists?.at(0)?.name ||
+    props.currentMusic?.artist?.name ||
+    props.currentMusic?.artist
+  )
+})
 </script>
 
 <template>
@@ -57,17 +65,14 @@ const setLiked = () => {
 
     <div class="g-player-track__info">
       <div class="g-player-track__info-song-name">
-        {{ currentMusic.title || 'Untitled' }}
+        {{ currentMusic?.title || currentMusic?.name || 'Untitled' }}
       </div>
 
       <div
-        v-if="
-          $q.platform.is.desktop &&
-          (currentMusic?.artist?.name || currentMusic?.artist)
-        "
+        v-if="$q.platform.is.desktop && artist"
         class="g-player-track__info-artists"
       >
-        {{ currentMusic?.artist?.name || currentMusic?.artist }}
+        {{ artist }}
       </div>
     </div>
 

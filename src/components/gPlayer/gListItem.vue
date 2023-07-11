@@ -26,6 +26,27 @@ const emit = defineEmits(['selectsong'])
 const padPosition = computed<string>(() => {
   return props.position.toString().padStart(2, '0')
 })
+
+const duration = computed<string>(() => {
+  if (props.item && props.item.duration !== null) {
+    const date = new Date(props.item.duration || 1000)
+    const minutes = date.getMinutes().toString().padStart(2, '0')
+    const seconds = date.getSeconds().toString().padStart(2, '0')
+
+    return `${minutes}:${seconds} ${t('gMusicSong.mins')}`
+  }
+
+  return ''
+})
+
+const releaseDate = computed<string>(() => {
+  if (props.item && props.item.release_date !== undefined) {
+    const date = new Date(props.item.release_date)
+
+    return date.toLocaleDateString()
+  }
+  return ''
+})
 </script>
 
 <template>
@@ -61,8 +82,12 @@ const padPosition = computed<string>(() => {
     </div>
 
     <div class="g-player-list-item__action">
-      <span class="g-player-list-item__action-date-added"> Yesterday </span>
-      <span class="g-player-list-item__action-duration"> 03:57 mins </span>
+      <span v-if="releaseDate" class="g-player-list-item__action-date-added">
+        {{ releaseDate }}
+      </span>
+      <span v-if="duration" class="g-player-list-item__action-duration">
+        {{ duration }}
+      </span>
     </div>
   </div>
 </template>

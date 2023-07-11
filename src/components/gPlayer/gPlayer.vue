@@ -378,7 +378,7 @@ const play = () => {
   }
 
   // Wait for the audio file to be loaded before calling play()
-  if (audio.value.readyState >= 4) {
+  if (audio.value && audio.value.readyState >= 4) {
     const audioPlayPromise = audio.value
       .play()
       .then(() => {
@@ -569,6 +569,8 @@ const onPrevSong = async () => {
       pic: previousItem.value?.cover_src || '',
       src: songUrl.data?.url || previousItem.value?.src,
       is_liked: previousItem.value?.is_liked,
+      duration: previousItem.value?.duration,
+      release_date: previousItem.value?.release_date,
     } as Song
   } catch (error: unknown) {
     console.error(error)
@@ -581,6 +583,8 @@ const onPrevSong = async () => {
       pic: previousItem.value?.cover_src || '',
       src: previousItem.value?.src,
       is_liked: previousItem.value?.is_liked,
+      duration: previousItem.value?.duration,
+      release_date: previousItem.value?.release_date,
     } as Song
   }
 
@@ -622,6 +626,8 @@ const onNextSong = async () => {
       pic: nextItem.value?.cover_src || '',
       src: songUrl.data?.url || nextItem.value?.src,
       is_liked: nextItem.value?.is_liked,
+      duration: nextItem.value?.duration,
+      release_date: nextItem.value?.release_date,
     } as Song
   } catch (error: unknown) {
     console.error(error)
@@ -634,6 +640,8 @@ const onNextSong = async () => {
       pic: nextItem.value?.cover_src || '',
       src: nextItem.value?.src,
       is_liked: nextItem.value?.is_liked,
+      duration: nextItem.value?.duration,
+      release_date: nextItem.value?.release_date,
     } as Song
   }
 
@@ -660,11 +668,17 @@ const onRewindNext = () => {
   audio.value.currentTime += 10
 }
 
-const onSelectSong = (song: any) => {
+const onSelectSong = async (song: any) => {
   if (currentMusic.value === song) {
     toggle()
   } else {
-    currentMusic.value = song
+    playerStore.setLoading(true)
+    const songUrl = await Songs.playSong(previousItem.value?._id)
+
+    currentMusic.value = {
+      src: songUrl.data?.url,
+      ...song,
+    }
     thenPlay()
   }
 }
@@ -956,12 +970,36 @@ const updateMetadata = () => {
       artist: currentMusic.value.artist?.name || currentMusic.value.artist,
       album: currentMusic.value?.album,
       artwork: [
-        { src: currentMusic.value.pic, sizes: '96x96', type: 'image/png' },
-        { src: currentMusic.value.pic, sizes: '128x128', type: 'image/png' },
-        { src: currentMusic.value.pic, sizes: '192x192', type: 'image/png' },
-        { src: currentMusic.value.pic, sizes: '256x256', type: 'image/png' },
-        { src: currentMusic.value.pic, sizes: '384x384', type: 'image/png' },
-        { src: currentMusic.value.pic, sizes: '512x512', type: 'image/png' },
+        {
+          src: currentMusic.value?.cover_src || currentMusic.value?.pic,
+          sizes: '96x96',
+          type: 'image/png',
+        },
+        {
+          src: currentMusic.value?.cover_src || currentMusic.value?.pic,
+          sizes: '128x128',
+          type: 'image/png',
+        },
+        {
+          src: currentMusic.value?.cover_src || currentMusic.value?.pic,
+          sizes: '192x192',
+          type: 'image/png',
+        },
+        {
+          src: currentMusic.value?.cover_src || currentMusic.value?.pic,
+          sizes: '256x256',
+          type: 'image/png',
+        },
+        {
+          src: currentMusic.value?.cover_src || currentMusic.value?.pic,
+          sizes: '384x384',
+          type: 'image/png',
+        },
+        {
+          src: currentMusic.value?.cover_src || currentMusic.value?.pic,
+          sizes: '512x512',
+          type: 'image/png',
+        },
       ],
     })
   }

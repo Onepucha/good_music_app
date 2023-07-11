@@ -132,6 +132,8 @@ const shufflePlay = async (songs: Array<Song>, artist: Artist) => {
         pic: songs.at(0)?.cover_src,
         is_liked: songs.at(0)?.is_liked,
         genres: songs.at(0)?.genres,
+        duration: songs.at(0)?.duration,
+        release_date: songs.at(0)?.release_date,
       } as Song,
       0
     )

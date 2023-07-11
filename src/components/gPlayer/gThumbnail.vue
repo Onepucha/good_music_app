@@ -1,17 +1,11 @@
 <script setup lang="ts">
 import { computed, CSSProperties, onUnmounted, reactive } from 'vue'
 import { usePlayerStore } from '@/stores'
+import { Song } from '@/types/artist'
 
 const playerStore = usePlayerStore()
 
 const emit = defineEmits(['dragbegin', 'dragging', 'dragend'])
-
-interface Song {
-  title: string
-  artist: string
-  src: string
-  pic: string
-}
 
 interface Props {
   currentMusic: Song
@@ -38,10 +32,11 @@ const data: Data = reactive({
 })
 
 const currentPicStyleObj = computed<CSSProperties>(() => {
-  if (!props.currentMusic?.pic) return {}
   return {
-    backgroundImage: `url('${props.currentMusic?.pic}')`,
-    backgroundColor: props.theme,
+    backgroundImage: `url('${
+      props.currentMusic?.cover_src || props.currentMusic?.pic
+    }')`,
+    backgroundColor: props?.theme,
   }
 })
 

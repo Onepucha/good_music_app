@@ -125,6 +125,8 @@ const shufflePlay = async () => {
         pic: shuffledSongs.at(0)?.cover_src,
         is_liked: shuffledSongs.at(0)?.is_liked,
         genres: shuffledSongs.at(0)?.genres,
+        duration: shuffledSongs.at(0)?.duration,
+        release_date: shuffledSongs.at(0)?.release_date,
       } as Song,
       0
     )
@@ -218,6 +220,8 @@ const onAudioPlay = async (item: {
         pic: item.song?.cover_src,
         is_liked: item.song?.is_liked,
         genres: item.song?.genres,
+        duration: item.song?.duration,
+        release_date: item.song?.release_date,
       } as Song,
       item.id as number
     )

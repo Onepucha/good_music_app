@@ -217,20 +217,22 @@
     justify-content: flex-end;
     gap: 27px;
 
-    &::before {
-      position: absolute;
-      left: 0;
-      right: 0;
-      margin: 0 auto;
-      top: 50%;
-      transform: translateY(-50%);
-      content: '';
-      height: 8px;
-      width: 1px;
-      background: $greyscale700;
+    span + span {
+      &::before {
+        position: absolute;
+        left: 0;
+        right: 0;
+        margin: 0 auto;
+        top: 50%;
+        transform: translateY(-50%);
+        content: '';
+        height: 8px;
+        width: 1px;
+        background: $greyscale700;
 
-      @media #{$mobile} {
-        display: none;
+        @media #{$mobile} {
+          display: none;
+        }
       }
     }
 

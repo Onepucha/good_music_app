@@ -162,10 +162,13 @@ const onAudioPlay = async (item: {
         _id: item.song?._id,
         title: item.song?.name,
         artist: item.song?.artists?.at(0),
+        album: item.song?.album_code?.split('-')[1].trim(),
         src: songUrl.data?.url,
         pic: item.song?.cover_src,
         is_liked: item.song?.is_liked,
         genres: item.song?.genres,
+        duration: item.song?.duration,
+        release_date: item.song?.release_date,
       } as Song,
       item.id as number
     )
@@ -204,10 +207,13 @@ const shufflePlay = () => {
       _id: shuffledSongs?.at(0)?._id,
       title: shuffledSongs.at(0)?.name,
       artist: shuffledSongs?.at(0)?.artists?.at(0),
+      album: shuffledSongs?.at(0)?.album_code?.split('-')[1].trim(),
       src: shuffledSongs.at(0)?.url,
       pic: shuffledSongs.at(0)?.cover_src,
       is_liked: shuffledSongs.at(0)?.is_liked,
       genres: shuffledSongs.at(0)?.genres,
+      duration: shuffledSongs.at(0)?.duration,
+      release_date: shuffledSongs.at(0)?.release_date,
     } as Song,
     0
   )

@@ -253,6 +253,11 @@ const dontPlayThis = () => {
             class="on-left"
             name="pause"
           />
+          <DynamicIcon
+            v-else-if="playerStore.loading"
+            class="on-left"
+            name="loading"
+          />
           <DynamicIcon v-else class="on-left" name="play" />
         </q-btn>
       </div>

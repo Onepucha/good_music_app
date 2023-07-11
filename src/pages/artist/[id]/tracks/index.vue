@@ -174,12 +174,13 @@ const onAudioPlay = async (item: {
         title: item.song?.name,
         artist: item.song?.artists?.at(0),
         album: album?.name,
-        duration: item.song?.duration,
         url: songUrl.data?.url,
         src: songUrl.data?.url,
         pic: item.song?.cover_src,
         is_liked: item.song?.is_liked,
         genres: item.song?.genres,
+        duration: item.song?.duration,
+        release_date: item.song?.release_date,
       } as Song,
       item.id as number
     )
