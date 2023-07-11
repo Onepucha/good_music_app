@@ -162,7 +162,7 @@ const getLikedSingers = async (index: number, done: () => void) => {
           :offset="250"
           @load="getLikedSingers"
         >
-          <template v-if="data.singers.length">
+          <template v-if="data.singers?.length">
             <g-music-singers-item
               v-for="singer in data.singers"
               :key="singer._id"

@@ -82,7 +82,7 @@ const onRecently = async (direction: string) => {
     direction: direction,
   })
 
-  data.singers = response.data.singers
+  data.singers = response.data.artists
 }
 
 const addPlayList = (artist: Artist) => {
@@ -197,7 +197,7 @@ const openSearch = () => {
           :offset="250"
           @load="getLikedSingers"
         >
-          <template v-if="data.singers.length">
+          <template v-if="data.singers?.length">
             <g-music-singers-item
               v-for="singer in data.singers"
               :key="singer._id"
